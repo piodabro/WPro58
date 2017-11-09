@@ -21,6 +21,7 @@ namespace StateMachine {
             void onUpdateDraw();
 
             void onButtonChange(Button button, Buttons::PressType pressType);
+            void onFSPinsChange(uint8_t state);
     };
 }
 
