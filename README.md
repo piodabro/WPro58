@@ -1,5 +1,5 @@
 # rx5808-pro-diversity-pro58
-STM32 based PRO58 module firmware based on Shea Ivy's rx5808-pro
+STM32 based PRO58 module firmware based on ![Shea Ivy's rx5808-pro](https://github.com/sheaivey/rx5808-pro-diversity)
 
 ### Pinouts and programming.
 To program PRO58 you have to use ST-link programmer.
