@@ -69,3 +69,12 @@ void StateMachine::ScreensaverStateHandler::onInitialDraw() {
 void StateMachine::ScreensaverStateHandler::onUpdateDraw() {
     this->onInitialDraw();
 }
+
+void StateMachine::ScreensaverStateHandler::onFSPinsChange(uint8_t state){
+	uint8_t bandOffset = Receiver::activeChannel - (Receiver::activeChannel % 8);
+	uint8_t orderedChanelIndex = bandOffset + state;
+	Receiver::setChannel(orderedChanelIndex);
+	showLogo = false;
+	this->displaySwapTimer.reset();
+	this->onInitialDraw();
+}

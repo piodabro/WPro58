@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=E:/REPO_PRIV/PioPRO58/PRO58/Inc
+HeaderPath=./Inc
 HeaderFiles=gpio.h;adc.h;dma.h;i2c.h;usart.h;stm32f1xx_it.h;stm32f1xx_hal_conf.h;main.h;
-SourcePath=E:/REPO_PRIV/PioPRO58/PRO58/Src
+SourcePath=./Src
 SourceFiles=gpio.h;adc.h;dma.h;i2c.h;usart.h;stm32f1xx_it.h;stm32f1xx_hal_conf.h;main.h;gpio.c;adc.c;dma.c;i2c.c;usart.c;stm32f1xx_it.c;stm32f1xx_hal_msp.c;main.c;
 
 [PreviousLibFiles]

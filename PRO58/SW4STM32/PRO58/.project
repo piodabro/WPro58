@@ -310,11 +310,11 @@
 	<variableList>
 		<variable>
 			<name>copy_PARENT</name>
-			<value>file:/E:/REPO_PRIV/PioPRO58Pub/PRO58/SW4STM32</value>
+			<value>$%7BPARENT-3-PROJECT_LOC%7D/PRO58/SW4STM32</value>
 		</variable>
 		<variable>
 			<name>copy_PARENT1</name>
-			<value>$%7BPARENT-1-copy_PARENT%7D</value>
+			<value>$%7BPARENT-3-PROJECT_LOC%7D/PRO58</value>
 		</variable>
 	</variableList>
 </projectDescription>
