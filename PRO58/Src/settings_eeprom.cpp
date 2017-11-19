@@ -186,7 +186,15 @@ void EepromSettings::initDefaults() {
 	vbatWarning = WARNING_VOLTAGE;
 	vbatCritical = CRITICAL_VOLTAGE;
 #endif
+	char sign[9] = CALLSIGN;
+	memcpy(callsign, sign, 8);
 
     //memcpy(this, &EepromDefaults, sizeof(EepromDefaults));
     this->save();
 }
+
+void EepromSettings::CallSign(char *sign){
+	memcpy(sign, callsign, 8);
+	sign[8]=0;
+}
+

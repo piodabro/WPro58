@@ -34,6 +34,7 @@ struct EepromSettings {
         uint8_t vbatCritical;
     #endif
 
+    uint8_t callsign[8];
 
     void update();
 
@@ -42,6 +43,7 @@ struct EepromSettings {
     void markDirty();
     void init(I2C_HandleTypeDef *i2c_handle);
     void initDefaults();
+    void CallSign(char *sign);
 
 };
 
@@ -67,6 +69,7 @@ const struct {
         uint8_t vbatWarning = WARNING_VOLTAGE;
         uint8_t vbatCritical = CRITICAL_VOLTAGE;
     #endif
+    const uint8_t callsign[8] = {0,0,0,0,0,0,0,0};
 } EepromDefaults;
 
 
