@@ -16,7 +16,8 @@ namespace StateMachine {
         MENU,
         SETTINGS,
         SETTINGS_RSSI,
-		SETTINGS_DIVERSITY_MODE
+		SETTINGS_DIVERSITY_MODE,
+		SETTINGS_CALLSIGN
     };
 
     class StateHandler {

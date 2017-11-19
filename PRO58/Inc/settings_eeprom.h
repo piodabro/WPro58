@@ -43,7 +43,9 @@ struct EepromSettings {
     void markDirty();
     void init(I2C_HandleTypeDef *i2c_handle);
     void initDefaults();
-    void CallSign(char *sign);
+    void getCallSign(char *sign);
+    void setCallSign(char *sign);
+    uint8_t cmpCallSign(char *sign);
 
 };
 

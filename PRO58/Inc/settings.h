@@ -47,8 +47,6 @@
 // rx5808 module need >20ms to tune.
 // 25 ms will do a 40 channel scan in 1 second.
 #define MIN_TUNE_TIME 40
-    
-#define CALLSIGN "pro58"
 
 #endif // file_defined
 

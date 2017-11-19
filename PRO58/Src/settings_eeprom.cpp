@@ -193,8 +193,16 @@ void EepromSettings::initDefaults() {
     this->save();
 }
 
-void EepromSettings::CallSign(char *sign){
+void EepromSettings::getCallSign(char *sign){
 	memcpy(sign, callsign, 8);
 	sign[8]=0;
+}
+
+void EepromSettings::setCallSign(char *sign){
+	memcpy(callsign, sign, 8);
+}
+
+uint8_t EepromSettings::cmpCallSign(char *sign){
+	return strncmp(sign, (char*)callsign, 8);
 }
 

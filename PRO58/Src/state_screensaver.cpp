@@ -44,10 +44,10 @@ void StateMachine::ScreensaverStateHandler::onInitialDraw() {
 
     	    Ui::display.setTextSize(2);
 		Ui::display.setCursor(
-			SCREEN_WIDTH_MID - ((CHAR_WIDTH) * 6) / 2 * 2 - 3,
-			2);
+			SCREEN_WIDTH_MID - (CHAR_WIDTH * 6) - 3,
+			SCREEN_HEIGHT_MID - CHAR_HEIGHT );
 		char sign[9] = "";
-		EepromSettings.CallSign(sign);
+		EepromSettings.getCallSign(sign);
 		Ui::display.print(sign);
 #else
 	if (showLogo) {
