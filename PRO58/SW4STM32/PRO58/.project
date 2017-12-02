@@ -167,6 +167,11 @@
 			<locationURI>copy_PARENT1/Src/state_settings.cpp</locationURI>
 		</link>
 		<link>
+			<name>Application/User/state_settings_callsign.cpp</name>
+			<type>1</type>
+			<locationURI>copy_PARENT1/Src/state_settings_callsign.cpp</locationURI>
+		</link>
+		<link>
 			<name>Application/User/state_settings_diversity_mode.cpp</name>
 			<type>1</type>
 			<locationURI>copy_PARENT1/Src/state_settings_diversity_mode.cpp</locationURI>

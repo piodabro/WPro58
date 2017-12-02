@@ -9,6 +9,7 @@
 #include "state_settings.h"
 #include "state_settings_rssi.h"
 #include "state_settings_diversity_mode.h"
+#include "state_settings_callsign.h"
 
 #include "ui.h"
 #include "buttons.h"
@@ -31,8 +32,9 @@ void *operator new(size_t size, void *ptr){
     MAX(sizeof(MenuStateHandler), \
     MAX(sizeof(SettingsStateHandler), \
 	MAX(sizeof(SettingsRssiStateHandler), \
+	MAX(sizeof(SettingsCallsignStateHandler), \
 	sizeof(SettingsDiversityModeStateHandler) \
-    ))))))
+	)))))))
 ;
 
 namespace StateMachine {
@@ -104,6 +106,7 @@ namespace StateMachine {
             STATE_FACTORY(State::SETTINGS, SettingsStateHandler);
             STATE_FACTORY(State::SETTINGS_RSSI, SettingsRssiStateHandler);
             STATE_FACTORY(State::SETTINGS_DIVERSITY_MODE, SettingsDiversityModeStateHandler);
+            STATE_FACTORY(State::SETTINGS_CALLSIGN, SettingsCallsignStateHandler);
 
             default:
                 return nullptr;

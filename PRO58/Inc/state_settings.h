@@ -21,7 +21,8 @@ namespace StateMachine {
         private:
 			enum class InternalState : uint8_t {
 							RSSI_CALIBRATION,
-							DIVERSITY_MODE
+							DIVERSITY_MODE,
+							CALLSIGN_MODE
 						};
 			InternalState internalState = InternalState::RSSI_CALIBRATION;
 			Ui::MenuHelper menu;

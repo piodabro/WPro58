@@ -5,6 +5,7 @@
 #include "buttons.h"
 #include "state.h"
 #include "ui.h"
+#include "settings_eeprom.h"
 
 #ifdef PUBLIC_RELEASE
 #include "logo.h"
@@ -37,15 +38,28 @@ void StateMachine::ScreensaverStateHandler::onButtonChange(
 void StateMachine::ScreensaverStateHandler::onInitialDraw() {
     Ui::clear();
 
+#ifdef CALLSIGN
     if (showLogo) {
-        Ui::display.drawBitmap(
-            0,
-            0,
-            logo,
-            SCREEN_WIDTH,
-            SCREEN_HEIGHT,
-            WHITE
-        );
+    		Ui::display.setTextColor(WHITE);
+
+    	    Ui::display.setTextSize(2);
+		Ui::display.setCursor(
+			SCREEN_WIDTH_MID - (CHAR_WIDTH * 6) - 3,
+			SCREEN_HEIGHT_MID - CHAR_HEIGHT );
+		char sign[9] = "";
+		EepromSettings.getCallSign(sign);
+		Ui::display.print(sign);
+#else
+	if (showLogo) {
+		Ui::display.drawBitmap(
+			0,
+			0,
+			logo,
+			SCREEN_WIDTH,
+			SCREEN_HEIGHT,
+			WHITE
+		);
+#endif
     } else {
         Ui::display.setTextColor(WHITE);
 
