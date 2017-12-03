@@ -3,13 +3,14 @@
 
 
 #include "state.h"
+#include "settings.h"
 
 
 namespace StateMachine {
     class SettingsCallsignStateHandler : public StateMachine::StateHandler {
         private:
     			int cursor;
-    			char callsign[9];
+    			char callsign[CALLSIGN_LEN+1];
         public:
             void onEnter();
             void onUpdate();

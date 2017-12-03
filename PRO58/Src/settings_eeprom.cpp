@@ -186,23 +186,23 @@ void EepromSettings::initDefaults() {
 	vbatWarning = WARNING_VOLTAGE;
 	vbatCritical = CRITICAL_VOLTAGE;
 #endif
-	char sign[9] = CALLSIGN;
-	memcpy(callsign, sign, 8);
+	char sign[CALLSIGN_LEN+1] = CALLSIGN_DEF;
+	memcpy(callsign, sign, CALLSIGN_LEN);
 
     //memcpy(this, &EepromDefaults, sizeof(EepromDefaults));
     this->save();
 }
 
 void EepromSettings::getCallSign(char *sign){
-	memcpy(sign, callsign, 8);
-	sign[8]=0;
+	memcpy(sign, callsign, CALLSIGN_LEN);
+	sign[CALLSIGN_LEN+1]=0;
 }
 
 void EepromSettings::setCallSign(char *sign){
-	memcpy(callsign, sign, 8);
+	memcpy(callsign, sign, CALLSIGN_LEN);
 }
 
 uint8_t EepromSettings::cmpCallSign(char *sign){
-	return strncmp(sign, (char*)callsign, 8);
+	return strncmp(sign, (char*)callsign, CALLSIGN_LEN);
 }
 

@@ -1,3 +1,4 @@
+#include <string.h>
 #include "state_screensaver.h"
 
 #include "receiver.h"
@@ -40,14 +41,14 @@ void StateMachine::ScreensaverStateHandler::onInitialDraw() {
 
 #ifdef CALLSIGN
     if (showLogo) {
+		char sign[CALLSIGN_LEN+1] = "";
+		EepromSettings.getCallSign(sign);
     		Ui::display.setTextColor(WHITE);
 
     	    Ui::display.setTextSize(2);
 		Ui::display.setCursor(
-			SCREEN_WIDTH_MID - (CHAR_WIDTH * 6) - 3,
+			SCREEN_WIDTH_MID - (2*(CHAR_WIDTH + 1)* strlen(sign))/2,
 			SCREEN_HEIGHT_MID - CHAR_HEIGHT );
-		char sign[9] = "";
-		EepromSettings.getCallSign(sign);
 		Ui::display.print(sign);
 #else
 	if (showLogo) {
