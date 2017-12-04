@@ -47,7 +47,9 @@ void StateMachine::SettingsCallsignStateHandler::onButtonChange(
 			StateMachine::switchState(StateMachine::State::SETTINGS);
 		}
 	} else {
-		if ((pressType == Buttons::PressType::SHORT) ||(pressType == Buttons::PressType::HOLDING && holdTimer.hasTicked())){
+		if ((cursor != -1) &&
+				((pressType == Buttons::PressType::SHORT)
+						||(pressType == Buttons::PressType::HOLDING && holdTimer.hasTicked()))){
 			switch(button){
 				case Button::DOWN:
 					if (callsign[cursor]>32){
