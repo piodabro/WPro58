@@ -34,7 +34,7 @@ struct EepromSettings {
         uint8_t vbatCritical;
     #endif
 
-    uint8_t callsign[8];
+    uint8_t callsign[CALLSIGN_LEN];
 
     void update();
 
@@ -71,7 +71,7 @@ const struct {
         uint8_t vbatWarning = WARNING_VOLTAGE;
         uint8_t vbatCritical = CRITICAL_VOLTAGE;
     #endif
-    const uint8_t callsign[8] = {0,0,0,0,0,0,0,0};
+    const uint8_t callsign[CALLSIGN_LEN] = {0};
 } EepromDefaults;
 
 

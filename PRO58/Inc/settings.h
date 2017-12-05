@@ -48,5 +48,8 @@
 // 25 ms will do a 40 channel scan in 1 second.
 #define MIN_TUNE_TIME 40
 
+#define CALLSIGN_LEN 10
+#define CALLSIGN_DEF "pro58"
+
 #endif // file_defined
 
