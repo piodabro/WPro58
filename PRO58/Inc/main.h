@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * File Name          : main.h
+  * File Name          : main.hpp
   * Description        : This file contains the common defines of the application
   ******************************************************************************
   ** This notice applies to any and all portions of this file
@@ -40,6 +40,7 @@
 #define __MAIN_H
   /* Includes ------------------------------------------------------------------*/
 
+/* Includes ------------------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -87,23 +88,23 @@
 #define LED_A_Pin GPIO_PIN_9
 #define LED_A_GPIO_Port GPIOB
 
+/* ########################## Assert Selection ############################## */
+/**
+  * @brief Uncomment the line below to expanse the "assert_param" macro in the 
+  *        HAL drivers code
+  */
+/* #define USE_FULL_ASSERT    1U */
+
 /* USER CODE BEGIN Private defines */
-#ifdef NUCLEO_TEST
-	#define LED_B_Pin GPIO_PIN_2 //
-	#define LED_B_GPIO_Port GPIOB // NUCLEO BOARDS HAS PA2 connected to USART of ST-LINK
-	#define RECEIVER_SW_Pin GPIO_PIN_1
-	#define RECEIVER_SW_GPIO_Port GPIOB //LSE
-#endif
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
  extern "C" {
 #endif
-
 void _Error_Handler(const char *, int);
 
 #define Error_Handler() _Error_Handler(__FILE__, __LINE__)
-
 #ifdef __cplusplus
 }
 #endif

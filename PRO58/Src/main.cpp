@@ -3,6 +3,11 @@
   * File Name          : main.c
   * Description        : Main program body
   ******************************************************************************
+  ** This notice applies to any and all portions of this file
+  * that are not between comment pairs USER CODE BEGIN and
+  * USER CODE END. Other portions of this file, whether 
+  * inserted by the user or by software development tools
+  * are owned by their respective copyright owners.
   *
   * COPYRIGHT(c) 2017 STMicroelectronics
   *
@@ -30,6 +35,7 @@
   *
   ******************************************************************************
   */
+
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f1xx_hal.h"
@@ -41,7 +47,6 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-
 #include "settings_eeprom.h"
 
 #include "channels.h"
@@ -60,7 +65,6 @@
 #include "logo.h"
 
 #include "fatshark_pins.h"
-
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -116,74 +120,73 @@ int main(void)
   MX_I2C2_Init();
   MX_USART1_UART_Init();
   MX_TIM4_Init();
+  MX_TIM3_Init();
 
   /* USER CODE BEGIN 2 */
-
   if(DWT_Delay_Init()){
-	_Error_Handler(__FILE__,__LINE__); /* Call Error Handler */
-  }
+  	_Error_Handler(__FILE__,__LINE__); /* Call Error Handler */
+    }
 
-  HAL_GPIO_WritePin(RECEIVER_SW_GPIO_Port,RECEIVER_SW_Pin,GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(SPI_SLAVE_SELECT_A_GPIO_Port,SPI_SLAVE_SELECT_A_Pin,GPIO_PIN_SET);
-  HAL_GPIO_WritePin(SPI_SLAVE_SELECT_B_GPIO_Port,SPI_SLAVE_SELECT_B_Pin,GPIO_PIN_SET);
-  HAL_GPIO_WritePin(SPI_CLOCK_GPIO_Port,SPI_CLOCK_Pin,GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(SPI_DATA_GPIO_Port,SPI_DATA_Pin,GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(RECEIVER_SW_GPIO_Port,RECEIVER_SW_Pin,GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(SPI_SLAVE_SELECT_A_GPIO_Port,SPI_SLAVE_SELECT_A_Pin,GPIO_PIN_SET);
+    HAL_GPIO_WritePin(SPI_SLAVE_SELECT_B_GPIO_Port,SPI_SLAVE_SELECT_B_Pin,GPIO_PIN_SET);
+    HAL_GPIO_WritePin(SPI_CLOCK_GPIO_Port,SPI_CLOCK_Pin,GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(SPI_DATA_GPIO_Port,SPI_DATA_Pin,GPIO_PIN_RESET);
 
-  HAL_Delay(100); //Delay 1000ms to allow RX5808 startup.
+    HAL_Delay(100); //Delay 1000ms to allow RX5808 startup.
 
-  I2C_Reset(hi2c1, MX_I2C1_Init);
-  Ui::setup(&hi2c1);
+    I2C_Reset(hi2c1, MX_I2C1_Init);
+    Ui::setup(&hi2c1);
 
-  Ui::display.drawBitmap(
-		0,
-		0,
-		logo,
-		SCREEN_WIDTH,
-		SCREEN_HEIGHT,
-		WHITE
-  );
-  Ui::display.display();
+    Ui::display.drawBitmap(
+  		0,
+  		0,
+  		logo,
+  		SCREEN_WIDTH,
+  		SCREEN_HEIGHT,
+  		WHITE
+    );
+    Ui::display.display();
 
-  Beeper::init();
-  Beeper::beepC(200); //welcome beeep ;)
-  while(Beeper::beeping){
-    Beeper::update();
-  }
-  Beeper::beepE(200); //welcome beeep ;)
-  while(Beeper::beeping){
-    Beeper::update();
-  }
-  Beeper::beepG(200); //welcome beeep ;)
-  while(Beeper::beeping){
-    Beeper::update();
-  }
-  HAL_Delay(200);
-  Beeper::beepE(200); //welcome beeep ;)
-  while(Beeper::beeping){
-    Beeper::update();
-  }
-  Beeper::beepG(400); //welcome beeep ;)
-  while(Beeper::beeping){
-    Beeper::update();
-  }
+    Beeper::init();
+    Beeper::beepC(200); //welcome beeep ;)
+    while(Beeper::beeping){
+      Beeper::update();
+    }
+    Beeper::beepE(200); //welcome beeep ;)
+    while(Beeper::beeping){
+      Beeper::update();
+    }
+    Beeper::beepG(200); //welcome beeep ;)
+    while(Beeper::beeping){
+      Beeper::update();
+    }
+    HAL_Delay(200);
+    Beeper::beepE(200); //welcome beeep ;)
+    while(Beeper::beeping){
+      Beeper::update();
+    }
+    Beeper::beepG(400); //welcome beeep ;)
+    while(Beeper::beeping){
+      Beeper::update();
+    }
 
-  HAL_Delay(200);
-  I2C_Reset(hi2c2, MX_I2C2_Init);
-  EepromSettings.init(&hi2c2);
-  EepromSettings.load();
-  Receiver::setup(&hadc1);
-  Receiver::setChannel(EepromSettings.startChannel);
+    HAL_Delay(200);
+    I2C_Reset(hi2c2, MX_I2C2_Init);
+    EepromSettings.init(&hi2c2);
+    EepromSettings.load();
+    Receiver::setup(&hadc1);
+    Receiver::setChannel(EepromSettings.startChannel);
 
-  FatSharkPins::init();
+    FatSharkPins::init();
 
-  StateMachine::setup();
+    StateMachine::setup();
 
-  Receiver::setActiveReceiver(Receiver::ReceiverId::A);
+    Receiver::setActiveReceiver(Receiver::ReceiverId::A);
 
-  Buttons::registerChangeFunc(globalMenuButtonHandler);
-  // Switch to initial state.
-  StateMachine::switchState(StateMachine::State::SEARCH);
-
+    Buttons::registerChangeFunc(globalMenuButtonHandler);
+    // Switch to initial state.
+    StateMachine::switchState(StateMachine::State::SEARCH);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -191,24 +194,23 @@ int main(void)
   while (1)
   {
 	  Beeper::update();
-	  Receiver::update();
-	  Buttons::update();
-	  FatSharkPins::update();
-	  StateMachine::update();
-	  Ui::update();
-	  EepromSettings.update();
+	  	  Receiver::update();
+	  	  Buttons::update();
+	  	  FatSharkPins::update();
+	  	  StateMachine::update();
+	  	  Ui::update();
+	  	  EepromSettings.update();
 
-	  if (
-//	    StateMachine::currentState != StateMachine::State::SCREENSAVER
-//	    && StateMachine::currentState != StateMachine::State::BANDSCAN
-//		&& StateMachine::currentState != StateMachine::State::SETTINGS_RSSI
-	    StateMachine::currentState == StateMachine::State::SEARCH
-	    && (HAL_GetTick() - Buttons::lastChangeTime) >
-	    (SCREENSAVER_TIMEOUT * 1000)
-	  ) {
-	    StateMachine::switchState(StateMachine::State::SCREENSAVER);
-	  }
-
+	  	  if (
+	  //	    StateMachine::currentState != StateMachine::State::SCREENSAVER
+	  //	    && StateMachine::currentState != StateMachine::State::BANDSCAN
+	  //		&& StateMachine::currentState != StateMachine::State::SETTINGS_RSSI
+	  	    StateMachine::currentState == StateMachine::State::SEARCH
+	  	    && (HAL_GetTick() - Buttons::lastChangeTime) >
+	  	    (SCREENSAVER_TIMEOUT * 1000)
+	  	  ) {
+	  	    StateMachine::switchState(StateMachine::State::SCREENSAVER);
+	  	  }
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
@@ -227,7 +229,7 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
-    /**Initializes the CPU, AHB and APB busses clocks
+    /**Initializes the CPU, AHB and APB busses clocks 
     */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
@@ -241,7 +243,7 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-    /**Initializes the CPU, AHB and APB busses clocks
+    /**Initializes the CPU, AHB and APB busses clocks 
     */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
@@ -262,11 +264,11 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-    /**Configure the Systick interrupt time
+    /**Configure the Systick interrupt time 
     */
   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
 
-    /**Configure the Systick
+    /**Configure the Systick 
     */
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
@@ -288,11 +290,11 @@ static void globalMenuButtonHandler(
   }
 
 }
-/* USER CODE END 4 */
-
 #ifdef __cplusplus
  extern "C" {
 #endif
+/* USER CODE END 4 */
+
 /**
   * @brief  This function is executed in case of error occurrence.
   * @param  None
@@ -305,8 +307,12 @@ void _Error_Handler(const char * file, int line)
   while(1) 
   {
   }
-  /* USER CODE END Error_Handler_Debug */
+  /* USER CODE END Error_Handler_Debug */ 
 }
+
+#ifdef __cplusplus
+ }
+#endif
 
 #ifdef USE_FULL_ASSERT
 
@@ -326,10 +332,6 @@ void assert_failed(uint8_t* file, uint32_t line)
 
 }
 
-#endif
-
-#ifdef __cplusplus
- }
 #endif
 
 /**
