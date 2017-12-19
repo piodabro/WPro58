@@ -18,7 +18,7 @@ include ../user_env.mk
 
 USER_DIR = ../Src
 USER_INCLUDE_DIR = ../Inc
-TEST_DIR = .
+TEST_DIR = unit
 OBJECT_DIR = ../obj/test
 
 include system-id.mk
@@ -27,8 +27,7 @@ include system-id.mk
 # variables available:
 #   <test_name>_SRC
 #   <test_name>_DEFINES
-
-#dummy_test_SRC := dummy.c
+filter_test_SRC := $(USER_DIR)/filter.c
 
 # Flags passed to the preprocessor.
 # Set Google Test's header directory as a system directory, such that
@@ -99,7 +98,7 @@ include ./verbosity.mk
 all : $(TESTS)
 
 clean :
-	rm -f $(OBJECT_DIR)/*.o
+	rm -rf $(OBJECT_DIR)/*
 
 ## test        : Build and run the Unit Tests (default goal)
 test: $(TESTS:%=test_%)

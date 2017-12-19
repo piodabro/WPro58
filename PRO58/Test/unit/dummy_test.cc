@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-
+#include "filter.h"
 
 TEST(DummyTest, Dummy1Test)
 {
