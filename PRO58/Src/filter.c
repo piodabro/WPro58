@@ -1,20 +1,23 @@
 
 #include "filter.h"
+#include <assert.h>
 
-float averageFilter(int *val, int size){
-	float res = 0;
+int32_t averageFilter(int32_t *val, int size){
+	int64_t res = 0;
 	for(int i = 0; i<size; i++){
-		res += val[i]/(float)size;
+		res += val[i];
 	}
-	return res;
+	return res/size;
 }
 
-void expFilterInit(expFilter_t *filter, float gain){
+void expFilterInit(expFilter_t *filter, int gain, int precision){
+	assert(gain<= precision);
 	filter->gain=gain;
 	filter->state=0;
+	filter->precision=precision;
 }
-void expFilterUpdate(expFilter_t *filter, int val){
-	filter->state=(1-filter->gain)*filter->state + filter->gain*val;
+void expFilterUpdate(expFilter_t *filter, int64_t val){
+	filter->state=((filter->precision - filter->gain)*filter->state + filter->gain*val)/filter->precision;
 }
 
 

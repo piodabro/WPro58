@@ -4,12 +4,13 @@
 #include <stdint.h>
 
 typedef struct expFilter_s {
-	float state;
-	float gain;
+	int64_t state;
+	int gain;
+	int precision;
 }expFilter_t;
 
-float averageFilter(int *val, int size);
-void expFilterInit(expFilter_t *filter, float gain);
-void expFilterUpdate(expFilter_t *filter, int val);
+int32_t averageFilter(int32_t *val, int size);
+void expFilterInit(expFilter_t *filter, int gain, int precision);
+void expFilterUpdate(expFilter_t *filter, int64_t val);
 
 #endif
