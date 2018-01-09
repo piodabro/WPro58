@@ -10,6 +10,8 @@
 #include "state_settings_rssi.h"
 #include "state_settings_diversity_mode.h"
 #include "state_settings_callsign.h"
+#include "state_settings_favourites.h"
+#include "state_favourite_screen.h"
 
 #include "ui.h"
 #include "buttons.h"
@@ -33,8 +35,10 @@ void *operator new(size_t size, void *ptr){
     MAX(sizeof(SettingsStateHandler), \
 	MAX(sizeof(SettingsRssiStateHandler), \
 	MAX(sizeof(SettingsCallsignStateHandler), \
+	MAX(sizeof(SettingsFavouritesStateHandler), \
+	MAX(sizeof(FavouriteScreenStateHandler), \
 	sizeof(SettingsDiversityModeStateHandler) \
-	)))))))
+	)))))))))
 ;
 
 namespace StateMachine {
@@ -103,10 +107,13 @@ namespace StateMachine {
             STATE_FACTORY(State::SCREENSAVER, ScreensaverStateHandler);
             STATE_FACTORY(State::BANDSCAN, BandScanStateHandler);
             STATE_FACTORY(State::MENU, MenuStateHandler);
+            STATE_FACTORY(State::FAVOURITES, FavouriteScreenStateHandler);
             STATE_FACTORY(State::SETTINGS, SettingsStateHandler);
             STATE_FACTORY(State::SETTINGS_RSSI, SettingsRssiStateHandler);
             STATE_FACTORY(State::SETTINGS_DIVERSITY_MODE, SettingsDiversityModeStateHandler);
             STATE_FACTORY(State::SETTINGS_CALLSIGN, SettingsCallsignStateHandler);
+            STATE_FACTORY(State::SETTINGS_FAVOURITES, SettingsFavouritesStateHandler);
+
 
             default:
                 return nullptr;

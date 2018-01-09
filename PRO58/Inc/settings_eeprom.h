@@ -36,6 +36,8 @@ struct EepromSettings {
 
     uint8_t callsign[CALLSIGN_LEN];
 
+    uint8_t favouriteChannels[8];
+
     void update();
 
     void load();
@@ -72,6 +74,8 @@ const struct {
         uint8_t vbatCritical = CRITICAL_VOLTAGE;
     #endif
     const uint8_t callsign[CALLSIGN_LEN] = {0};
+
+    uint8_t favouriteChannels[8] = { 32, 33, 34, 35, 36, 37, 38, 39 }; //RaceBand ones ;)
 } EepromDefaults;
 
 
