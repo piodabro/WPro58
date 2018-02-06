@@ -3,7 +3,9 @@
 #include "buttons.h"
 #include "settings.h"
 #include "stm32f1xx_hal.h"
-#include "beeper.h"
+#ifndef HB5808
+	#include "beeper.h"
+#endif
 
 struct Buttons::ButtonState states[BUTTON_COUNT];
 static Buttons::ChangeFunc changeFuncs[BUTTON_HOOKS_MAX] = { nullptr };
@@ -77,7 +79,9 @@ namespace Buttons {
     }
 
     static void runChangeFuncs(Button button, PressType pressType) {
+#ifndef HB5808
     	Beeper::beepHigh(50);
+#endif
         for (uint8_t i = 0; i < BUTTON_HOOKS_MAX; i++) {
             if (changeFuncs[i] != nullptr) {
                 changeFuncs[i](button, pressType);

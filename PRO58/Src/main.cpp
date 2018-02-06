@@ -60,11 +60,12 @@
 #include "DWT_Delay.h"
 #include "i2c_reset.h"
 
-#include "beeper.h"
+#ifndef HB5808
+	#include "beeper.h"
+	#include "fatshark_pins.h"
+#endif
 
 #include "logo.h"
-
-#include "fatshark_pins.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -116,10 +117,12 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_ADC1_Init();
-  MX_I2C1_Init();
   MX_I2C2_Init();
   MX_USART1_UART_Init();
+#ifndef HB5808
+  MX_I2C1_Init();
   MX_TIM4_Init();
+#endif
   MX_TIM3_Init();
 
   /* USER CODE BEGIN 2 */
@@ -135,8 +138,13 @@ int main(void)
 
     HAL_Delay(100); //Delay 1000ms to allow RX5808 startup.
 
+#ifndef HB5808
     I2C_Reset(hi2c1, MX_I2C1_Init);
     Ui::setup(&hi2c1);
+#else
+    I2C_Reset(hi2c2, MX_I2C2_Init);
+    Ui::setup(&hi2c2);
+#endif
 
     Ui::display.drawBitmap(
   		0,
@@ -148,6 +156,7 @@ int main(void)
     );
     Ui::display.display();
 
+#ifndef HB5808
     Beeper::init();
     Beeper::beepC(200); //welcome beeep ;)
     while(Beeper::beeping){
@@ -170,15 +179,25 @@ int main(void)
     while(Beeper::beeping){
       Beeper::update();
     }
+#endif
 
     HAL_Delay(200);
+
+#ifndef HB5808
     I2C_Reset(hi2c2, MX_I2C2_Init);
     EepromSettings.init(&hi2c2);
     EepromSettings.load();
+#else
+    EepromSettings.initDefaults();
+    //TODO: Flash EEPROM emulation for HB5808
+#endif
+
     Receiver::setup(&hadc1);
     Receiver::setChannel(EepromSettings.startChannel);
 
+#ifndef HB5808
     FatSharkPins::init();
+#endif
 
     StateMachine::setup();
 
@@ -193,13 +212,19 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  Beeper::update();
+#ifndef HB5808
+	  	  Beeper::update();
+#endif
 	  	  Receiver::update();
 	  	  Buttons::update();
+#ifndef HB5808
 	  	  FatSharkPins::update();
+#endif
 	  	  StateMachine::update();
 	  	  Ui::update();
+#ifndef HB5808
 	  	  EepromSettings.update();
+#endif
 
 	  	  if (
 	  //	    StateMachine::currentState != StateMachine::State::SCREENSAVER

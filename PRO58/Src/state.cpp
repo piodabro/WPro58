@@ -16,7 +16,9 @@
 #include "ui.h"
 #include "buttons.h"
 #include "settings_internal.h"
-#include "fatshark_pins.h"
+#ifndef HB5808
+	#include "fatshark_pins.h"
+#endif
 
 
 #include "timer.h"
@@ -55,7 +57,9 @@ namespace StateMachine {
 
     void setup() {
         Buttons::registerChangeFunc(onButtonChange);
+#ifndef HB5808
         FatSharkPins::registerChangeFunc(onFSPinsChange);
+#endif
     }
 
     void update() {
