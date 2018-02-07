@@ -45,29 +45,14 @@ void EepromSettings::update() {
 }
 
 void EepromSettings::load() {
-#ifndef HB5808
     EEPROM.get(0, *this);
-#else
-    uint16_t *ptr = (uint16_t*) this;
-	for( uint16_t count = 0; count < sizeof(EepromSettings)/2; ++count )  {
-		EE_ReadVariable(count, ptr++);
-	}
-#endif
     
     if (this->magic != EEPROM_MAGIC)
         this->initDefaults();
 }
 
 void EepromSettings::save() {
-#ifndef HB5808
    EEPROM.put(0, *this);
-#else
-   const uint16_t *ptr = (const uint16_t*) this;
-   for( uint16_t count = 0; count < sizeof(EepromSettings)/2 ; ++count)  {
-	   EE_WriteVariable(count, *ptr);
-	   ++ptr;
-   }
-#endif
 
 }
 

@@ -56,10 +56,15 @@ namespace Receiver {
     }
 
     void setActiveReceiver(ReceiverId receiver) {
- 
+#ifndef HB5808
 		HAL_GPIO_WritePin(LED_A_GPIO_Port,LED_A_Pin,receiver != ReceiverId::A ? GPIO_PIN_SET : GPIO_PIN_RESET);//(PIN_LED_A, receiver != ReceiverId::A);
 		HAL_GPIO_WritePin(LED_B_GPIO_Port,LED_B_Pin,receiver != ReceiverId::B ? GPIO_PIN_SET : GPIO_PIN_RESET);//digitalWrite(PIN_LED_B, receiver != ReceiverId::B);
 		HAL_GPIO_WritePin(RECEIVER_SW_GPIO_Port, RECEIVER_SW_Pin, receiver == ReceiverId::A ? GPIO_PIN_SET : GPIO_PIN_RESET);//    digitalWrite(PIN_SW, receiver == ReceiverId::A);
+#else
+		HAL_GPIO_WritePin(LED_A_GPIO_Port,LED_A_Pin,receiver == ReceiverId::A ? GPIO_PIN_SET : GPIO_PIN_RESET);//(PIN_LED_A, receiver != ReceiverId::A);
+		HAL_GPIO_WritePin(LED_B_GPIO_Port,LED_B_Pin,receiver == ReceiverId::B ? GPIO_PIN_SET : GPIO_PIN_RESET);//digitalWrite(PIN_LED_B, receiver != ReceiverId::B);
+		HAL_GPIO_WritePin(RECEIVER_SW_GPIO_Port, RECEIVER_SW_Pin, receiver != ReceiverId::A ? GPIO_PIN_SET : GPIO_PIN_RESET);//    digitalWrite(PIN_SW, receiver == ReceiverId::A);
+#endif
     
         activeReceiver = receiver;
     }

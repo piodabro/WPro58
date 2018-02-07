@@ -6,6 +6,9 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
+
 /* Global variable used to store variable value in read sequence */
 uint16_t DataVar = 0;
 
@@ -15,7 +18,7 @@ extern uint16_t DataStructSize;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-static HAL_StatusTypeDef EE_Format(void);
+static uint16_t EE_Format(void);
 static uint16_t EE_FindValidPage(uint8_t Operation);
 static uint16_t EE_VerifyPageFullWriteVariable(uint16_t VirtAddress,
 		uint16_t Data);
@@ -302,8 +305,8 @@ uint16_t EE_WriteVariable(uint16_t VirtAddress, uint16_t Data) {
  * @retval Status of the last operation (Flash write or erase) done during
  *         EEPROM formating
  */
-static HAL_StatusTypeDef EE_Format(void) {
-	HAL_StatusTypeDef FlashStatus = HAL_OK;
+static uint16_t EE_Format(void) {
+	uint16_t FlashStatus = HAL_OK;
 
 	FlashStatus = HAL_FLASH_Unlock();
 	if (FlashStatus != HAL_OK) {
@@ -469,7 +472,7 @@ static uint16_t EE_VerifyPageFullWriteVariable(uint16_t VirtAddress,
  *           - Flash error code: on write Flash error
  */
 static uint16_t EE_PageTransfer(uint16_t VirtAddress, uint16_t Data) {
-	HAL_StatusTypeDef FlashStatus = HAL_OK;
+	uint16_t FlashStatus = HAL_OK;
 	uint32_t NewPageAddress = 0x080103FF, OldPageAddress = 0x08010000;
 	uint16_t ValidPage = PAGE0, VarIdx = 0;
 	uint16_t EepromStatus = 0, ReadStatus = 0;
@@ -557,12 +560,12 @@ static uint16_t EE_ErasePage(uint32_t PageAddress){
 	flashErase.TypeErase = FLASH_TYPEERASE_PAGES;
 	if(HAL_FLASHEx_Erase(&flashErase,&error)==HAL_OK)
 	{
-		HAL_FLASH_Lock();
 		if(error != 0xFFFFFFFF)
 			return error;
 		else
 			return HAL_OK;
 	}
-	HAL_FLASH_Lock();
 	return HAL_ERROR;
 }
+
+#pragma GCC pop_options
