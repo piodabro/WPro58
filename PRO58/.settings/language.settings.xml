@@ -24,7 +24,7 @@
 			</provider>
 		</extension>
 	</configuration>
-	<configuration id="fr.ac6.managedbuild.config.gnu.cross.exe.debug.239771716.1496360277" name="Debug HB5808">
+	<configuration id="fr.ac6.managedbuild.config.gnu.cross.exe.debug.239771716.1496360277" name="Debug_HB5808">
 		<extension point="org.eclipse.cdt.core.LanguageSettingsProvider">
 			<provider copy-of="extension" id="org.eclipse.cdt.ui.UserLanguageSettingsProvider"/>
 			<provider-reference id="org.eclipse.cdt.core.ReferencedProjectsLanguageSettingsProvider" ref="shared-provider"/>
@@ -36,7 +36,7 @@
 			</provider>
 		</extension>
 	</configuration>
-	<configuration id="fr.ac6.managedbuild.config.gnu.cross.exe.release.1829076308.613354538" name="Release HB5808">
+	<configuration id="fr.ac6.managedbuild.config.gnu.cross.exe.release.1829076308.613354538" name="Release_HB5808">
 		<extension point="org.eclipse.cdt.core.LanguageSettingsProvider">
 			<provider copy-of="extension" id="org.eclipse.cdt.ui.UserLanguageSettingsProvider"/>
 			<provider-reference id="org.eclipse.cdt.core.ReferencedProjectsLanguageSettingsProvider" ref="shared-provider"/>

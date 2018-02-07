@@ -112,7 +112,7 @@
 #define SPI_SLAVE_SELECT_A_Pin GPIO_PIN_13  // This is just a bit mask. A | B = A = B
 #define SPI_SLAVE_SELECT_A_GPIO_Port GPIOB
 
-#define SPI_DATA_Pin GPIO_PIN_2
+#define SPI_DATA_Pin GPIO_PIN_12
 #define SPI_DATA_GPIO_Port GPIOB
 #define SPI_CLOCK_Pin GPIO_PIN_14
 #define SPI_CLOCK_GPIO_Port GPIOB

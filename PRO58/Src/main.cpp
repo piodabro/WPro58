@@ -179,6 +179,8 @@ int main(void)
     while(Beeper::beeping){
       Beeper::update();
     }
+#else
+	HAL_Delay(1000);
 #endif
 
     HAL_Delay(200);
@@ -188,8 +190,8 @@ int main(void)
     EepromSettings.init(&hi2c2);
     EepromSettings.load();
 #else
-    EepromSettings.initDefaults();
-    //TODO: Flash EEPROM emulation for HB5808
+    EepromSettings.init();
+    EepromSettings.load();
 #endif
 
     Receiver::setup(&hadc1);
@@ -222,9 +224,7 @@ int main(void)
 #endif
 	  	  StateMachine::update();
 	  	  Ui::update();
-#ifndef HB5808
 	  	  EepromSettings.update();
-#endif
 
 	  	  if (
 	  //	    StateMachine::currentState != StateMachine::State::SCREENSAVER
