@@ -60,9 +60,12 @@
 #include "DWT_Delay.h"
 #include "i2c_reset.h"
 
-#ifndef HB5808
-	#include "beeper.h"
+#ifdef USE_FS_PINS
 	#include "fatshark_pins.h"
+#endif
+
+#ifdef USE_BUZZER
+	#include "beeper.h"
 #endif
 
 #include "logo.h"
@@ -121,6 +124,8 @@ int main(void)
   MX_USART1_UART_Init();
 #ifndef HB5808
   MX_I2C1_Init();
+#endif
+#ifdef USE_BUZZER
   MX_TIM4_Init();
 #endif
   MX_TIM3_Init();
@@ -156,7 +161,7 @@ int main(void)
     );
     Ui::display.display();
 
-#ifndef HB5808
+#ifdef USE_BUZZER
     Beeper::init();
     Beeper::beepC(200); //welcome beeep ;)
     while(Beeper::beeping){
@@ -197,7 +202,7 @@ int main(void)
     Receiver::setup(&hadc1);
     Receiver::setChannel(EepromSettings.startChannel);
 
-#ifndef HB5808
+#ifdef USE_FS_PINS
     FatSharkPins::init();
 #endif
 
@@ -214,12 +219,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-#ifndef HB5808
+#ifdef USE_BUZZER
 	  	  Beeper::update();
 #endif
 	  	  Receiver::update();
 	  	  Buttons::update();
-#ifndef HB5808
+#ifdef USE_FS_PINS
 	  	  FatSharkPins::update();
 #endif
 	  	  StateMachine::update();

@@ -1,4 +1,4 @@
-#ifndef HB5808
+#ifdef USE_FS_PINS
 
 #include "fatshark_pins.h"
 #include "main.h"

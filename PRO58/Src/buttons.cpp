@@ -3,7 +3,7 @@
 #include "buttons.h"
 #include "settings.h"
 #include "stm32f1xx_hal.h"
-#ifndef HB5808
+#ifdef USE_BUZZER
 	#include "beeper.h"
 #endif
 
@@ -79,7 +79,7 @@ namespace Buttons {
     }
 
     static void runChangeFuncs(Button button, PressType pressType) {
-#ifndef HB5808
+#ifdef USE_BUZZER
     	Beeper::beepHigh(50);
 #endif
         for (uint8_t i = 0; i < BUTTON_HOOKS_MAX; i++) {
