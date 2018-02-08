@@ -4,10 +4,14 @@
 STM32 based Eachine PRO58 module firmware based on [Shea Ivey's rx5808-pro](https://github.com/sheaivey/rx5808-pro-diversity)
 
 ### Pinouts and programming.
-To program PRO58 you have to use ST-link programmer.
+To program your PRO58 or HB5808 module you have to use ST-link programmer.
 Connect 5V power and GND via Fatshark connector and GND, SWDIO and SWDCLK to ST-Link via SWD connector.
 Remember that module draws 360 mA of current, power it with efficient power supply!
 
-![Pinouts](PRO58_pinouts.jpg)
+#### Eachine PRO58 pinouts
+![Pinouts](docs/PRO58_pinouts.jpg)
+
+#### Quanum HB5808 pinouts
+![Pinouts](docs/HB5808_pinouts.jpg)
 
 To edit/build code you need to download [SW4STM32](http://www.openstm32.org/HomePage) IDE (Eclipse based)

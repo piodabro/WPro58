@@ -148,12 +148,12 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
   else if(tim_baseHandle->Instance==TIM4)
   {
   /* USER CODE BEGIN TIM4_MspInit 0 */
-
+#ifndef HB5808
   /* USER CODE END TIM4_MspInit 0 */
     /* TIM4 clock enable */
     __HAL_RCC_TIM4_CLK_ENABLE();
   /* USER CODE BEGIN TIM4_MspInit 1 */
-
+#endif
   /* USER CODE END TIM4_MspInit 1 */
   }
 }
@@ -164,7 +164,7 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
   if(timHandle->Instance==TIM4)
   {
   /* USER CODE BEGIN TIM4_MspPostInit 0 */
-
+#ifndef HB5808
   /* USER CODE END TIM4_MspPostInit 0 */
   
     /**TIM4 GPIO Configuration    
@@ -176,7 +176,7 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
     HAL_GPIO_Init(BUZZER_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN TIM4_MspPostInit 1 */
-
+#endif
   /* USER CODE END TIM4_MspPostInit 1 */
   }
 

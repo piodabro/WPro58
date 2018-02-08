@@ -36,14 +36,15 @@
 #define GRAPH_W (SCREEN_WIDTH - BORDER_GRAPH_L_X)
 #ifdef USE_DIVERSITY
     #define GRAPH_H (GRAPH_SEPERATOR_Y - 2)
-    #define GRAPH_A_Y (SCREEN_HEIGHT - GRAPH_H - 1)
-    #define GRAPH_B_Y 0
+    #define GRAPH_A_Y 0
+    #define GRAPH_B_Y (SCREEN_HEIGHT - GRAPH_H - 1)
 
     #define RX_TEXT_SIZE 1
     #define RX_TEXT_X (BORDER_GRAPH_L_X + 4)
     #define RX_TEXT_H (CHAR_HEIGHT * RX_TEXT_SIZE)
     #define RX_TEXT_A_Y ((GRAPH_A_Y + GRAPH_H / 2) - (RX_TEXT_H / 2))
     #define RX_TEXT_B_Y ((GRAPH_B_Y + GRAPH_H / 2) - (RX_TEXT_H / 2))
+	#define RX_RSSI_X (BORDER_GRAPH_L_X + GRAPH_W - 4 * CHAR_WIDTH - 4)
 #else
     #define GRAPH_H (SCREEN_HEIGHT - 1)
     #define GRAPH_Y 0
@@ -147,7 +148,7 @@ void StateMachine::SearchStateHandler::drawScanBar() {
 void StateMachine::SearchStateHandler::drawRssiGraph() {
     #ifdef USE_DIVERSITY
         Ui::drawGraph(
-            Receiver::rssiBLast,
+            Receiver::rssiALast,
             RECEIVER_LAST_DATA_SIZE,
             100,
             GRAPH_X,
@@ -157,7 +158,7 @@ void StateMachine::SearchStateHandler::drawRssiGraph() {
         );
 
         Ui::drawGraph(
-            Receiver::rssiALast,
+            Receiver::rssiBLast,
             RECEIVER_LAST_DATA_SIZE,
             100,
             GRAPH_X,
@@ -176,11 +177,33 @@ void StateMachine::SearchStateHandler::drawRssiGraph() {
         display.setTextSize(RX_TEXT_SIZE);
         display.setTextColor(INVERSE);
 
+		if(Receiver::rssiA < 100 && Receiver::rssiA >= 10){
+			display.setCursor(RX_RSSI_X + CHAR_WIDTH, RX_TEXT_A_Y);
+		} else if (Receiver::rssiA < 10){
+			display.setCursor(RX_RSSI_X + CHAR_WIDTH*2, RX_TEXT_A_Y);
+		} else {
+			display.setCursor(RX_RSSI_X, RX_TEXT_A_Y);
+		}
+		display.print(Receiver::rssiA);
+		display.setCursor(SCREEN_WIDTH - CHAR_WIDTH, RX_TEXT_A_Y);
+		display.print("%");
+
+		if(Receiver::rssiB < 100 && Receiver::rssiB >= 10){
+			display.setCursor(RX_RSSI_X + 5, RX_TEXT_B_Y);
+		} else if (Receiver::rssiB < 10){
+			display.setCursor(RX_RSSI_X + 10, RX_TEXT_B_Y);
+		} else {
+			display.setCursor(RX_RSSI_X, RX_TEXT_B_Y);
+		}
+		display.print(Receiver::rssiB);
+		display.setCursor(SCREEN_WIDTH - CHAR_WIDTH, RX_TEXT_B_Y);
+		display.print("%");
+
         display.setCursor(RX_TEXT_X, RX_TEXT_A_Y);
-        display.print(("B"));
+        display.print(("A"));
 
         display.setCursor(RX_TEXT_X, RX_TEXT_B_Y);
-        display.print(("A"));
+        display.print(("B"));
     #else
         Ui::drawGraph(
             Receiver::rssiALast,

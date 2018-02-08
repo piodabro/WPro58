@@ -2,3 +2,5 @@
 /Release/
 /obj/
 user_env.mk
+/Debug HB5808/
+/Release_HB5808/

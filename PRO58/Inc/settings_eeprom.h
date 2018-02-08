@@ -43,7 +43,11 @@ struct EepromSettings {
     void load();
     void save();
     void markDirty();
+#ifdef USE_EXTERNAL_EEPROM
     void init(I2C_HandleTypeDef *i2c_handle);
+#else
+    void init();
+#endif
     void initDefaults();
     void getCallSign(char *sign);
     void setCallSign(char *sign);
@@ -75,7 +79,7 @@ const struct {
     #endif
     const uint8_t callsign[CALLSIGN_LEN] = {0};
 
-    uint8_t favouriteChannels[8] = { 32, 33, 34, 35, 36, 37, 38, 39 }; //RaceBand ones ;)
+    const uint8_t favouriteChannels[8] = { 32, 33, 34, 35, 36, 37, 38, 39 }; //RaceBand ones ;)
 } EepromDefaults;
 
 

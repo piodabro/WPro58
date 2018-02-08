@@ -7,7 +7,6 @@
 #include "channels.h"
 #include "buttons.h"
 #include "ui.h"
-#include "fatshark_pins.h"
 
 using StateMachine::FavouriteScreenStateHandler;
 

@@ -1,3 +1,5 @@
+#ifdef USE_FS_PINS
+
 #include "fatshark_pins.h"
 #include "main.h"
 #include "stm32f1xx_hal.h"
@@ -72,3 +74,5 @@ namespace FatSharkPins {
     	}
     }
 }
+
+#endif
