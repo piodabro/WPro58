@@ -82,6 +82,7 @@ void EepromSettings::initDefaults() {
 	char sign[CALLSIGN_LEN + 1] = CALLSIGN_DEF;
 	memcpy(callsign, sign, CALLSIGN_LEN);
 
+	memcpy(favouriteChannels, EepromDefaults.favouriteChannels, 8);
 	//memcpy(this, &EepromDefaults, sizeof(EepromDefaults));
 	this->save();
 }

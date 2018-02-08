@@ -43,7 +43,7 @@ struct EepromSettings {
     void load();
     void save();
     void markDirty();
-#ifndef HB5808
+#ifdef USE_EXTERNAL_EEPROM
     void init(I2C_HandleTypeDef *i2c_handle);
 #else
     void init();
