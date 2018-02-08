@@ -287,7 +287,7 @@ Eeprom24C01_02::writeBuffer
     uint8_t*   p_data
 ){
 
-	HAL_I2C_Mem_Write_DMA(i2c_handler, m_deviceAddress << 1, address, 1, p_data, length);
+	HAL_I2C_Mem_Write(i2c_handler, m_deviceAddress << 1, address, 1, p_data, length, 100);
     
     // Write cycle time (tWR). See EEPROM memory datasheet for more details.
     HAL_Delay(10);

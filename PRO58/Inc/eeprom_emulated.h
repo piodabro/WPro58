@@ -10,15 +10,11 @@
 
 /* Exported constants --------------------------------------------------------*/
 /* Define the STM32F10Xxx Flash page size depending on the used STM32 device */
-#if defined (STM32F103xB) || defined (STM32F10X_MD)
-  #define PAGE_SIZE  (uint16_t)0x400U  /* Page size = 1KByte */
-#elif defined (STM32F10X_HD) || defined (STM32F10X_CL)
-  #define PAGE_SIZE  (uint16_t)0x800  /* Page size = 2KByte */
-#endif
+#define PAGE_SIZE FLASH_PAGE_SIZE  /* Page size = 1KByte */
 
 /* EEPROM start address in Flash */
-#define EEPROM_START_ADDRESS    ((uint32_t)0x08010000U) /* EEPROM emulation start address:
-                                                  after 64KByte of used Flash memory */
+#define EEPROM_START_ADDRESS    ((uint32_t)0x0800F000U) /* EEPROM emulation start address:
+                                                  after 60KByte of used Flash memory */
 
 /* Pages 0 and 1 base and end addresses */
 #define PAGE0_BASE_ADDRESS      ((uint32_t)(EEPROM_START_ADDRESS + 0x000U))
@@ -143,9 +139,8 @@ struct EEPtr{
 
     This object represents the entire EEPROM space.
     It wraps the functionality of EEPtr and EERef into a basic interface.
-    This class is also 100% backwards compatible with earlier Arduino core releases.
+    It comes from Arduino...
 ***/
-
 struct EEPROMClass{
 
     //Basic user access methods.

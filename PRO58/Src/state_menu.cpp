@@ -58,9 +58,9 @@ static void favouritesMenuHandler();
 void StateMachine::MenuStateHandler::onEnter() {
     this->menu.reset();
     this->menu.addItem("Search", searchIcon, searchMenuHandler);
+    this->menu.addItem("Favourites", starIcon, favouritesMenuHandler);
     this->menu.addItem("Band Scan", bandScanIcon, bandScannerMenuHandler);
     this->menu.addItem("Settings", settingsIcon, settingsMenuHandler);
-    this->menu.addItem("Favourites", starIcon, favouritesMenuHandler);
 }
 
 

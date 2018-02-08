@@ -49,6 +49,7 @@
 									<listOptionValue builtIn="false" value="CALLSIGN=&quot;WPro58&quot;"/>
 									<listOptionValue builtIn="false" value="USE_FS_PINS"/>
 									<listOptionValue builtIn="false" value="USE_BUZZER"/>
+									<listOptionValue builtIn="false" value="USE_EXTERNAL_EEPROM"/>
 								</option>
 								<option id="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other.822087866" superClass="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-fmessage-length=0" valueType="string"/>
 								<option id="gnu.c.compiler.option.dialect.std.1105823341" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
@@ -75,6 +76,7 @@
 									<listOptionValue builtIn="false" value="CALLSIGN=&quot;WPro58&quot;"/>
 									<listOptionValue builtIn="false" value="USE_FS_PINS"/>
 									<listOptionValue builtIn="false" value="USE_BUZZER"/>
+									<listOptionValue builtIn="false" value="USE_EXTERNAL_EEPROM"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.dialect.std.1692575105" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.dialect.flags.2078677799" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" useByScannerDiscovery="true" value="-std=c++11" valueType="string"/>
@@ -165,6 +167,7 @@
 									<listOptionValue builtIn="false" value="CALLSIGN=&quot;WPro58&quot;"/>
 									<listOptionValue builtIn="false" value="USE_FS_PINS"/>
 									<listOptionValue builtIn="false" value="USE_BUZZER"/>
+									<listOptionValue builtIn="false" value="USE_EXTERNAL_EEPROM"/>
 								</option>
 								<option id="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other.822087866" superClass="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-fmessage-length=0" valueType="string"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.1472656559" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
@@ -190,6 +193,7 @@
 									<listOptionValue builtIn="false" value="CALLSIGN=&quot;WPro58&quot;"/>
 									<listOptionValue builtIn="false" value="USE_FS_PINS"/>
 									<listOptionValue builtIn="false" value="USE_BUZZER"/>
+									<listOptionValue builtIn="false" value="USE_EXTERNAL_EEPROM"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.dialect.std.1032729674" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.dialect.flags.386883079" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" useByScannerDiscovery="true" value="-std=c++11" valueType="string"/>

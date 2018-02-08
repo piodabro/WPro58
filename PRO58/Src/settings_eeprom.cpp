@@ -1,16 +1,17 @@
 #include <string.h>
 
-
 #include "settings.h"
 #include "settings_internal.h"
 #include "settings_eeprom.h"
 
-#ifndef HB5808
+#ifdef USE_EXTERNAL_EEPROM
 #include "Eeprom24C01_02.h"
 #include "eeprom_external.h"
 #else
 #include "eeprom_emulated.h"
-uint16_t DataStructSize = sizeof(EepromSettings);
+//This is needed to determine how much variable 16-bit elements are stored to flash.
+//This is used for example in page data copy. It must be equal to 16-bit EepromSettings struct size wchich is written to flash.
+uint16_t DataStructSize = (sizeof(EepromSettings) % 2 == 0) ? sizeof(EepromSettings)/2 : sizeof(EepromSettings)/2 + 1;
 #endif
 
 #include "timer.h"
@@ -22,11 +23,11 @@ static bool isDirty = false;
 
 struct EepromSettings EepromSettings;
 
-#ifndef HB5808
+#ifdef USE_EXTERNAL_EEPROM
 Eeprom24C01_02 eep(0x50);
 
 void EepromSettings::init(I2C_HandleTypeDef *i2c_handle) {
-    eep.initialize(i2c_handle);
+	eep.initialize(i2c_handle);
 }
 #else
 void EepromSettings::init() {
@@ -35,30 +36,28 @@ void EepromSettings::init() {
 #endif
 
 void EepromSettings::update() {
-    if (isDirty) {
-        if (saveTimer.hasTicked()) {
-            isDirty = false;
-            saveTimer.reset();
-            this->save();
-        }
-    }
+	if (isDirty) {
+		if (saveTimer.hasTicked()) {
+			isDirty = false;
+			saveTimer.reset();
+			this->save();
+		}
+	}
 }
 
 void EepromSettings::load() {
-    EEPROM.get(0, *this);
-    
-    if (this->magic != EEPROM_MAGIC)
-        this->initDefaults();
+	EEPROM.get(0, *this);
+	if (this->magic != EEPROM_MAGIC)
+		this->initDefaults();
 }
 
 void EepromSettings::save() {
-   EEPROM.put(0, *this);
-
+	EEPROM.put(0, *this);
 }
 
 void EepromSettings::markDirty() {
-    isDirty = true;
-    saveTimer.reset();
+	isDirty = true;
+	saveTimer.reset();
 }
 
 void EepromSettings::initDefaults() {
@@ -80,23 +79,23 @@ void EepromSettings::initDefaults() {
 	vbatWarning = WARNING_VOLTAGE;
 	vbatCritical = CRITICAL_VOLTAGE;
 #endif
-	char sign[CALLSIGN_LEN+1] = CALLSIGN_DEF;
+	char sign[CALLSIGN_LEN + 1] = CALLSIGN_DEF;
 	memcpy(callsign, sign, CALLSIGN_LEN);
 
-    //memcpy(this, &EepromDefaults, sizeof(EepromDefaults));
-    this->save();
+	//memcpy(this, &EepromDefaults, sizeof(EepromDefaults));
+	this->save();
 }
 
-void EepromSettings::getCallSign(char *sign){
+void EepromSettings::getCallSign(char *sign) {
 	memcpy(sign, callsign, CALLSIGN_LEN);
-	sign[CALLSIGN_LEN+1]=0;
+	sign[CALLSIGN_LEN + 1] = 0;
 }
 
-void EepromSettings::setCallSign(char *sign){
+void EepromSettings::setCallSign(char *sign) {
 	memcpy(callsign, sign, CALLSIGN_LEN);
 }
 
-uint8_t EepromSettings::cmpCallSign(char *sign){
-	return strncmp(sign, (char*)callsign, CALLSIGN_LEN);
+uint8_t EepromSettings::cmpCallSign(char *sign) {
+	return strncmp(sign, (char*) callsign, CALLSIGN_LEN);
 }
 

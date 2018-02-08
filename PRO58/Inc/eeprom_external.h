@@ -91,7 +91,7 @@ struct EEPtr{
 
     This object represents the entire EEPROM space.
     It wraps the functionality of EEPtr and EERef into a basic interface.
-    This class is also 100% backwards compatible with earlier Arduino core releases.
+    It comes from Arduino...
 ***/
 
 struct EEPROMClass{
