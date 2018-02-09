@@ -2,6 +2,7 @@
 #include "beeper.h"
 #include "tim.h"
 #include "stm32f1xx_hal.h"
+#include "settings_eeprom.h"
 
 static Timer beeperTimer = Timer(100);
 
@@ -13,20 +14,6 @@ namespace Beeper
 		HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
 	}
 
-	void beepLow(uint16_t time){
-		beeping = true;
-		TIM4->PSC = 1637;
-		TIM4->CCR3 = 50;
-		beeperTimer.setDelay(time);
-	}
-
-	void beepHigh(uint16_t time){
-		beeping = true;
-		TIM4->PSC = 720;
-		TIM4->CCR3 = 50;
-		beeperTimer.setDelay(time);
-	}
-
 	void beepFreq(uint16_t time, float freq){
 		beeping = true;
 		uint32_t psc = 720000 / freq;
@@ -35,6 +22,17 @@ namespace Beeper
 		beeperTimer.setDelay(time);
 	}
 
+	void beepLow(uint16_t time){
+		if(EepromSettings.beepEnabled){
+			beepFreq(time, 440);
+		}
+	}
+
+	void beepHigh(uint16_t time){
+		if(EepromSettings.beepEnabled){
+			beepFreq(time, 1000);
+		}
+	}
 
 	void beepC(uint16_t time){
 		beepFreq(time, 523.251136);

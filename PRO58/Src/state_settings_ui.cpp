@@ -5,97 +5,45 @@
 #include <cstring>
 //#include "pstr_helper.h"
 
-
-#define TRIANGLE_SIZE 4
-#define TRIANGLE_MARGIN 2
-
-#define GRAPHIC_SIZE 32
-#define GRAPHIC_X SCREEN_WIDTH_MID - (GRAPHIC_SIZE / 2)
-#define GRAPHIC_Y 7
-
-#define TEXT_Y SCREEN_HEIGHT - (CHAR_HEIGHT + 2) * 2
-
-static void drawTriangles();
-//static void drawMenuEntry();
-
+#define ITEM_HEIGHT 8
 
 void StateMachine::SettingsStateHandler::onInitialDraw() {
     Ui::clear();
 
-    drawMenuEntry();
-    drawTriangles();
+    drawMenu();
 
     Ui::needDisplay();
 }
 
 void StateMachine::SettingsStateHandler::onUpdateDraw() {
-    Ui::clearRect(
-        0,
-        SCREEN_HEIGHT - (CHAR_HEIGHT + 2) * 2,
-        SCREEN_WIDTH,
-        (CHAR_HEIGHT + 2) * 2
-    );
-
-    drawMenuEntry();
+    drawMenu();
     Ui::needDisplay();
 }
 
 
-void StateMachine::SettingsStateHandler::drawMenuEntry() {
-    const Ui::MenuItem* item = this->menu.getCurrentItem();
-    const uint8_t charLen = strlen((item->text));
+void StateMachine::SettingsStateHandler::drawMenu() {
+	const uint8_t currentMenuIndex = this->menu.getCurrentItemIndex();
 
-    Ui::display.setTextSize(2);
-    Ui::display.setTextColor(WHITE);
-    Ui::display.setCursor(
-        SCREEN_WIDTH_MID - (charLen * ((CHAR_WIDTH + 1) * 2)) / 2,
-        TEXT_Y
-    );
-    Ui::display.print((item->text));
+	Ui::clear();
+	Ui::display.setTextSize(1);
 
-    if (item->icon) {
-        Ui::clearRect(
-            GRAPHIC_X,
-            GRAPHIC_Y,
-            GRAPHIC_SIZE,
-            GRAPHIC_SIZE
-        );
+    for(uint8_t i=0;i<SETTINGS_MENU_ITEMS_MAX;i++){
+    	const Ui::SettingsMenuItem* item = this->menu.getItem(i);
+    	const uint8_t charLen = strlen((item->text));
 
-        Ui::display.drawBitmap(
-            GRAPHIC_X,
-            GRAPHIC_Y,
-            item->icon,
-            GRAPHIC_SIZE,
-            GRAPHIC_SIZE,
-            WHITE
-        );
+    	if(i == currentMenuIndex){
+    		Ui::display.fillRect(0,i*ITEM_HEIGHT,SCREEN_WIDTH,ITEM_HEIGHT,WHITE);
+    		Ui::display.setTextColor(BLACK);
+    	} else {
+    		Ui::display.setTextColor(WHITE);
+    	}
+
+    	Ui::display.setCursor(2, i * ITEM_HEIGHT + ((ITEM_HEIGHT - CHAR_HEIGHT) / 2));
+    	Ui::display.print(item->text);
+
+    	if(item->value != nullptr){
+    		Ui::display.setCursor(SCREEN_WIDTH - (CHAR_WIDTH * strlen(item->value)) - 4, i * ITEM_HEIGHT + ((ITEM_HEIGHT - CHAR_HEIGHT) / 2));
+    		Ui::display.print(item->value);
+    	}
     }
-}
-
-static void drawTriangles() {
-    Ui::display.fillTriangle(
-        SCREEN_WIDTH - 1 - (TRIANGLE_SIZE),
-        SCREEN_HEIGHT_MID + TRIANGLE_MARGIN,
-
-        SCREEN_WIDTH - 1 - (TRIANGLE_SIZE / 2),
-        SCREEN_HEIGHT_MID + TRIANGLE_MARGIN + (TRIANGLE_SIZE),
-
-        SCREEN_WIDTH - 1,
-        SCREEN_HEIGHT_MID + TRIANGLE_MARGIN,
-
-        WHITE
-    );
-
-    Ui::display.fillTriangle(
-        SCREEN_WIDTH - 1 - (TRIANGLE_SIZE),
-        SCREEN_HEIGHT_MID - TRIANGLE_MARGIN,
-
-        SCREEN_WIDTH - 1 - (TRIANGLE_SIZE / 2),
-        SCREEN_HEIGHT_MID - TRIANGLE_MARGIN - (TRIANGLE_SIZE),
-
-        SCREEN_WIDTH - 1,
-        SCREEN_HEIGHT_MID - TRIANGLE_MARGIN,
-
-        WHITE
-    );
 }

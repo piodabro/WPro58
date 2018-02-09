@@ -120,7 +120,7 @@ namespace Buttons {
 
                 if (duration < 500)
                     runChangeFuncs(button, PressType::SHORT);
-                else if (duration < 2000)
+                else if (duration < 1500)
                     runChangeFuncs(button, PressType::LONG);
             }
         }
@@ -128,7 +128,7 @@ namespace Buttons {
         if (state.pressed) {
             uint32_t duration = HAL_GetTick() - state.changeTime;
 
-            if (duration >= 2000)
+            if (duration >= 1500)
                 runChangeFuncs(button, PressType::HOLDING);
         }
     }

@@ -3,7 +3,7 @@
 
 
 #include "state.h"
-#include "ui_menu.h"
+#include "ui_settings_menu.h"
 
 
 namespace StateMachine {
@@ -25,8 +25,8 @@ namespace StateMachine {
 							CALLSIGN_MODE
 						};
 			InternalState internalState = InternalState::RSSI_CALIBRATION;
-			Ui::MenuHelper menu;
-			void drawMenuEntry();
+			Ui::SettingsMenuHelper menu;
+			void drawMenu();
     };
 }
 
