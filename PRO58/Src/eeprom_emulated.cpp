@@ -1,3 +1,9 @@
+/*
+ * This lib is reimplementation of lib described in AN2594: EEPROM emulation in STM32F10x microcontrollers
+ * PioDabro reimplemented this to use HAL libraries
+ * Due to problems with optimization this lib has disabled optimizations.
+ * */
+
 /* Includes ------------------------------------------------------------------*/
 #include "eeprom_emulated.h"
 
