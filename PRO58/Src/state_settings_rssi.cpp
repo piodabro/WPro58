@@ -26,18 +26,22 @@ void StateMachine::SettingsRssiStateHandler::onUpdate() {
 
     switch (internalState) {
         case InternalState::SCANNING_LOW:
-            if (Receiver::rssiARaw < EepromSettings.rssiAMin)
+            if (Receiver::rssiARaw < EepromSettings.rssiAMin){
                 EepromSettings.rssiAMin = Receiver::rssiARaw;
+                Ui::needUpdate();
+            }
 
-            #ifdef USE_DIVERSITY
+			#ifdef USE_DIVERSITY
                 if (Receiver::rssiBRaw < EepromSettings.rssiBMin)
                     EepromSettings.rssiBMin = Receiver::rssiBRaw;
-            #endif
+			#endif
         break;
 
         case InternalState::SCANNING_HIGH:
-            if (Receiver::rssiARaw > EepromSettings.rssiAMax)
+            if (Receiver::rssiARaw > EepromSettings.rssiAMax){
                 EepromSettings.rssiAMax = Receiver::rssiARaw;
+                Ui::needUpdate();
+            }
 
             #ifdef USE_DIVERSITY
                 if (Receiver::rssiBRaw > EepromSettings.rssiBMax)
@@ -130,6 +134,12 @@ void StateMachine::SettingsRssiStateHandler::onUpdateDraw() {
             Ui::display.setTextSize(1);
             Ui::display.setCursor(0, 0);
             Ui::display.print(("2/4\nScanning for lowest\nRSSI..."));
+            Ui::display.setCursor(10, 46);
+            Ui::display.print("A: ");
+            Ui::display.print(EepromSettings.rssiAMin);
+            Ui::display.setCursor(70, 46);
+			Ui::display.print("B: ");
+			Ui::display.print(EepromSettings.rssiBMin);
         break;
 
         case InternalState::WAIT_FOR_HIGH:
@@ -145,6 +155,12 @@ void StateMachine::SettingsRssiStateHandler::onUpdateDraw() {
             Ui::display.setTextSize(1);
             Ui::display.setCursor(0, 0);
             Ui::display.print(("4/4\nScanning for highest\nRSSI..."));
+            Ui::display.setCursor(10, 46);
+			Ui::display.print("A: ");
+			Ui::display.print(EepromSettings.rssiAMax);
+			Ui::display.setCursor(70, 46);
+			Ui::display.print("B: ");
+			Ui::display.print(EepromSettings.rssiBMax);
         break;
 
         case InternalState::DONE:
@@ -159,7 +175,7 @@ void StateMachine::SettingsRssiStateHandler::onUpdateDraw() {
             Ui::display.print(EepromSettings.rssiAMin);
             #ifdef USE_DIVERSITY
                 Ui::display.setCursor((CHAR_WIDTH + 1) * 12, CHAR_HEIGHT * 2);
-                Ui::display.print(EepromSettings.rssiAMin);
+                Ui::display.print(EepromSettings.rssiBMin);
             #endif
 
             Ui::display.setCursor(0, CHAR_HEIGHT * 3 + 1);
