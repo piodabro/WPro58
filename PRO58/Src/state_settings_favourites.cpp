@@ -46,6 +46,9 @@ void StateMachine::SettingsFavouritesStateHandler::onButtonChange(
 
     	Ui::needUpdate();
     }
+    else if(button == Button::MODE && pressType == Buttons::PressType::LONG){
+    	StateMachine::switchState(StateMachine::State::SETTINGS);
+    }
 }
 
 
