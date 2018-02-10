@@ -60,7 +60,12 @@ void SearchStateHandler::onUpdateAuto() {
 		return;
 
 	if (scanning) {
-		if(!forceNext && (Receiver::rssiA >= RSSI_SEEK_TRESHOLD || Receiver::rssiB >= RSSI_SEEK_TRESHOLD)){
+		bool threshold =
+			EepromSettings.diversityMode == Receiver::DiversityMode::AUTO ?
+					(Receiver::rssiA >= RSSI_SEEK_TRESHOLD || Receiver::rssiB >= RSSI_SEEK_TRESHOLD) :
+					(EepromSettings.diversityMode == Receiver::DiversityMode::FORCE_A ?
+							Receiver::rssiA >= RSSI_SEEK_TRESHOLD : Receiver::rssiB >= RSSI_SEEK_TRESHOLD);
+		if(!forceNext && threshold){
 			this->setAndSaveChannel();
 			scanning = false;
 			forceNext = false;

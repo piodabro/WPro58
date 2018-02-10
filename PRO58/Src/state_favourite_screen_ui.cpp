@@ -147,63 +147,69 @@ void StateMachine::FavouriteScreenStateHandler::drawScanBar() {
 
 void StateMachine::FavouriteScreenStateHandler::drawRssiGraph() {
     #ifdef USE_DIVERSITY
-        Ui::drawGraph(
-            Receiver::rssiBLast,
-            RECEIVER_LAST_DATA_SIZE,
-            100,
-            GRAPH_X,
-            GRAPH_B_Y,
-            GRAPH_W,
-            GRAPH_H
-        );
 
-        Ui::drawGraph(
-            Receiver::rssiALast,
-            RECEIVER_LAST_DATA_SIZE,
-            100,
-            GRAPH_X,
-            GRAPH_A_Y,
-            GRAPH_W,
-            GRAPH_H
-        );
+	display.setTextSize(RX_TEXT_SIZE);
+	    display.setTextColor(INVERSE);
 
-        Ui::drawDashedHLine(
-            GRAPH_X,
-            GRAPH_SEPERATOR_Y,
-            GRAPH_SEPERATOR_W,
-            GRAPH_SEPERATOR_STEP
-        );
+		if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO || EepromSettings.diversityMode == Receiver::DiversityMode::FORCE_A){
+	        Ui::drawGraph(
+	            Receiver::rssiALast,
+	            RECEIVER_LAST_DATA_SIZE,
+	            100,
+	            GRAPH_X,
+	            GRAPH_A_Y,
+	            GRAPH_W,
+	            GRAPH_H
+	        );
 
-        display.setTextSize(RX_TEXT_SIZE);
-        display.setTextColor(INVERSE);
+			if(Receiver::rssiA < 100 && Receiver::rssiA >= 10){
+				display.setCursor(RX_RSSI_X + CHAR_WIDTH, RX_TEXT_A_Y);
+			} else if (Receiver::rssiA < 10){
+				display.setCursor(RX_RSSI_X + CHAR_WIDTH*2, RX_TEXT_A_Y);
+			} else {
+				display.setCursor(RX_RSSI_X, RX_TEXT_A_Y);
+			}
+			display.print(Receiver::rssiA);
+			display.setCursor(SCREEN_WIDTH - CHAR_WIDTH, RX_TEXT_A_Y);
+			display.print("%");
 
-		if(Receiver::rssiA < 100 && Receiver::rssiA >= 10){
-			display.setCursor(RX_RSSI_X + CHAR_WIDTH, RX_TEXT_A_Y);
-		} else if (Receiver::rssiA < 10){
-			display.setCursor(RX_RSSI_X + CHAR_WIDTH*2, RX_TEXT_A_Y);
-		} else {
-			display.setCursor(RX_RSSI_X, RX_TEXT_A_Y);
+	        display.setCursor(RX_TEXT_X, RX_TEXT_A_Y);
+	        display.print(("A"));
 		}
-		display.print(Receiver::rssiA);
-		display.setCursor(SCREEN_WIDTH - CHAR_WIDTH, RX_TEXT_A_Y);
-		display.print("%");
 
-		if(Receiver::rssiB < 100 && Receiver::rssiB >= 10){
-			display.setCursor(RX_RSSI_X + 5, RX_TEXT_B_Y);
-		} else if (Receiver::rssiB < 10){
-			display.setCursor(RX_RSSI_X + 10, RX_TEXT_B_Y);
-		} else {
-			display.setCursor(RX_RSSI_X, RX_TEXT_B_Y);
+		if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO || EepromSettings.diversityMode == Receiver::DiversityMode::FORCE_B){
+	        Ui::drawGraph(
+	            Receiver::rssiBLast,
+	            RECEIVER_LAST_DATA_SIZE,
+	            100,
+	            GRAPH_X,
+	            GRAPH_B_Y,
+	            GRAPH_W,
+	            GRAPH_H
+	        );
+
+			if(Receiver::rssiB < 100 && Receiver::rssiB >= 10){
+				display.setCursor(RX_RSSI_X + 5, RX_TEXT_B_Y);
+			} else if (Receiver::rssiB < 10){
+				display.setCursor(RX_RSSI_X + 10, RX_TEXT_B_Y);
+			} else {
+				display.setCursor(RX_RSSI_X, RX_TEXT_B_Y);
+			}
+			display.print(Receiver::rssiB);
+			display.setCursor(SCREEN_WIDTH - CHAR_WIDTH, RX_TEXT_B_Y);
+			display.print("%");
+
+	        display.setCursor(RX_TEXT_X, RX_TEXT_B_Y);
+	        display.print(("B"));
 		}
-		display.print(Receiver::rssiB);
-		display.setCursor(SCREEN_WIDTH - CHAR_WIDTH, RX_TEXT_B_Y);
-		display.print("%");
 
-        display.setCursor(RX_TEXT_X, RX_TEXT_A_Y);
-        display.print(("A"));
+		Ui::drawDashedHLine(
+			GRAPH_X,
+			GRAPH_SEPERATOR_Y,
+			GRAPH_SEPERATOR_W,
+			GRAPH_SEPERATOR_STEP
+		);
 
-        display.setCursor(RX_TEXT_X, RX_TEXT_B_Y);
-        display.print(("B"));
     #else
         Ui::drawGraph(
             Receiver::rssiALast,

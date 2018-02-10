@@ -3,6 +3,7 @@
 #include "receiver.h"
 #include "channels.h"
 #include "ui.h"
+#include "settings_eeprom.h"
 //#include "pstr_helper.h"
 
 
@@ -147,6 +148,11 @@ void StateMachine::SearchStateHandler::drawScanBar() {
 
 void StateMachine::SearchStateHandler::drawRssiGraph() {
     #ifdef USE_DIVERSITY
+
+    display.setTextSize(RX_TEXT_SIZE);
+    display.setTextColor(INVERSE);
+
+	if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO || EepromSettings.diversityMode == Receiver::DiversityMode::FORCE_A){
         Ui::drawGraph(
             Receiver::rssiALast,
             RECEIVER_LAST_DATA_SIZE,
@@ -156,26 +162,6 @@ void StateMachine::SearchStateHandler::drawRssiGraph() {
             GRAPH_W,
             GRAPH_H
         );
-
-        Ui::drawGraph(
-            Receiver::rssiBLast,
-            RECEIVER_LAST_DATA_SIZE,
-            100,
-            GRAPH_X,
-            GRAPH_B_Y,
-            GRAPH_W,
-            GRAPH_H
-        );
-
-        Ui::drawDashedHLine(
-            GRAPH_X,
-            GRAPH_SEPERATOR_Y,
-            GRAPH_SEPERATOR_W,
-            GRAPH_SEPERATOR_STEP
-        );
-
-        display.setTextSize(RX_TEXT_SIZE);
-        display.setTextColor(INVERSE);
 
 		if(Receiver::rssiA < 100 && Receiver::rssiA >= 10){
 			display.setCursor(RX_RSSI_X + CHAR_WIDTH, RX_TEXT_A_Y);
@@ -188,6 +174,21 @@ void StateMachine::SearchStateHandler::drawRssiGraph() {
 		display.setCursor(SCREEN_WIDTH - CHAR_WIDTH, RX_TEXT_A_Y);
 		display.print("%");
 
+        display.setCursor(RX_TEXT_X, RX_TEXT_A_Y);
+        display.print(("A"));
+	}
+
+	if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO || EepromSettings.diversityMode == Receiver::DiversityMode::FORCE_B){
+        Ui::drawGraph(
+            Receiver::rssiBLast,
+            RECEIVER_LAST_DATA_SIZE,
+            100,
+            GRAPH_X,
+            GRAPH_B_Y,
+            GRAPH_W,
+            GRAPH_H
+        );
+
 		if(Receiver::rssiB < 100 && Receiver::rssiB >= 10){
 			display.setCursor(RX_RSSI_X + 5, RX_TEXT_B_Y);
 		} else if (Receiver::rssiB < 10){
@@ -199,11 +200,17 @@ void StateMachine::SearchStateHandler::drawRssiGraph() {
 		display.setCursor(SCREEN_WIDTH - CHAR_WIDTH, RX_TEXT_B_Y);
 		display.print("%");
 
-        display.setCursor(RX_TEXT_X, RX_TEXT_A_Y);
-        display.print(("A"));
-
         display.setCursor(RX_TEXT_X, RX_TEXT_B_Y);
         display.print(("B"));
+	}
+
+	Ui::drawDashedHLine(
+		GRAPH_X,
+		GRAPH_SEPERATOR_Y,
+		GRAPH_SEPERATOR_W,
+		GRAPH_SEPERATOR_STEP
+	);
+
     #else
         Ui::drawGraph(
             Receiver::rssiALast,
