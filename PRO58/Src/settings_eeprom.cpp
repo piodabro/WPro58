@@ -64,6 +64,7 @@ void EepromSettings::initDefaults() {
 	magic = EEPROM_MAGIC;
 	startChannel = 0;
 	beepEnabled = true;
+	screensaverEnabled = true;
 	searchManual = false;
 	rssiAMin = RSSI_MIN_VAL;
 	rssiAMax = RSSI_MAX_VAL;

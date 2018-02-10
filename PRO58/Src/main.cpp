@@ -226,12 +226,14 @@ int main(void) {
 		EepromSettings.update();
 
 		if (
-		//	    StateMachine::currentState != StateMachine::State::SCREENSAVER
-		//	    && StateMachine::currentState != StateMachine::State::BANDSCAN
-		//		&& StateMachine::currentState != StateMachine::State::SETTINGS_RSSI
-		StateMachine::currentState == StateMachine::State::SEARCH
-				&& (HAL_GetTick() - Buttons::lastChangeTime)
-						> (SCREENSAVER_TIMEOUT * 1000)) {
+				(
+					StateMachine::currentState == StateMachine::State::FAVOURITES
+					|| StateMachine::currentState == StateMachine::State::SEARCH
+				)
+				&& EepromSettings.screensaverEnabled
+				&& ((HAL_GetTick() - Buttons::lastChangeTime) > (SCREENSAVER_TIMEOUT * 1000))
+			)
+		{
 			StateMachine::switchState(StateMachine::State::SCREENSAVER);
 		}
 		/* USER CODE END WHILE */

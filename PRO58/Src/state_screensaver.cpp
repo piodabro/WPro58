@@ -39,7 +39,7 @@ void StateMachine::ScreensaverStateHandler::onButtonChange(
 void StateMachine::ScreensaverStateHandler::onInitialDraw() {
     Ui::clear();
 
-#ifdef CALLSIGN
+#ifdef USE_CALLSIGN
     if (showLogo) {
 		char sign[CALLSIGN_LEN+1] = "";
 		EepromSettings.getCallSign(sign);

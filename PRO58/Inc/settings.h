@@ -49,7 +49,7 @@
 #define MIN_TUNE_TIME 40
 
 #define CALLSIGN_LEN 10
-#define CALLSIGN_DEF "pro58"
+#define CALLSIGN_DEF "WPro58"
 
 #endif // file_defined
 

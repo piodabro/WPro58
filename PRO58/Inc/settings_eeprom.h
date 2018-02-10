@@ -17,6 +17,8 @@ struct EepromSettings {
 
     uint8_t beepEnabled;
 
+    uint8_t screensaverEnabled;
+
     uint8_t searchManual;
 
     uint16_t rssiAMin;
@@ -60,6 +62,8 @@ const struct {
     uint8_t startChannel = 0;
 
     uint8_t beepEnabled = true;
+
+    uint8_t screensaverEnabled = true;
 
     uint8_t searchManual = false;
 

@@ -22,7 +22,7 @@ void StateMachine::SettingsStateHandler::onUpdateDraw() {
 
 
 void StateMachine::SettingsStateHandler::drawMenu() {
-	const uint8_t currentMenuIndex = this->menu.getCurrentItemIndex();
+	const uint8_t currentMenuIndex = this->menu.getSelectedItemIndex();
 
 	Ui::clear();
 	Ui::display.setTextSize(1);

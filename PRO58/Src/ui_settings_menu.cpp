@@ -12,23 +12,13 @@ void Ui::SettingsMenuHelper::addItem(
     const Ui::SettingsMenuHandler handler,
 	const char* value
 ) {
-    this->menuItems[this->activeItems].text = text;
-    this->menuItems[this->activeItems].handler = handler;
-    this->menuItems[this->activeItems].value = value;
-    this->activeItems++;
+	if(this->activeItems < SETTINGS_MENU_ITEMS_MAX){
+		this->menuItems[this->activeItems].text = text;
+		this->menuItems[this->activeItems].handler = handler;
+		this->menuItems[this->activeItems].value = value;
+		this->activeItems++;
+	}
 }
-
-//void Ui::SettingsMenuHelper::addValuedItem(
-//    const char* text,
-//	const char* value,
-//    const Ui::SettingsMenuHandler handler
-//) {
-//    this->menuItems[this->activeItems].text = text;
-//    this->menuItems[this->activeItems].value = value;
-//    this->menuItems[this->activeItems].handler = handler;
-//
-//    this->activeItems++;
-//}
 
 void Ui::SettingsMenuHelper::selectNextItem() {
     if (++this->selectedItem >= this->activeItems)
@@ -40,8 +30,12 @@ void Ui::SettingsMenuHelper::selectPreviousItem() {
         this->selectedItem = this->activeItems - 1;
 }
 
-uint8_t Ui::SettingsMenuHelper::getCurrentItemIndex(){
+uint8_t Ui::SettingsMenuHelper::getSelectedItemIndex(){
 	return this->selectedItem;
+}
+
+void Ui::SettingsMenuHelper::setSelectedItemIndex(uint8_t index){
+	this->selectedItem = index;
 }
 
 uint8_t Ui::SettingsMenuHelper::getItemCount(){

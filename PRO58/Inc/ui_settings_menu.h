@@ -32,7 +32,8 @@ namespace Ui {
             void selectNextItem();
             void selectPreviousItem();
             void activateItem();
-            uint8_t getCurrentItemIndex();
+            uint8_t getSelectedItemIndex();
+            void setSelectedItemIndex(uint8_t index);
             uint8_t getItemCount();
 
         private:

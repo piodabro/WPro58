@@ -15,13 +15,17 @@ static void favouritesSettingsMenuHandler(Ui::SettingsMenuItem* item);
 #ifdef USE_BUZZER
 static void buzzerSettingMenuHandler(Ui::SettingsMenuItem* item);
 #endif
+static void screensaverSettingMenuHandler(Ui::SettingsMenuItem* item);
+
+static uint8_t resetCofirmation = 0;
+static void resetSettingsMenuHandler(Ui::SettingsMenuItem* item);
 
 void StateMachine::SettingsStateHandler::onEnter() {
 	this->menu.reset();
 	this->menu.addItem("RSSI Calibration", rssiCalibrationMenuHandler);
 	this->menu.addItem("Favorite channels", favouritesSettingsMenuHandler);
 
-#ifdef CALLSIGN
+#ifdef USE_CALLSIGN
 	this->menu.addItem("Callsign", callsignMenuHandler);
 #endif
 
@@ -33,6 +37,10 @@ void StateMachine::SettingsStateHandler::onEnter() {
 	this->menu.addItem("Buzzer", buzzerSettingMenuHandler, buzzerValue);
 #endif
 
+	const char* screensaverValue = (EepromSettings.screensaverEnabled ? "ON" : "OFF");
+	this->menu.addItem("Screensaver", screensaverSettingMenuHandler, screensaverValue);
+
+	this->menu.addItem("Reset Settings", resetSettingsMenuHandler);
 	this->menu.addItem("Exit", exitMenuHandler);
 }
 
@@ -54,11 +62,27 @@ void StateMachine::SettingsStateHandler::onButtonChange(
     switch (button) {
         case Button::UP:
             this->menu.selectPreviousItem();
+
+            if(resetCofirmation != 0){
+            	int selectedItem = this->menu.getSelectedItemIndex();
+            	resetCofirmation = 0;
+            	onEnter();
+            	this->menu.setSelectedItemIndex(selectedItem);
+            }
+
             Ui::needUpdate();
             break;
 
         case Button::DOWN:
             this->menu.selectNextItem();
+
+            if(resetCofirmation != 0){
+				int selectedItem = this->menu.getSelectedItemIndex();
+				resetCofirmation = 0;
+				onEnter();
+				this->menu.setSelectedItemIndex(selectedItem);
+			}
+
             Ui::needUpdate();
             break;
 
@@ -116,4 +140,28 @@ static void buzzerSettingMenuHandler(Ui::SettingsMenuItem* item){
 
 static void favouritesSettingsMenuHandler(Ui::SettingsMenuItem* item){
 	StateMachine::switchState(StateMachine::State::SETTINGS_FAVOURITES);
+}
+
+static void screensaverSettingMenuHandler(Ui::SettingsMenuItem* item){
+	if(EepromSettings.screensaverEnabled)
+			EepromSettings.screensaverEnabled = 0;
+		else
+			EepromSettings.screensaverEnabled = 1;
+
+	EepromSettings.markDirty();
+	const char* value = (EepromSettings.screensaverEnabled ? "ON" : "OFF");
+	item->value = value;
+}
+
+static void resetSettingsMenuHandler(Ui::SettingsMenuItem* item){
+	if(resetCofirmation == 0){
+		resetCofirmation = 1;
+		item->text = "Press MODE to confirm";
+	}
+	else if(resetCofirmation == 1){
+		EepromSettings.initDefaults();
+		EepromSettings.save();
+		HAL_Delay(500);
+		HAL_NVIC_SystemReset();
+	}
 }
