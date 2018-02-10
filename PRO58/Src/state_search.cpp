@@ -44,6 +44,7 @@ void SearchStateHandler::onEnter() {
 
     this->manual = EepromSettings.searchManual;
 	this->orderedChanelIndex = EepromSettings.startChannel;
+	Receiver::setChannel(orderedChanelIndex);
 }
 
 void SearchStateHandler::onUpdate() {
