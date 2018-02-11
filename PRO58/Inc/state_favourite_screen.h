@@ -1,19 +1,14 @@
 #ifndef STATE_FAVOURITE_SCREEN_H
 #define STATE_FAVOURITE_SCREEN_H
 
-
-#include "state.h"
+#include "state_graph_base_ui.h"
 
 namespace StateMachine {
-    class FavouriteScreenStateHandler : public StateMachine::StateHandler {
+    class FavouriteScreenStateHandler : public StateMachine::BaseGraphUiStateHandler {
         private:
             void onUpdateAuto();
 
-            void drawBorders();
-            void drawChannelText();
-            void drawFrequencyText();
             void drawScanBar();
-            void drawRssiGraph();
 
             void setChannel();
 
@@ -23,9 +18,6 @@ namespace StateMachine {
             void onEnter();
             void onUpdate();
             void onExit();
-
-            void onInitialDraw();
-            void onUpdateDraw();
 
             void onButtonChange(Button button, Buttons::PressType pressType);
             void onFSPinsChange(uint8_t state);

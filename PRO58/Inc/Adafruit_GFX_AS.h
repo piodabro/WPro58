@@ -4,13 +4,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "Load_fonts.h"
-
-//#if ARDUINO >= 100
-// #include "Arduino.h"
 #include "Print.h"
-//#else
-// #include "WProgram.h"
-//#endif
 
 #define abs(x) (((x) > 0) ? (x) : -(x))
 #define swap(a, b) { int16_t t = a; a = b; b = t; }

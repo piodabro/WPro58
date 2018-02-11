@@ -6,6 +6,7 @@ namespace Beeper {
 	extern bool beeping;
 
 	void init();
+	void welcome();
 	void beepLow(uint16_t time);
 	void beepHigh(uint16_t time);
 	void beepC(uint16_t time);

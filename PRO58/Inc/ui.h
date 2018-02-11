@@ -24,6 +24,8 @@ namespace Ui {
     void setup(I2C_HandleTypeDef *i2c_handle);
     void update();
 
+    void drawLogo();
+
     void drawGraph(
         const uint8_t data[],
         const uint8_t dataSize,

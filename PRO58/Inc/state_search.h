@@ -2,7 +2,7 @@
 #define STATE_SEARCH_H
 
 
-#include "state.h"
+#include "state_graph_base_ui.h"
 #include "ui_state_menu.h"
 
 
@@ -10,7 +10,7 @@
 
 
 namespace StateMachine {
-    class SearchStateHandler : public StateMachine::StateHandler {
+    class SearchStateHandler : public StateMachine::BaseGraphUiStateHandler {
         private:
             enum class ScanDirection : int8_t {
                 UP = 1,
@@ -25,11 +25,7 @@ namespace StateMachine {
 
             void onUpdateAuto();
 
-            void drawBorders();
-            void drawChannelText();
-            void drawFrequencyText();
             void drawScanBar();
-            void drawRssiGraph();
             void drawMenu();
 
             void setAndSaveChannel();
@@ -40,9 +36,6 @@ namespace StateMachine {
 
             void onEnter();
             void onUpdate();
-
-            void onInitialDraw();
-            void onUpdateDraw();
 
             void onButtonChange(Button button, Buttons::PressType pressType);
             void onFSPinsChange(uint8_t state);

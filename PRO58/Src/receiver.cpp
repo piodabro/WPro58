@@ -7,14 +7,13 @@
 
 #include "timer.h"
 
+#define INVERT_LOGIC(x) x=(x == GPIO_PIN_SET ? GPIO_PIN_RESET : GPIO_PIN_SET)
+
 #define abs(x) (((x) > 0) ? (x) : -(x))
 #define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
-//#define map(value, fromStart, fromEnd, toStart, toEnd) (value-fromStart)*(toEnd-toStart)/(fromEnd-fromStart)+toStart;
+
 static inline uint16_t map(uint16_t value, uint16_t fromStart, uint16_t fromEnd,
 		uint16_t toStart, uint16_t toEnd);
-
-//static void updateRssiLimits();
-//static void writeSerialData();
 
 
 namespace Receiver {
@@ -56,15 +55,20 @@ namespace Receiver {
     }
 
     void setActiveReceiver(ReceiverId receiver) {
-#ifndef HB5808
-		HAL_GPIO_WritePin(LED_A_GPIO_Port,LED_A_Pin,receiver != ReceiverId::A ? GPIO_PIN_SET : GPIO_PIN_RESET);//(PIN_LED_A, receiver != ReceiverId::A);
-		HAL_GPIO_WritePin(LED_B_GPIO_Port,LED_B_Pin,receiver != ReceiverId::B ? GPIO_PIN_SET : GPIO_PIN_RESET);//digitalWrite(PIN_LED_B, receiver != ReceiverId::B);
-		HAL_GPIO_WritePin(RECEIVER_SW_GPIO_Port, RECEIVER_SW_Pin, receiver == ReceiverId::A ? GPIO_PIN_SET : GPIO_PIN_RESET);//    digitalWrite(PIN_SW, receiver == ReceiverId::A);
-#else
-		HAL_GPIO_WritePin(LED_A_GPIO_Port,LED_A_Pin,receiver == ReceiverId::A ? GPIO_PIN_SET : GPIO_PIN_RESET);//(PIN_LED_A, receiver != ReceiverId::A);
-		HAL_GPIO_WritePin(LED_B_GPIO_Port,LED_B_Pin,receiver == ReceiverId::B ? GPIO_PIN_SET : GPIO_PIN_RESET);//digitalWrite(PIN_LED_B, receiver != ReceiverId::B);
-		HAL_GPIO_WritePin(RECEIVER_SW_GPIO_Port, RECEIVER_SW_Pin, receiver != ReceiverId::A ? GPIO_PIN_SET : GPIO_PIN_RESET);//    digitalWrite(PIN_SW, receiver == ReceiverId::A);
+    	bool swState = receiver == ReceiverId::A;
+    	bool ledAState = receiver != ReceiverId::A;
+    	bool ledBState = receiver != ReceiverId::B;
+
+#ifdef HB5808 //HB5808 has inverted logic in video switch and leds.
+    	swState = !swState;
+    	ledAState = !ledAState;
+    	ledBState = !ledBState;
 #endif
+
+		HAL_GPIO_WritePin(LED_A_GPIO_Port,LED_A_Pin, ledAState ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LED_B_GPIO_Port,LED_B_Pin, ledBState ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(RECEIVER_SW_GPIO_Port, RECEIVER_SW_Pin, swState ? GPIO_PIN_SET : GPIO_PIN_RESET);
+
     
         activeReceiver = receiver;
     }

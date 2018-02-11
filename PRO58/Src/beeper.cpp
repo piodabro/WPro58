@@ -14,6 +14,30 @@ namespace Beeper
 		HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
 	}
 
+	void welcome(){
+		Beeper::beepC(200); //welcome beeep ;)
+		while (Beeper::beeping) {
+			Beeper::update();
+		}
+		Beeper::beepE(200); //welcome beeep ;)
+		while (Beeper::beeping) {
+			Beeper::update();
+		}
+		Beeper::beepG(200); //welcome beeep ;)
+		while (Beeper::beeping) {
+			Beeper::update();
+		}
+		HAL_Delay(200);
+		Beeper::beepE(200); //welcome beeep ;)
+		while (Beeper::beeping) {
+			Beeper::update();
+		}
+		Beeper::beepG(400); //welcome beeep ;)
+		while (Beeper::beeping) {
+			Beeper::update();
+		}
+	}
+
 	void beepFreq(uint16_t time, float freq){
 		beeping = true;
 		uint32_t psc = 720000 / freq;

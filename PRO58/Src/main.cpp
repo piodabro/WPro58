@@ -67,8 +67,6 @@
 #ifdef USE_BUZZER
 #include "beeper.h"
 #endif
-
-#include "logo.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -150,35 +148,11 @@ int main(void) {
 	Ui::setup(&hi2c2);
 #endif
 
-	Ui::display.drawBitmap(0, 0, logo,
-	SCREEN_WIDTH,
-	SCREEN_HEIGHT,
-	WHITE);
-	Ui::display.display();
+	Ui::drawLogo();
 
 #ifdef USE_BUZZER
 	Beeper::init();
-	Beeper::beepC(200); //welcome beeep ;)
-	while (Beeper::beeping) {
-		Beeper::update();
-	}
-	Beeper::beepE(200); //welcome beeep ;)
-	while (Beeper::beeping) {
-		Beeper::update();
-	}
-	Beeper::beepG(200); //welcome beeep ;)
-	while (Beeper::beeping) {
-		Beeper::update();
-	}
-	HAL_Delay(200);
-	Beeper::beepE(200); //welcome beeep ;)
-	while (Beeper::beeping) {
-		Beeper::update();
-	}
-	Beeper::beepG(400); //welcome beeep ;)
-	while (Beeper::beeping) {
-		Beeper::update();
-	}
+	Beeper::welcome();
 #else
 	HAL_Delay(1000);
 #endif

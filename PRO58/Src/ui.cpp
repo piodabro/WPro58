@@ -1,5 +1,6 @@
 
 #include "ui.h"
+#include "logo.h"
 
 namespace Ui {
     SSD1306 display;
@@ -26,6 +27,13 @@ namespace Ui {
         }
     }
 
+    void drawLogo(){
+    	display.drawBitmap(0, 0, logo,
+    	SCREEN_WIDTH,
+    	SCREEN_HEIGHT,
+    	WHITE);
+    	display.display();
+    }
 
     void drawGraph(
         const uint8_t data[],
