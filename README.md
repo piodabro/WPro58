@@ -1,6 +1,7 @@
 # WPro58 for Eachine PRO58 and Quanum HB5808 modules.
 STM32 MCU based diversity module firmware.
-This firmware code is based on [Shea Ivey's rx5808-pro](https://github.com/sheaivey/rx5808-pro-diversity) 
+
+This firmware uses some code from [Shea Ivey's rx5808-pro](https://github.com/sheaivey/rx5808-pro-diversity) 
 
 
 ### Pinouts and programming.
