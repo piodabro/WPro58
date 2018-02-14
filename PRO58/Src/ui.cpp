@@ -17,7 +17,6 @@ namespace Ui {
         display.setTextSize(1);
         display.setTextWrap(false);
         display.clearDisplay();
-     //   display.begin();
     }
 
     void update() {

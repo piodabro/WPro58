@@ -14,6 +14,9 @@ products from Adafruit!
 Written by Limor Fried/Ladyada  for Adafruit Industries.  
 BSD license, check license.txt for more information
 All text above, and the splash screen below must be included in any redistribution
+
+THIS LIB WAS REWRITTEN TO STM32 HAL DRIVER COMPATIBLE VERSION
+by PioDabro for WPro58 firmware.
 *********************************************************************/
 
 
