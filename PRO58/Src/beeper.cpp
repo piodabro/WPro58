@@ -28,6 +28,10 @@ namespace Beeper
 			Beeper::update();
 		}
 		HAL_Delay(200);
+//		Beeper::beepPause(200); //welcome beeep ;)
+//		while (Beeper::beeping) {
+//			Beeper::update();
+//		}
 		Beeper::beepE(200); //welcome beeep ;)
 		while (Beeper::beeping) {
 			Beeper::update();
@@ -36,6 +40,12 @@ namespace Beeper
 		while (Beeper::beeping) {
 			Beeper::update();
 		}
+	}
+
+	void beepPause(uint16_t time){
+		TIM4->CCR3 = 0;
+		beeping = true;
+		beeperTimer.setDelay(time);
 	}
 
 	void beepFreq(uint16_t time, float freq){

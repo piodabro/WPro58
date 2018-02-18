@@ -1,6 +1,8 @@
 #include "DWT_Delay.h"
 
 
+#pragma GCC push_options
+#pragma GCC optimize ("O3")
 /**
  * @brief  Initializes DWT_Clock_Cycle_Count for DWT_Delay_us function
  * @return Error DWT counter
@@ -36,3 +38,17 @@ uint32_t DWT_Delay_Init(void) {
     return 1; /*clock cycle counter not started*/
   }
 }
+
+
+void DWT_Delay_us(volatile uint32_t microseconds)
+{
+//  uint32_t clk_cycle_start = DWT->CYCCNT;
+  DWT->CYCCNT = 0;
+
+  /* Go to number of cycles for system */
+  microseconds *= (HAL_RCC_GetHCLKFreq() / 1000000);
+
+  /* Delay till end */
+  while ((DWT->CYCCNT) < microseconds);
+}
+#pragma GCC pop_options

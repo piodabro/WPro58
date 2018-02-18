@@ -42,6 +42,7 @@
 #include "adc.h"
 #include "dma.h"
 #include "i2c.h"
+#include "iwdg.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -108,27 +109,30 @@ int main(void) {
 	SystemClock_Config();
 
 	/* USER CODE BEGIN SysInit */
-	HAL_Delay(200);
+
 	/* USER CODE END SysInit */
 
 	/* Initialize all configured peripherals */
 	MX_GPIO_Init();
 	MX_DMA_Init();
 	MX_ADC1_Init();
-	MX_I2C2_Init();
-	MX_USART1_UART_Init();
 #ifndef HB5808
 	MX_I2C1_Init();
 #endif
+	MX_I2C2_Init();
+	MX_USART1_UART_Init();
 #ifdef USE_BUZZER
 	MX_TIM4_Init();
 #endif
 	MX_TIM3_Init();
+	MX_IWDG_Init();
+	MX_TIM2_Init();
 
 	/* USER CODE BEGIN 2 */
 	if (DWT_Delay_Init()) {
 		_Error_Handler(__FILE__, __LINE__); /* Call Error Handler */
 	}
+//	TIM_Delay_us_Init();
 
 	HAL_GPIO_WritePin(RECEIVER_SW_GPIO_Port, RECEIVER_SW_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(SPI_SLAVE_SELECT_A_GPIO_Port, SPI_SLAVE_SELECT_A_Pin,
@@ -138,7 +142,7 @@ int main(void) {
 	HAL_GPIO_WritePin(SPI_CLOCK_GPIO_Port, SPI_CLOCK_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(SPI_DATA_GPIO_Port, SPI_DATA_Pin, GPIO_PIN_RESET);
 
-	HAL_Delay(100); //Delay 1000ms to allow RX5808 startup.
+
 
 #ifndef HB5808
 	I2C_Reset(hi2c1, MX_I2C1_Init);
@@ -157,7 +161,7 @@ int main(void) {
 	HAL_Delay(1000);
 #endif
 
-	HAL_Delay(200);
+	HAL_IWDG_Start(&hiwdg);
 
 #ifdef USE_EXTERNAL_EEPROM
 	I2C_Reset(hi2c2, MX_I2C2_Init);
@@ -182,6 +186,8 @@ int main(void) {
 	Buttons::registerChangeFunc(globalMenuButtonHandler);
 	// Switch to initial state.
 	StateMachine::switchState(StateMachine::State::SEARCH);
+
+
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -210,6 +216,8 @@ int main(void) {
 		{
 			StateMachine::switchState(StateMachine::State::SCREENSAVER);
 		}
+
+		HAL_IWDG_Refresh(&hiwdg);
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
@@ -220,55 +228,60 @@ int main(void) {
 }
 
 /** System Clock Configuration
- */
-void SystemClock_Config(void) {
+*/
+void SystemClock_Config(void)
+{
 
-	RCC_OscInitTypeDef RCC_OscInitStruct;
-	RCC_ClkInitTypeDef RCC_ClkInitStruct;
-	RCC_PeriphCLKInitTypeDef PeriphClkInit;
+  RCC_OscInitTypeDef RCC_OscInitStruct;
+  RCC_ClkInitTypeDef RCC_ClkInitStruct;
+  RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
-	/**Initializes the CPU, AHB and APB busses clocks
-	 */
-	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-	RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-	RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
-	RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-	RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-	RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
-	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
-		_Error_Handler(__FILE__, __LINE__);
-	}
+    /**Initializes the CPU, AHB and APB busses clocks
+    */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
 
-	/**Initializes the CPU, AHB and APB busses clocks
-	 */
-	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
-			| RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
-	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+    /**Initializes the CPU, AHB and APB busses clocks
+    */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) {
-		_Error_Handler(__FILE__, __LINE__);
-	}
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
 
-	PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
-	PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6;
-	if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK) {
-		_Error_Handler(__FILE__, __LINE__);
-	}
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  {
+    _Error_Handler(__FILE__, __LINE__);
+  }
 
-	/**Configure the Systick interrupt time
-	 */
-	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000);
+    /**Configure the Systick interrupt time
+    */
+  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
 
-	/**Configure the Systick
-	 */
-	HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
+    /**Configure the Systick
+    */
+  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
-	/* SysTick_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+  /* SysTick_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
 /* USER CODE BEGIN 4 */
@@ -281,6 +294,26 @@ static void globalMenuButtonHandler(Button button,
 	}
 
 }
+
+void HAL_Delay(__IO uint32_t Delay)
+{
+  uint32_t tickstart = 0;
+  uint32_t lastWatchdogReset = 0;
+  tickstart = HAL_GetTick();
+  lastWatchdogReset = tickstart;
+  while((HAL_GetTick() - tickstart) < Delay)
+  {
+	  if((HAL_GetTick() - lastWatchdogReset) > 250) {
+		  HAL_IWDG_Refresh(&hiwdg);
+		  lastWatchdogReset = HAL_GetTick();
+	  }
+  }
+  if((HAL_GetTick() - lastWatchdogReset) > 250) {
+	  HAL_IWDG_Refresh(&hiwdg);
+	  lastWatchdogReset = HAL_GetTick();
+  }
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif

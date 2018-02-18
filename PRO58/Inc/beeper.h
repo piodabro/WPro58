@@ -7,6 +7,7 @@ namespace Beeper {
 
 	void init();
 	void welcome();
+	void beepPause(uint16_t time);
 	void beepLow(uint16_t time);
 	void beepHigh(uint16_t time);
 	void beepC(uint16_t time);
