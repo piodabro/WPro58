@@ -4,7 +4,7 @@
 #include "ui.h"
 
 
-#define SETTINGS_MENU_ITEMS_MAX 8
+#define SETTINGS_MENU_ITEMS_MAX 16
 
 
 namespace Ui {

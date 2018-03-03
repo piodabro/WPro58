@@ -42,6 +42,10 @@ void StateMachine::SettingsStateHandler::onEnter() {
 
 	this->menu.addItem("Reset Settings", resetSettingsMenuHandler);
 	this->menu.addItem("Exit", exitMenuHandler);
+	this->menu.addItem("RSSI Calibration", rssiCalibrationMenuHandler);
+	this->menu.addItem("Favorite channels", favouritesSettingsMenuHandler);
+
+	this->menuDisplayOffset = 0;
 }
 
 void StateMachine::SettingsStateHandler::onExit() {
@@ -63,11 +67,12 @@ void StateMachine::SettingsStateHandler::onButtonChange(
         case Button::UP:
             this->menu.selectPreviousItem();
 
+            if(this->menu.getSelectedItemIndex() - this->menuDisplayOffset < 0){
+				--this->menuDisplayOffset;
+			}
+
             if(resetCofirmation != 0){
-            	int selectedItem = this->menu.getSelectedItemIndex();
-            	resetCofirmation = 0;
-            	onEnter();
-            	this->menu.setSelectedItemIndex(selectedItem);
+            	this->resetConfirmation();
             }
 
             Ui::needUpdate();
@@ -75,12 +80,12 @@ void StateMachine::SettingsStateHandler::onButtonChange(
 
         case Button::DOWN:
             this->menu.selectNextItem();
+            if(this->menu.getSelectedItemIndex() - this->menuDisplayOffset > 7){
+            	++this->menuDisplayOffset;
+            }
 
             if(resetCofirmation != 0){
-				int selectedItem = this->menu.getSelectedItemIndex();
-				resetCofirmation = 0;
-				onEnter();
-				this->menu.setSelectedItemIndex(selectedItem);
+				this->resetConfirmation();
 			}
 
             Ui::needUpdate();
@@ -91,6 +96,15 @@ void StateMachine::SettingsStateHandler::onButtonChange(
             Ui::needUpdate();
             break;
     }
+}
+
+void StateMachine::SettingsStateHandler::resetConfirmation(){
+	uint8_t selectedItem = this->menu.getSelectedItemIndex();
+	uint8_t offset = this->menuDisplayOffset;
+	resetCofirmation = 0;
+	onEnter();
+	this->menuDisplayOffset = offset;
+	this->menu.setSelectedItemIndex(selectedItem);
 }
 
 static void diveristyModeMenuHandler(Ui::SettingsMenuItem* item) {

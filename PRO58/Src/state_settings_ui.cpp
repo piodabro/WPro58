@@ -27,11 +27,11 @@ void StateMachine::SettingsStateHandler::drawMenu() {
 	Ui::clear();
 	Ui::display.setTextSize(1);
 
-    for(uint8_t i=0;i<SETTINGS_MENU_ITEMS_MAX;i++){
-    	const Ui::SettingsMenuItem* item = this->menu.getItem(i);
+    for(uint8_t i = 0; i < MAX_ITEMS_PER_SCREEN; ++i){
+    	const Ui::SettingsMenuItem* item = this->menu.getItem(i + this->menuDisplayOffset);
     	const uint8_t charLen = strlen((item->text));
 
-    	if(i == currentMenuIndex){
+    	if(i + this->menuDisplayOffset == currentMenuIndex){
     		Ui::display.fillRect(0,i*ITEM_HEIGHT,SCREEN_WIDTH,ITEM_HEIGHT,WHITE);
     		Ui::display.setTextColor(BLACK);
     	} else {

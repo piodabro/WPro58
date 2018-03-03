@@ -22,12 +22,12 @@ void Ui::SettingsMenuHelper::addItem(
 
 void Ui::SettingsMenuHelper::selectNextItem() {
     if (++this->selectedItem >= this->activeItems)
-        this->selectedItem = 0;
+        this->selectedItem = this->activeItems - 1;
 }
 
 void Ui::SettingsMenuHelper::selectPreviousItem() {
     if (--this->selectedItem < 0)
-        this->selectedItem = this->activeItems - 1;
+        this->selectedItem = 0;
 }
 
 uint8_t Ui::SettingsMenuHelper::getSelectedItemIndex(){

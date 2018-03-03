@@ -5,6 +5,7 @@
 #include "state.h"
 #include "ui_settings_menu.h"
 
+#define MAX_ITEMS_PER_SCREEN 8
 
 namespace StateMachine {
     class SettingsStateHandler : public StateMachine::StateHandler {
@@ -26,7 +27,9 @@ namespace StateMachine {
 						};
 			InternalState internalState = InternalState::RSSI_CALIBRATION;
 			Ui::SettingsMenuHelper menu;
+			uint8_t menuDisplayOffset;
 			void drawMenu();
+			void resetConfirmation();
     };
 }
 
