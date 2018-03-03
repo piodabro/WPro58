@@ -44,8 +44,6 @@ void StateMachine::SettingsStateHandler::onEnter() {
 	this->menu.addItem("Exit", exitMenuHandler);
 	this->menu.addItem("RSSI Calibration", rssiCalibrationMenuHandler);
 	this->menu.addItem("Favorite channels", favouritesSettingsMenuHandler);
-
-	this->menuDisplayOffset = 0;
 }
 
 void StateMachine::SettingsStateHandler::onExit() {
@@ -67,10 +65,6 @@ void StateMachine::SettingsStateHandler::onButtonChange(
         case Button::UP:
             this->menu.selectPreviousItem();
 
-            if(this->menu.getSelectedItemIndex() - this->menuDisplayOffset < 0){
-				--this->menuDisplayOffset;
-			}
-
             if(resetCofirmation != 0){
             	this->resetConfirmation();
             }
@@ -80,9 +74,6 @@ void StateMachine::SettingsStateHandler::onButtonChange(
 
         case Button::DOWN:
             this->menu.selectNextItem();
-            if(this->menu.getSelectedItemIndex() - this->menuDisplayOffset > 7){
-            	++this->menuDisplayOffset;
-            }
 
             if(resetCofirmation != 0){
 				this->resetConfirmation();
@@ -100,10 +91,10 @@ void StateMachine::SettingsStateHandler::onButtonChange(
 
 void StateMachine::SettingsStateHandler::resetConfirmation(){
 	uint8_t selectedItem = this->menu.getSelectedItemIndex();
-	uint8_t offset = this->menuDisplayOffset;
+	uint8_t offset = this->menu.getMenuOffset();
 	resetCofirmation = 0;
 	onEnter();
-	this->menuDisplayOffset = offset;
+	this->menu.setMenuOffset(offset);
 	this->menu.setSelectedItemIndex(selectedItem);
 }
 
@@ -170,7 +161,7 @@ static void screensaverSettingMenuHandler(Ui::SettingsMenuItem* item){
 static void resetSettingsMenuHandler(Ui::SettingsMenuItem* item){
 	if(resetCofirmation == 0){
 		resetCofirmation = 1;
-		item->text = "Press MODE to confirm";
+		item->text = "Confirm: press MODE";
 	}
 	else if(resetCofirmation == 1){
 		EepromSettings.initDefaults();

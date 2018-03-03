@@ -5,6 +5,7 @@
 
 
 #define SETTINGS_MENU_ITEMS_MAX 16
+#define MAX_ITEMS_PER_SCREEN 8
 
 
 namespace Ui {
@@ -35,12 +36,15 @@ namespace Ui {
             uint8_t getSelectedItemIndex();
             void setSelectedItemIndex(uint8_t index);
             uint8_t getItemCount();
+            uint8_t getMenuOffset();
+            void setMenuOffset(uint8_t offset);
 
         private:
             Ui::SettingsMenuItem menuItems[SETTINGS_MENU_ITEMS_MAX];
 
-            int activeItems = 0;
-            int selectedItem = 0;
+            uint8_t activeItems = 0;
+            uint8_t selectedItem = 0;
+            uint8_t menuOffset = 0;
     };
 }
 

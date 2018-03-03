@@ -5,6 +5,7 @@
 void Ui::SettingsMenuHelper::reset() {
     this->activeItems = 0;
     this->selectedItem = 0;
+    this->menuOffset = 0;
 }
 
 void Ui::SettingsMenuHelper::addItem(
@@ -23,11 +24,19 @@ void Ui::SettingsMenuHelper::addItem(
 void Ui::SettingsMenuHelper::selectNextItem() {
     if (++this->selectedItem >= this->activeItems)
         this->selectedItem = this->activeItems - 1;
+
+    if(this->selectedItem - this->menuOffset > MAX_ITEMS_PER_SCREEN - 1){
+		++menuOffset;
+	}
 }
 
 void Ui::SettingsMenuHelper::selectPreviousItem() {
-    if (--this->selectedItem < 0)
+    if (--this->selectedItem > this->activeItems)
         this->selectedItem = 0;
+
+    if(this->selectedItem - this->menuOffset < 0){
+		--menuOffset;
+	}
 }
 
 uint8_t Ui::SettingsMenuHelper::getSelectedItemIndex(){
@@ -36,6 +45,15 @@ uint8_t Ui::SettingsMenuHelper::getSelectedItemIndex(){
 
 void Ui::SettingsMenuHelper::setSelectedItemIndex(uint8_t index){
 	this->selectedItem = index;
+}
+
+
+uint8_t Ui::SettingsMenuHelper::getMenuOffset(){
+	return this->menuOffset;
+}
+
+void Ui::SettingsMenuHelper::setMenuOffset(uint8_t offset){
+	this->menuOffset = offset;
 }
 
 uint8_t Ui::SettingsMenuHelper::getItemCount(){
