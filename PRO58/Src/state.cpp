@@ -15,6 +15,7 @@
 #include "ui.h"
 #include "buttons.h"
 #include "settings_internal.h"
+#include "settings_eeprom.h"
 #ifdef USE_FS_PINS
 	#include "fatshark_pins.h"
 #endif
@@ -55,6 +56,7 @@ namespace StateMachine {
 
     void setup() {
         Buttons::registerChangeFunc(onButtonChange);
+
 #ifdef USE_FS_PINS
         FatSharkPins::registerChangeFunc(onFSPinsChange);
 #endif

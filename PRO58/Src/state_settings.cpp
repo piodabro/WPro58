@@ -6,6 +6,7 @@
 #include "ui.h"
 #include "settings_eeprom.h"
 #include "receiver.h"
+#include "gpio.h"
 
 static void diveristyModeMenuHandler(Ui::SettingsMenuItem* item);
 static void rssiCalibrationMenuHandler(Ui::SettingsMenuItem* item);
@@ -43,14 +44,15 @@ void StateMachine::SettingsStateHandler::onEnter() {
 	const char* screensaverValue = (EepromSettings.screensaverEnabled ? "ON" : "OFF");
 	this->menu.addItem("Screensaver", screensaverSettingMenuHandler, screensaverValue);
 
-	this->menu.addItem("Reset Settings", resetSettingsMenuHandler);
-	this->menu.addItem("Exit", exitMenuHandler);
-
 	const char* flipScreenValue = EepromSettings.screenFlip ? "FLIP" : "NORM";
 	this->menu.addItem("Flip screen", flipScreenMenuHandler, flipScreenValue);
 
+#ifdef USE_FS_PINS
 	const char* FSPinsMode = (EepromSettings.FSPinsMode ? "FS" : "BUTTON");
 	this->menu.addItem("FS pins mode", fsPinsModeMenuHandler, FSPinsMode);
+#endif
+	this->menu.addItem("Reset Settings", resetSettingsMenuHandler);
+	this->menu.addItem("Exit", exitMenuHandler);
 }
 
 void StateMachine::SettingsStateHandler::onExit() {
@@ -175,9 +177,14 @@ static void flipScreenMenuHandler(Ui::SettingsMenuItem* item){
 
 static void fsPinsModeMenuHandler(Ui::SettingsMenuItem* item){
 	EepromSettings.FSPinsMode = !EepromSettings.FSPinsMode;
+
+	const char* FSPinValue = (EepromSettings.FSPinsMode ? "FS" : "BUTTON");
+	item->value = FSPinValue;
+
+	uint32_t pull = EepromSettings.FSPinsMode ? GPIO_PULLDOWN : GPIO_PULLUP;
+	GPIO_FS_Reinit(pull);
+
 	EepromSettings.save();
-	HAL_Delay(500);
-	HAL_NVIC_SystemReset();
 }
 
 static void resetSettingsMenuHandler(Ui::SettingsMenuItem* item){

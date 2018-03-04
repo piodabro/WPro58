@@ -33,7 +33,7 @@ SOFTWARE.
 // === EEPROM ==================================================================
 
 // This should be incremented after every EEPROM change.
-#define EEPROM_MAGIC 0x00000005
+#define EEPROM_MAGIC 0x00000006
 
 // === Receiver Modules =========================================================
 

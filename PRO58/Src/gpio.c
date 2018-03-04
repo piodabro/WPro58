@@ -111,16 +111,16 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = BUTTON_UP_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(BUTTON_UP_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = FS_PIN_EB1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(FS_PIN_EB1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = BUTTON_UP_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(BUTTON_UP_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = LED_A_Pin;
@@ -131,6 +131,24 @@ void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 2 */
+void GPIO_FS_Reinit(uint32_t pullup)
+{
+  HAL_GPIO_DeInit(GPIOB,FS_PIN_EB0_Pin);
+  HAL_GPIO_DeInit(GPIOB,FS_PIN_EB2_Pin);
+  HAL_GPIO_DeInit(GPIOA,FS_PIN_EB1_Pin);
+
+  GPIO_InitTypeDef GPIO_InitStruct_Buttons;
+  GPIO_InitStruct_Buttons.Pin = FS_PIN_EB0_Pin|FS_PIN_EB2_Pin;
+  GPIO_InitStruct_Buttons.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct_Buttons.Pull = pullup;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct_Buttons);
+
+  GPIO_InitStruct_Buttons.Pin = FS_PIN_EB1_Pin;
+  GPIO_InitStruct_Buttons.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct_Buttons.Pull = pullup;
+  HAL_GPIO_Init(FS_PIN_EB1_GPIO_Port, &GPIO_InitStruct_Buttons);
+}
+
 #else
 void MX_GPIO_Init(void)
 {

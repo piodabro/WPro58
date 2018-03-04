@@ -171,6 +171,9 @@ int main(void) {
 
 #ifdef USE_FS_PINS
 	FatSharkPins::init();
+	if(!EepromSettings.FSPinsMode){
+		GPIO_FS_Reinit(GPIO_PULLUP);
+	}
 #endif
 
 	StateMachine::setup();
@@ -190,8 +193,11 @@ int main(void) {
 #endif
 		Receiver::update();
 		Buttons::update();
+
 #ifdef USE_FS_PINS
-		FatSharkPins::update();
+		if(EepromSettings.FSPinsMode){
+			FatSharkPins::update();
+		}
 #endif
 		StateMachine::update();
 		Ui::update();
