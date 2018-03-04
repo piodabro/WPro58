@@ -140,6 +140,15 @@ int main(void) {
 
 	HAL_Delay(100); //Delay 1000ms to allow RX5808 startup.
 
+#ifdef USE_EXTERNAL_EEPROM
+	I2C_Reset(hi2c2, MX_I2C2_Init);
+	EepromSettings.init(&hi2c2);
+	EepromSettings.load();
+#else
+	EepromSettings.init();
+	EepromSettings.load();
+#endif
+
 #ifndef HB5808
 	I2C_Reset(hi2c1, MX_I2C1_Init);
 	Ui::setup(&hi2c1);
@@ -155,17 +164,6 @@ int main(void) {
 	Beeper::welcome();
 #else
 	HAL_Delay(1000);
-#endif
-
-	HAL_Delay(200);
-
-#ifdef USE_EXTERNAL_EEPROM
-	I2C_Reset(hi2c2, MX_I2C2_Init);
-	EepromSettings.init(&hi2c2);
-	EepromSettings.load();
-#else
-	EepromSettings.init();
-	EepromSettings.load();
 #endif
 
 	Receiver::setup(&hadc1);

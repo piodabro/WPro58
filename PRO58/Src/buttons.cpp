@@ -2,6 +2,7 @@
 
 #include "buttons.h"
 #include "settings.h"
+#include "settings_eeprom.h"
 #include "stm32f1xx_hal.h"
 #ifdef USE_BUZZER
 	#include "beeper.h"
@@ -41,10 +42,15 @@ namespace Buttons {
         UPDATE_BUTTON(EB2);
         #undef UPDATE_BUTTON
 */
-
-        updateButton(Button::UP, states[static_cast<uint8_t>(Button::UP)], BUTTON_UP_GPIO_Port, BUTTON_UP_Pin);
-        updateButton(Button::DOWN, states[static_cast<uint8_t>(Button::DOWN)], BUTTON_DOWN_GPIO_Port, BUTTON_DOWN_Pin);
-        updateButton(Button::MODE, states[static_cast<uint8_t>(Button::MODE)], BUTTON_MODE_GPIO_Port, BUTTON_MODE_Pin);
+    	if(EepromSettings.screenFlip == false){
+			updateButton(Button::UP, states[static_cast<uint8_t>(Button::UP)], BUTTON_UP_GPIO_Port, BUTTON_UP_Pin);
+			updateButton(Button::DOWN, states[static_cast<uint8_t>(Button::DOWN)], BUTTON_DOWN_GPIO_Port, BUTTON_DOWN_Pin);
+    	}
+    	else{
+			updateButton(Button::UP, states[static_cast<uint8_t>(Button::UP)], BUTTON_DOWN_GPIO_Port, BUTTON_DOWN_Pin);
+			updateButton(Button::DOWN, states[static_cast<uint8_t>(Button::DOWN)], BUTTON_UP_GPIO_Port, BUTTON_UP_Pin);
+    	}
+		updateButton(Button::MODE, states[static_cast<uint8_t>(Button::MODE)], BUTTON_MODE_GPIO_Port, BUTTON_MODE_Pin);
     }
 
     const ButtonState *get(Button button) {
@@ -96,8 +102,6 @@ namespace Buttons {
         uint16_t pin
     ) {
     	bool pinStatus = HAL_GPIO_ReadPin(port,pin) == GPIO_PIN_SET ? false : true;
-
-        //const uint8_t reading = !digitalRead(pin); // Invert as we use pull-ups.
 
         if (pinStatus != state.lastReading) {
             state.lastDebounceTime = HAL_GetTick();

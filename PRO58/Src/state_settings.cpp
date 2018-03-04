@@ -20,6 +20,9 @@ static void screensaverSettingMenuHandler(Ui::SettingsMenuItem* item);
 static uint8_t resetCofirmation = 0;
 static void resetSettingsMenuHandler(Ui::SettingsMenuItem* item);
 
+static void flipScreenMenuHandler(Ui::SettingsMenuItem* item);
+static void fsPinsModeMenuHandler(Ui::SettingsMenuItem* item);
+
 void StateMachine::SettingsStateHandler::onEnter() {
 	this->menu.reset();
 	this->menu.addItem("RSSI Calibration", rssiCalibrationMenuHandler);
@@ -42,8 +45,12 @@ void StateMachine::SettingsStateHandler::onEnter() {
 
 	this->menu.addItem("Reset Settings", resetSettingsMenuHandler);
 	this->menu.addItem("Exit", exitMenuHandler);
-	this->menu.addItem("RSSI Calibration", rssiCalibrationMenuHandler);
-	this->menu.addItem("Favorite channels", favouritesSettingsMenuHandler);
+
+	const char* flipScreenValue = EepromSettings.screenFlip ? "FLIP" : "NORM";
+	this->menu.addItem("Flip screen", flipScreenMenuHandler, flipScreenValue);
+
+	const char* FSPinsMode = (EepromSettings.FSPinsMode ? "FS" : "BUTTON");
+	this->menu.addItem("FS pins mode", fsPinsModeMenuHandler, FSPinsMode);
 }
 
 void StateMachine::SettingsStateHandler::onExit() {
@@ -156,6 +163,21 @@ static void screensaverSettingMenuHandler(Ui::SettingsMenuItem* item){
 	EepromSettings.markDirty();
 	const char* value = (EepromSettings.screensaverEnabled ? "ON" : "OFF");
 	item->value = value;
+}
+
+static void flipScreenMenuHandler(Ui::SettingsMenuItem* item){
+	EepromSettings.screenFlip = !EepromSettings.screenFlip;
+	EepromSettings.markDirty();
+	const char* flipScreenValue = EepromSettings.screenFlip ? "FLIP" : "NORM";
+	item->value = flipScreenValue;
+	Ui::display.setRotation(EepromSettings.screenFlip ? 2 : 0);
+}
+
+static void fsPinsModeMenuHandler(Ui::SettingsMenuItem* item){
+	EepromSettings.FSPinsMode = !EepromSettings.FSPinsMode;
+	EepromSettings.save();
+	HAL_Delay(500);
+	HAL_NVIC_SystemReset();
 }
 
 static void resetSettingsMenuHandler(Ui::SettingsMenuItem* item){

@@ -19,6 +19,12 @@ struct EepromSettings {
 
     uint8_t screensaverEnabled;
 
+    //false normal, true upside-down
+    uint8_t screenFlip;
+
+    //true - FatShark, false - button
+    uint8_t FSPinsMode;
+
     uint8_t searchManual;
 
     uint16_t rssiAMin;
@@ -64,6 +70,12 @@ const struct {
     uint8_t beepEnabled = true;
 
     uint8_t screensaverEnabled = true;
+
+    //fale normal, true upside-down
+    uint8_t screenFlip = false;
+
+    //true - FatShark, false - button
+    uint8_t FSPinsMode = true;
 
     uint8_t searchManual = false;
 
