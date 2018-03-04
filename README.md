@@ -21,6 +21,7 @@ ___
 #### Quanum HB5808 pinouts
 ![Pinouts](docs/HB5808_pinouts.jpg)
 
+FatShark pins are not connected to MCU.
 ___
 
 ### Big thanks to
