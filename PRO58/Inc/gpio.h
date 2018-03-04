@@ -59,7 +59,7 @@
 void MX_GPIO_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+void GPIO_FS_Reinit(uint32_t pullup);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

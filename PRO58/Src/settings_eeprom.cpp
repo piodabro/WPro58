@@ -65,6 +65,8 @@ void EepromSettings::initDefaults() {
 	startChannel = 0;
 	beepEnabled = true;
 	screensaverEnabled = true;
+    screenFlip = false;
+    FSPinsMode = true;
 	searchManual = false;
 	rssiAMin = RSSI_MIN_VAL;
 	rssiAMax = RSSI_MAX_VAL;
