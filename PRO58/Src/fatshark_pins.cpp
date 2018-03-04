@@ -8,11 +8,6 @@
 
 static FatSharkPins::FSChangeFunc changeFuncs[FS_PIN_HOOKS_MAX] = { nullptr };
 
-
-//        updateButton(Button::EB0, states[static_cast<uint8_t>(Button::EB0)], BUTTON_EB0_GPIO_Port, BUTTON_EB0_Pin);
-//        updateButton(Button::EB1, states[static_cast<uint8_t>(Button::EB1)], BUTTON_EB1_GPIO_Port, BUTTON_EB1_Pin);
-//        updateButton(Button::EB2, states[static_cast<uint8_t>(Button::EB2)], BUTTON_EB2_GPIO_Port, BUTTON_EB2_Pin);
-
 namespace FatSharkPins {
 
 	uint8_t lastState = 0;

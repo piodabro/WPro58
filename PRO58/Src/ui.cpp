@@ -1,6 +1,7 @@
 
 #include "ui.h"
 #include "logo.h"
+#include "settings_eeprom.h"
 
 namespace Ui {
     SSD1306 display;
@@ -16,6 +17,7 @@ namespace Ui {
         display.setTextColor(WHITE);
         display.setTextSize(1);
         display.setTextWrap(false);
+        display.setRotation(EepromSettings.screenFlip ? 2 : 0);
         display.clearDisplay();
     }
 

@@ -59,7 +59,6 @@
 */
 void MX_GPIO_Init(void)
 {
-
 	GPIO_InitTypeDef GPIO_InitStruct;
 
 	/* GPIO Ports Clock Enable */
@@ -127,10 +126,27 @@ void MX_GPIO_Init(void)
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
 	HAL_GPIO_Init(LED_A_GPIO_Port, &GPIO_InitStruct);
-
 }
 
 /* USER CODE BEGIN 2 */
+void GPIO_FS_Reinit(uint32_t pullup)
+{
+  HAL_GPIO_DeInit(GPIOB,FS_PIN_EB0_Pin);
+  HAL_GPIO_DeInit(GPIOB,FS_PIN_EB2_Pin);
+  HAL_GPIO_DeInit(GPIOA,FS_PIN_EB1_Pin);
+
+  GPIO_InitTypeDef GPIO_InitStruct_Buttons;
+  GPIO_InitStruct_Buttons.Pin = FS_PIN_EB0_Pin|FS_PIN_EB2_Pin;
+  GPIO_InitStruct_Buttons.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct_Buttons.Pull = pullup;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct_Buttons);
+
+  GPIO_InitStruct_Buttons.Pin = FS_PIN_EB1_Pin;
+  GPIO_InitStruct_Buttons.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct_Buttons.Pull = pullup;
+  HAL_GPIO_Init(FS_PIN_EB1_GPIO_Port, &GPIO_InitStruct_Buttons);
+}
+
 #else
 void MX_GPIO_Init(void)
 {

@@ -6,6 +6,7 @@
 #include "ui.h"
 #include "settings_eeprom.h"
 #include "receiver.h"
+#include "gpio.h"
 
 static void diveristyModeMenuHandler(Ui::SettingsMenuItem* item);
 static void rssiCalibrationMenuHandler(Ui::SettingsMenuItem* item);
@@ -19,6 +20,9 @@ static void screensaverSettingMenuHandler(Ui::SettingsMenuItem* item);
 
 static uint8_t resetCofirmation = 0;
 static void resetSettingsMenuHandler(Ui::SettingsMenuItem* item);
+
+static void flipScreenMenuHandler(Ui::SettingsMenuItem* item);
+static void fsPinsModeMenuHandler(Ui::SettingsMenuItem* item);
 
 void StateMachine::SettingsStateHandler::onEnter() {
 	this->menu.reset();
@@ -40,6 +44,13 @@ void StateMachine::SettingsStateHandler::onEnter() {
 	const char* screensaverValue = (EepromSettings.screensaverEnabled ? "ON" : "OFF");
 	this->menu.addItem("Screensaver", screensaverSettingMenuHandler, screensaverValue);
 
+	const char* flipScreenValue = EepromSettings.screenFlip ? "FLIP" : "NORM";
+	this->menu.addItem("Flip screen", flipScreenMenuHandler, flipScreenValue);
+
+#ifdef USE_FS_PINS
+	const char* FSPinsMode = (EepromSettings.FSPinsMode ? "FS" : "BUTTON");
+	this->menu.addItem("FS pins mode", fsPinsModeMenuHandler, FSPinsMode);
+#endif
 	this->menu.addItem("Reset Settings", resetSettingsMenuHandler);
 	this->menu.addItem("Exit", exitMenuHandler);
 }
@@ -64,10 +75,7 @@ void StateMachine::SettingsStateHandler::onButtonChange(
             this->menu.selectPreviousItem();
 
             if(resetCofirmation != 0){
-            	int selectedItem = this->menu.getSelectedItemIndex();
-            	resetCofirmation = 0;
-            	onEnter();
-            	this->menu.setSelectedItemIndex(selectedItem);
+            	this->resetConfirmation();
             }
 
             Ui::needUpdate();
@@ -77,10 +85,7 @@ void StateMachine::SettingsStateHandler::onButtonChange(
             this->menu.selectNextItem();
 
             if(resetCofirmation != 0){
-				int selectedItem = this->menu.getSelectedItemIndex();
-				resetCofirmation = 0;
-				onEnter();
-				this->menu.setSelectedItemIndex(selectedItem);
+				this->resetConfirmation();
 			}
 
             Ui::needUpdate();
@@ -91,6 +96,15 @@ void StateMachine::SettingsStateHandler::onButtonChange(
             Ui::needUpdate();
             break;
     }
+}
+
+void StateMachine::SettingsStateHandler::resetConfirmation(){
+	uint8_t selectedItem = this->menu.getSelectedItemIndex();
+	uint8_t offset = this->menu.getMenuOffset();
+	resetCofirmation = 0;
+	onEnter();
+	this->menu.setMenuOffset(offset);
+	this->menu.setSelectedItemIndex(selectedItem);
 }
 
 static void diveristyModeMenuHandler(Ui::SettingsMenuItem* item) {
@@ -153,10 +167,30 @@ static void screensaverSettingMenuHandler(Ui::SettingsMenuItem* item){
 	item->value = value;
 }
 
+static void flipScreenMenuHandler(Ui::SettingsMenuItem* item){
+	EepromSettings.screenFlip = !EepromSettings.screenFlip;
+	EepromSettings.markDirty();
+	const char* flipScreenValue = EepromSettings.screenFlip ? "FLIP" : "NORM";
+	item->value = flipScreenValue;
+	Ui::display.setRotation(EepromSettings.screenFlip ? 2 : 0);
+}
+
+static void fsPinsModeMenuHandler(Ui::SettingsMenuItem* item){
+	EepromSettings.FSPinsMode = !EepromSettings.FSPinsMode;
+
+	const char* FSPinValue = (EepromSettings.FSPinsMode ? "FS" : "BUTTON");
+	item->value = FSPinValue;
+
+	uint32_t pull = EepromSettings.FSPinsMode ? GPIO_PULLDOWN : GPIO_PULLUP;
+	GPIO_FS_Reinit(pull);
+
+	EepromSettings.save();
+}
+
 static void resetSettingsMenuHandler(Ui::SettingsMenuItem* item){
 	if(resetCofirmation == 0){
 		resetCofirmation = 1;
-		item->text = "Press MODE to confirm";
+		item->text = "Confirm: press MODE";
 	}
 	else if(resetCofirmation == 1){
 		EepromSettings.initDefaults();

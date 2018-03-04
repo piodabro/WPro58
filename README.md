@@ -3,6 +3,9 @@ STM32 MCU based diversity module firmware.
 
 This firmware uses some code from [Shea Ivey's rx5808-pro](https://github.com/sheaivey/rx5808-pro-diversity) 
 
+If you like this work and you're buying Eachine PRO58 please use this link:
+[Eachine PRO58](https://www.banggood.com/Eachine-PRO58-RX-Diversity-40CH-5_8G-OLED-SCAN-VRX-FPV-Receiver-for-FatShark-Goggles-p-1160357.html?p=CL07182964413201511Q)
+(It's a reflink)
 
 ### Pinouts and programming.
 To program your PRO58 or HB5808 module you have to use ST-link programmer.
@@ -18,6 +21,7 @@ ___
 #### Quanum HB5808 pinouts
 ![Pinouts](docs/HB5808_pinouts.jpg)
 
+FatShark pins are not connected to MCU.
 ___
 
 ### Big thanks to

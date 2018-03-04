@@ -5,7 +5,6 @@
 #include "state.h"
 #include "ui_settings_menu.h"
 
-
 namespace StateMachine {
     class SettingsStateHandler : public StateMachine::StateHandler {
         public:
@@ -27,6 +26,8 @@ namespace StateMachine {
 			InternalState internalState = InternalState::RSSI_CALIBRATION;
 			Ui::SettingsMenuHelper menu;
 			void drawMenu();
+			void resetConfirmation();
+			void drawTriangles();
     };
 }
 
