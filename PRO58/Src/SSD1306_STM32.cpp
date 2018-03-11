@@ -153,8 +153,8 @@ Adafruit_GFX(SSD1306_LCDWIDTH, SSD1306_LCDHEIGHT) {
 
 
 void SSD1306::begin(I2C_HandleTypeDef *i2c_handle, int8_t reset_pin, uint8_t vccstate, uint8_t i2caddr, bool reset) {
-  rst = reset_pin;
 	i2c_handler = i2c_handle;
+	rst = reset_pin;
 	_vccstate = vccstate;
 	_i2caddr = i2caddr;
 
@@ -299,7 +299,7 @@ void SSD1306::ssd1306_command(uint8_t c) {
     while (HAL_I2C_GetState(i2c_handler) != HAL_I2C_STATE_READY);
     HAL_StatusTypeDef ret = HAL_I2C_Mem_Write(i2c_handler, _i2caddr, control, 1, &c, 1, 10);
     if(ret != HAL_OK){
-        	I2C_Reset(*i2c_handler, MX_I2C1_Init);
+        	I2C_Reset(i2c_handler, MX_I2C1_Init);
     	    HAL_I2C_Mem_Write(i2c_handler, _i2caddr, control, 1, &c, 1, 10);
     }
 }
@@ -400,7 +400,7 @@ void SSD1306::ssd1306_data(uint8_t c) {
 
 	HAL_StatusTypeDef ret = HAL_I2C_Mem_Write(i2c_handler, _i2caddr, control, 1, &c, 1, 10);
     if(ret != HAL_OK){
-  	  I2C_Reset(*i2c_handler, MX_I2C1_Init);
+  	  I2C_Reset(i2c_handler, MX_I2C1_Init);
   	  HAL_I2C_Mem_Write(i2c_handler, _i2caddr, control, 1, &c, 1, 10);
     }
 }
