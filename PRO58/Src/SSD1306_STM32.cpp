@@ -4,14 +4,14 @@ This is a library for our Monochrome OLEDs based on SSD1306 drivers
   Pick one up today in the adafruit shop!
   ------> http://www.adafruit.com/category/63_98
 
-These displays use SPI to communicate, 4 or 5 pins are required to  
+These displays use SPI to communicate, 4 or 5 pins are required to
 interface
 
-Adafruit invests time and resources providing this open source code, 
-please support Adafruit and open-source hardware by purchasing 
+Adafruit invests time and resources providing this open source code,
+please support Adafruit and open-source hardware by purchasing
 products from Adafruit!
 
-Written by Limor Fried/Ladyada  for Adafruit Industries.  
+Written by Limor Fried/Ladyada  for Adafruit Industries.
 BSD license, check license.txt for more information
 All text above, and the splash screen below must be included in any redistribution
 
@@ -133,16 +133,16 @@ void SSD1306::drawPixel(int16_t x, int16_t y, uint16_t color) {
     swap(x, y);
     y = HEIGHT - y - 1;
     break;
-  }  
+  }
 
   // x is which column
-    switch (color) 
+    switch (color)
     {
       case WHITE:   buffer[x+ (y/8)*SSD1306_LCDWIDTH] |=  (1 << (y&7)); break;
-      case BLACK:   buffer[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << (y&7)); break; 
-      case INVERSE: buffer[x+ (y/8)*SSD1306_LCDWIDTH] ^=  (1 << (y&7)); break; 
+      case BLACK:   buffer[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << (y&7)); break;
+      case INVERSE: buffer[x+ (y/8)*SSD1306_LCDWIDTH] ^=  (1 << (y&7)); break;
     }
-    
+
 }
 
 // initializer for I2C - we only indicate the reset pin!
@@ -150,11 +150,11 @@ SSD1306::SSD1306() :
 Adafruit_GFX(SSD1306_LCDWIDTH, SSD1306_LCDHEIGHT) {
   sclk = dc = cs = sid = rst = -1;
 }
-  
+
 
 void SSD1306::begin(I2C_HandleTypeDef *i2c_handle, int8_t reset_pin, uint8_t vccstate, uint8_t i2caddr, bool reset) {
   rst = reset_pin;
-  i2c_handler = i2c_handle;
+	i2c_handler = i2c_handle;
 	_vccstate = vccstate;
 	_i2caddr = i2caddr;
 
@@ -184,9 +184,9 @@ void SSD1306::begin(I2C_HandleTypeDef *i2c_handle, int8_t reset_pin, uint8_t vcc
     ssd1306_command(0x0);                                   // no offset
     ssd1306_command(SSD1306_SETSTARTLINE | 0x0);            // line #0
     ssd1306_command(SSD1306_CHARGEPUMP);                    // 0x8D
-    if (vccstate == SSD1306_EXTERNALVCC) 
+    if (vccstate == SSD1306_EXTERNALVCC)
       { ssd1306_command(0x10); }
-    else 
+    else
       { ssd1306_command(0x14); }
     ssd1306_command(SSD1306_MEMORYMODE);                    // 0x20
     ssd1306_command(0x00);                                  // 0x0 act like ks0108
@@ -197,9 +197,9 @@ void SSD1306::begin(I2C_HandleTypeDef *i2c_handle, int8_t reset_pin, uint8_t vcc
     ssd1306_command(SSD1306_SETCONTRAST);                   // 0x81
     ssd1306_command(0x8F);
     ssd1306_command(SSD1306_SETPRECHARGE);                  // 0xd9
-    if (vccstate == SSD1306_EXTERNALVCC) 
+    if (vccstate == SSD1306_EXTERNALVCC)
       { ssd1306_command(0x22); }
-    else 
+    else
       { ssd1306_command(0xF1); }
     ssd1306_command(SSD1306_SETVCOMDETECT);                 // 0xDB
     ssd1306_command(0x40);
@@ -218,9 +218,9 @@ void SSD1306::begin(I2C_HandleTypeDef *i2c_handle, int8_t reset_pin, uint8_t vcc
     ssd1306_command(0x0);                                   // no offset
     ssd1306_command(SSD1306_SETSTARTLINE | 0x0);            // line #0
     ssd1306_command(SSD1306_CHARGEPUMP);                    // 0x8D
-    if (vccstate == SSD1306_EXTERNALVCC) 
+    if (vccstate == SSD1306_EXTERNALVCC)
       { ssd1306_command(0x10); }
-    else 
+    else
       { ssd1306_command(0x14); }
     ssd1306_command(SSD1306_MEMORYMODE);                    // 0x20
     ssd1306_command(0x00);                                  // 0x0 act like ks0108
@@ -229,14 +229,14 @@ void SSD1306::begin(I2C_HandleTypeDef *i2c_handle, int8_t reset_pin, uint8_t vcc
     ssd1306_command(SSD1306_SETCOMPINS);                    // 0xDA
     ssd1306_command(0x12);
     ssd1306_command(SSD1306_SETCONTRAST);                   // 0x81
-    if (vccstate == SSD1306_EXTERNALVCC) 
+    if (vccstate == SSD1306_EXTERNALVCC)
       { ssd1306_command(0x9F); }
-    else 
+    else
       { ssd1306_command(0xCF); }
     ssd1306_command(SSD1306_SETPRECHARGE);                  // 0xd9
-    if (vccstate == SSD1306_EXTERNALVCC) 
+    if (vccstate == SSD1306_EXTERNALVCC)
       { ssd1306_command(0x22); }
-    else 
+    else
       { ssd1306_command(0xF1); }
     ssd1306_command(SSD1306_SETVCOMDETECT);                 // 0xDB
     ssd1306_command(0x40);
@@ -255,9 +255,9 @@ void SSD1306::begin(I2C_HandleTypeDef *i2c_handle, int8_t reset_pin, uint8_t vcc
     ssd1306_command(0x00);                                   // no offset
     ssd1306_command(SSD1306_SETSTARTLINE | 0x0);            // line #0
     ssd1306_command(SSD1306_CHARGEPUMP);                    // 0x8D
-    if (vccstate == SSD1306_EXTERNALVCC) 
+    if (vccstate == SSD1306_EXTERNALVCC)
       { ssd1306_command(0x10); }
-    else 
+    else
       { ssd1306_command(0x14); }
     ssd1306_command(SSD1306_MEMORYMODE);                    // 0x20
     ssd1306_command(0x00);                                  // 0x0 act like ks0108
@@ -266,14 +266,14 @@ void SSD1306::begin(I2C_HandleTypeDef *i2c_handle, int8_t reset_pin, uint8_t vcc
     ssd1306_command(SSD1306_SETCOMPINS);                    // 0xDA
     ssd1306_command(0x2);	//ada x12
     ssd1306_command(SSD1306_SETCONTRAST);                   // 0x81
-    if (vccstate == SSD1306_EXTERNALVCC) 
+    if (vccstate == SSD1306_EXTERNALVCC)
       { ssd1306_command(0x10); }
-    else 
+    else
       { ssd1306_command(0xAF); }
     ssd1306_command(SSD1306_SETPRECHARGE);                  // 0xd9
-    if (vccstate == SSD1306_EXTERNALVCC) 
+    if (vccstate == SSD1306_EXTERNALVCC)
       { ssd1306_command(0x22); }
-    else 
+    else
       { ssd1306_command(0xF1); }
     ssd1306_command(SSD1306_SETVCOMDETECT);                 // 0xDB
     ssd1306_command(0x40);
@@ -296,17 +296,18 @@ void SSD1306::invertDisplay(uint8_t i) {
 void SSD1306::ssd1306_command(uint8_t c) {
     uint8_t control = 0x00;   // Co = 0, D/C = 0
 
-    HAL_StatusTypeDef ret = HAL_I2C_Mem_Write(i2c_handler, _i2caddr << 1, control, 1, &c, 1, 10);
+    while (HAL_I2C_GetState(i2c_handler) != HAL_I2C_STATE_READY);
+    HAL_StatusTypeDef ret = HAL_I2C_Mem_Write(i2c_handler, _i2caddr, control, 1, &c, 1, 10);
     if(ret != HAL_OK){
-    	I2C_Reset(*i2c_handler, MX_I2C1_Init);
-    	HAL_I2C_Mem_Write(i2c_handler, _i2caddr << 1, control, 1, &c, 1, 10);
+        	I2C_Reset(*i2c_handler, MX_I2C1_Init);
+    	    HAL_I2C_Mem_Write(i2c_handler, _i2caddr, control, 1, &c, 1, 10);
     }
 }
 
 // startscrollright
 // Activate a right handed scroll for rows start through stop
 // Hint, the display is 16 rows tall. To scroll the whole display, run:
-// display.scrollright(0x00, 0x0F) 
+// display.scrollright(0x00, 0x0F)
 void SSD1306::startscrollright(uint8_t start, uint8_t stop){
   ssd1306_command(SSD1306_RIGHT_HORIZONTAL_SCROLL);
   ssd1306_command(0X00);
@@ -321,7 +322,7 @@ void SSD1306::startscrollright(uint8_t start, uint8_t stop){
 // startscrollleft
 // Activate a right handed scroll for rows start through stop
 // Hint, the display is 16 rows tall. To scroll the whole display, run:
-// display.scrollright(0x00, 0x0F) 
+// display.scrollright(0x00, 0x0F)
 void SSD1306::startscrollleft(uint8_t start, uint8_t stop){
   ssd1306_command(SSD1306_LEFT_HORIZONTAL_SCROLL);
   ssd1306_command(0X00);
@@ -336,9 +337,9 @@ void SSD1306::startscrollleft(uint8_t start, uint8_t stop){
 // startscrolldiagright
 // Activate a diagonal scroll for rows start through stop
 // Hint, the display is 16 rows tall. To scroll the whole display, run:
-// display.scrollright(0x00, 0x0F) 
+// display.scrollright(0x00, 0x0F)
 void SSD1306::startscrolldiagright(uint8_t start, uint8_t stop){
-  ssd1306_command(SSD1306_SET_VERTICAL_SCROLL_AREA);  
+  ssd1306_command(SSD1306_SET_VERTICAL_SCROLL_AREA);
   ssd1306_command(0X00);
   ssd1306_command(SSD1306_LCDHEIGHT);
   ssd1306_command(SSD1306_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL);
@@ -353,9 +354,9 @@ void SSD1306::startscrolldiagright(uint8_t start, uint8_t stop){
 // startscrolldiagleft
 // Activate a diagonal scroll for rows start through stop
 // Hint, the display is 16 rows tall. To scroll the whole display, run:
-// display.scrollright(0x00, 0x0F) 
+// display.scrollright(0x00, 0x0F)
 void SSD1306::startscrolldiagleft(uint8_t start, uint8_t stop){
-  ssd1306_command(SSD1306_SET_VERTICAL_SCROLL_AREA);  
+  ssd1306_command(SSD1306_SET_VERTICAL_SCROLL_AREA);
   ssd1306_command(0X00);
   ssd1306_command(SSD1306_LCDHEIGHT);
   ssd1306_command(SSD1306_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL);
@@ -392,21 +393,19 @@ void SSD1306::dim(bool dim) {
   ssd1306_command(contrast);
 }
 
+
+//WARNING: Why is this here?? It's not refrenced anywhere.
 void SSD1306::ssd1306_data(uint8_t c) {
     uint8_t control = 0x40;   // Co = 0, D/C = 1
 
-	HAL_StatusTypeDef ret = HAL_I2C_Mem_Write(i2c_handler, _i2caddr << 1, control, 1, &c, 1, 10);
+	HAL_StatusTypeDef ret = HAL_I2C_Mem_Write(i2c_handler, _i2caddr, control, 1, &c, 1, 10);
     if(ret != HAL_OK){
   	  I2C_Reset(*i2c_handler, MX_I2C1_Init);
-  	  HAL_I2C_Mem_Write(i2c_handler, _i2caddr << 1, control, 1, &c, 1, 10);
+  	  HAL_I2C_Mem_Write(i2c_handler, _i2caddr, control, 1, &c, 1, 10);
     }
 }
 
 bool SSD1306::display(void) {
-
-  if(HAL_I2C_GetState(i2c_handler)!=HAL_I2C_STATE_READY)
-	  return false;
-
   ssd1306_command(SSD1306_COLUMNADDR);
   ssd1306_command(0);   // Column start address (0 = reset)
   ssd1306_command(SSD1306_LCDWIDTH-1); // Column end address (127 = reset)
@@ -423,21 +422,12 @@ bool SSD1306::display(void) {
     ssd1306_command(1); // Page end address
   #endif
 
-    //I2C_WAIT_READY
-
-	for (uint16_t i=0; i<(SSD1306_LCDHEIGHT); i++) {
-      HAL_StatusTypeDef ret = HAL_I2C_Mem_Write(i2c_handler, _i2caddr << 1, 0x40, 1, &buffer[i*16], 16, 10);
-      if(ret != HAL_OK){
-    	  I2C_Reset(*i2c_handler, MX_I2C1_Init);
-    	  HAL_I2C_Mem_Write(i2c_handler, _i2caddr << 1, 0x40, 1, &buffer[i*16], 16, 10);
-      }
-    }
-
-//	HAL_StatusTypeDef ret = HAL_I2C_Mem_Write_DMA(i2c_handler, _i2caddr << 1, 0x40, 1, buffer, 16*SSD1306_LCDHEIGHT);
-//	if(ret != HAL_OK){
-//	  I2C_Reset(*i2c_handler, MX_I2C1_Init);
-//	  HAL_I2C_Mem_Write_DMA(i2c_handler, _i2caddr << 1, 0x40, 1, buffer, 16*SSD1306_LCDHEIGHT);
-//	}
+    while (HAL_I2C_GetState(i2c_handler) != HAL_I2C_STATE_READY) asm("NOP");
+    while (HAL_I2C_IsDeviceReady(i2c_handler, _i2caddr, 5, 100) != HAL_OK) asm("NOP");
+    //Buffer can't be modified while data is sent using DMA otherwise there will be tearing on the screen...
+    HAL_I2C_Mem_Write_DMA(i2c_handler, _i2caddr, 0x40, I2C_MEMADD_SIZE_8BIT, buffer, sizeof(buffer));
+    //This could be removed but remember that buffer can't be modified
+    while (HAL_I2C_GetState(i2c_handler) != HAL_I2C_STATE_READY) asm("NOP");
 
 	return true;
 }
@@ -449,7 +439,7 @@ void SSD1306::clearDisplay(void) {
 
 void SSD1306::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color) {
   bool bSwap = false;
-  switch(rotation) { 
+  switch(rotation) {
     case 0:
       // 0 degree rotation, do nothing
       break;
@@ -474,9 +464,9 @@ void SSD1306::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color) {
       break;
   }
 
-  if(bSwap) { 
+  if(bSwap) {
     drawFastVLineInternal(x, y, w, color);
-  } else { 
+  } else {
     drawFastHLineInternal(x, y, w, color);
   }
 }
@@ -486,13 +476,13 @@ void SSD1306::drawFastHLineInternal(int16_t x, int16_t y, int16_t w, uint16_t co
   if(y < 0 || y >= HEIGHT) { return; }
 
   // make sure we don't try to draw below 0
-  if(x < 0) { 
+  if(x < 0) {
     w += x;
     x = 0;
   }
 
   // make sure we don't go off the edge of the display
-  if( (x + w) > WIDTH) { 
+  if( (x + w) > WIDTH) {
     w = (WIDTH - x);
   }
 
@@ -508,7 +498,7 @@ void SSD1306::drawFastHLineInternal(int16_t x, int16_t y, int16_t w, uint16_t co
 
   register uint8_t mask = 1 << (y&7);
 
-  switch (color) 
+  switch (color)
   {
   case WHITE:         while(w--) { *pBuf++ |= mask; }; break;
     case BLACK: mask = ~mask;   while(w--) { *pBuf++ &= mask; }; break;
@@ -518,7 +508,7 @@ void SSD1306::drawFastHLineInternal(int16_t x, int16_t y, int16_t w, uint16_t co
 
 void SSD1306::drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color) {
   bool bSwap = false;
-  switch(rotation) { 
+  switch(rotation) {
     case 0:
       break;
     case 1:
@@ -535,14 +525,14 @@ void SSD1306::drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color) {
       y -= (h-1);
       break;
     case 3:
-      // 270 degree rotation, swap x & y for rotation, then invert y 
+      // 270 degree rotation, swap x & y for rotation, then invert y
       bSwap = true;
       swap(x, y);
       y = HEIGHT - y - 1;
       break;
   }
 
-  if(bSwap) { 
+  if(bSwap) {
     drawFastHLineInternal(x, y, h, color);
   } else {
     drawFastVLineInternal(x, y, h, color);
@@ -556,20 +546,20 @@ void SSD1306::drawFastVLineInternal(int16_t x, int16_t __y, int16_t __h, uint16_
   if(x < 0 || x >= WIDTH) { return; }
 
   // make sure we don't try to draw below 0
-  if(__y < 0) { 
+  if(__y < 0) {
     // __y is negative, this will subtract enough from __h to account for __y being 0
     __h += __y;
     __y = 0;
 
-  } 
+  }
 
   // make sure we don't go past the height of the display
-  if( (__y + __h) > HEIGHT) { 
+  if( (__y + __h) > HEIGHT) {
     __h = (HEIGHT - __y);
   }
 
-  // if our height is now negative, punt 
-  if(__h <= 0) { 
+  // if our height is now negative, punt
+  if(__h <= 0) {
     return;
   }
 
@@ -588,7 +578,7 @@ void SSD1306::drawFastVLineInternal(int16_t x, int16_t __y, int16_t __h, uint16_
   // do the first partial byte, if necessary - this requires some masking
   register uint8_t mod = (y&7);
   if(mod) {
-    // mask off the high n bits we want to set 
+    // mask off the high n bits we want to set
     mod = 8-mod;
 
     // note - lookup table results in a nearly 10% performance improvement in fill* functions
@@ -597,17 +587,17 @@ void SSD1306::drawFastVLineInternal(int16_t x, int16_t __y, int16_t __h, uint16_
     register uint8_t mask = premask[mod];
 
     // adjust the mask if we're not going to reach the end of this byte
-    if( h < mod) { 
+    if( h < mod) {
       mask &= (0XFF >> (mod-h));
     }
 
-  switch (color) 
+  switch (color)
     {
     case WHITE:   *pBuf |=  mask;  break;
     case BLACK:   *pBuf &= ~mask;  break;
     case INVERSE: *pBuf ^=  mask;  break;
     }
-  
+
     // fast exit if we're done here!
     if(h<mod) { return; }
 
@@ -618,7 +608,7 @@ void SSD1306::drawFastVLineInternal(int16_t x, int16_t __y, int16_t __h, uint16_
 
 
   // write solid bytes while we can - effectively doing 8 rows at a time
-  if(h >= 8) { 
+  if(h >= 8) {
     if (color == INVERSE)  {          // separate copy of the code so we don't impact performance of the black/white write version with an extra comparison per loop
       do  {
       *pBuf=~(*pBuf);
@@ -631,7 +621,7 @@ void SSD1306::drawFastVLineInternal(int16_t x, int16_t __y, int16_t __h, uint16_
       } while(h >= 8);
       }
     else {
-      // store a local value to work with 
+      // store a local value to work with
       register uint8_t val = (color == WHITE) ? 255 : 0;
 
       do  {
@@ -655,7 +645,7 @@ void SSD1306::drawFastVLineInternal(int16_t x, int16_t __y, int16_t __h, uint16_
     // note - lookup table results in a nearly 10% performance improvement in fill* functions
     static uint8_t postmask[8] = {0x00, 0x01, 0x03, 0x07, 0x0F, 0x1F, 0x3F, 0x7F };
     register uint8_t mask = postmask[mod];
-    switch (color) 
+    switch (color)
     {
       case WHITE:   *pBuf |=  mask;  break;
       case BLACK:   *pBuf &= ~mask;  break;

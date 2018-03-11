@@ -138,8 +138,6 @@ int main(void) {
 	HAL_GPIO_WritePin(SPI_CLOCK_GPIO_Port, SPI_CLOCK_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(SPI_DATA_GPIO_Port, SPI_DATA_Pin, GPIO_PIN_RESET);
 
-	HAL_Delay(100); //Delay 1000ms to allow RX5808 startup.
-
 #ifdef USE_EXTERNAL_EEPROM
 	I2C_Reset(hi2c2, MX_I2C2_Init);
 	EepromSettings.init(&hi2c2);
@@ -166,6 +164,7 @@ int main(void) {
 	HAL_Delay(1000);
 #endif
 
+	HAL_Delay(100); //Delay 1000ms to allow RX5808 startup.
 	Receiver::setup(&hadc1);
 	Receiver::setChannel(EepromSettings.startChannel);
 
