@@ -152,7 +152,7 @@ int main(void) {
 	I2C_Reset(&hi2c1, MX_I2C1_Init);
 	Ui::setup(&hi2c1);
 #else
-	I2C_Reset(hi2c2, MX_I2C2_Init);
+	I2C_Reset(&hi2c2, MX_I2C2_Init);
 	Ui::setup(&hi2c2);
 #endif
 
