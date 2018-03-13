@@ -147,5 +147,5 @@ void SearchStateHandler::setAndSaveChannel() {
 void SearchStateHandler::onFSPinsChange(uint8_t state){
 	uint8_t bandOffset = Receiver::activeChannel - (Receiver::activeChannel % 8);
 	orderedChanelIndex = bandOffset + state;
-	Receiver::setChannel(orderedChanelIndex);
+	this->setAndSaveChannel();
 }
