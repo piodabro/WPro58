@@ -27,6 +27,7 @@ ___
 ### Big thanks to
 - **mihero** for contributing
 - **20Sy** for HB5808 module ;)
+- **conkerkh** for contributing
 
 ___
 
