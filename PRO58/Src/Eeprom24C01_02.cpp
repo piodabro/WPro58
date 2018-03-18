@@ -10,7 +10,7 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option) any
  * later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
@@ -113,7 +113,7 @@ Eeprom24C01_02::writeByte
 ){
 	HAL_StatusTypeDef ret = HAL_I2C_Mem_Write(i2c_handler, m_deviceAddress<<1, address, 1, &data, 1, 10);
 	if(ret != HAL_OK){
-	  I2C_Reset(*i2c_handler, MX_I2C2_Init);
+	  I2C_Reset(i2c_handler, MX_I2C2_Init);
 	  HAL_I2C_Mem_Write(i2c_handler, m_deviceAddress<<1, address, 1, &data, 1, 10);
 	}
 	HAL_Delay(4);
@@ -124,7 +124,7 @@ Eeprom24C01_02::writeByte
  * uint8_t     address,
  * uint8_t     length,
  * uint8_t*    p_data)
- * 
+ *
  * \brief Write bytes in EEPROM memory.
  *
  * \param       address Start address.
@@ -177,7 +177,7 @@ Eeprom24C01_02::writeBytes
 
 /**************************************************************************//**
  * \fn uint8_t Eeprom24C01_02::readByte(uint8_t address)
- * 
+ *
  * \brief Read a byte in EEPROM memory.
  *
  * \param   address Address.
@@ -192,7 +192,7 @@ Eeprom24C01_02::readByte
 	uint8_t data = 0;
 	HAL_StatusTypeDef ret = HAL_I2C_Mem_Read(i2c_handler, m_deviceAddress << 1, address, 1, &data, 1, 10);
 	if(ret != HAL_OK){
-	  I2C_Reset(*i2c_handler, MX_I2C2_Init);
+	  I2C_Reset(i2c_handler, MX_I2C2_Init);
 	  HAL_I2C_Mem_Read(i2c_handler, m_deviceAddress << 1, address, 1, &data, 1, 10);
 	}
 
@@ -288,7 +288,7 @@ Eeprom24C01_02::writeBuffer
 ){
 
 	HAL_I2C_Mem_Write(i2c_handler, m_deviceAddress << 1, address, 1, p_data, length, 100);
-    
+
     // Write cycle time (tWR). See EEPROM memory datasheet for more details.
     HAL_Delay(10);
 }
@@ -314,7 +314,7 @@ Eeprom24C01_02::readBuffer
 ){
 	HAL_StatusTypeDef ret = HAL_I2C_Mem_Read(i2c_handler, m_deviceAddress << 1, address, 1, p_data, length, 10);
 	if(ret != HAL_OK){
-	  I2C_Reset(*i2c_handler, MX_I2C2_Init);
+	  I2C_Reset(i2c_handler, MX_I2C2_Init);
 	  HAL_I2C_Mem_Read(i2c_handler, m_deviceAddress << 1, address, 1, p_data, length, 10);
 	}
 }
