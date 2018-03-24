@@ -339,4 +339,5 @@ namespace Channels {
     const uint8_t getOrderedIndexFromIndex(uint8_t index) {
         return channelIndexToOrderedIndex[index];
     }
+
 }

@@ -86,12 +86,12 @@ void StateMachine::ScreensaverStateHandler::onUpdateDraw() {
 }
 
 void StateMachine::ScreensaverStateHandler::onFSPinsChange(uint8_t state){
-	uint8_t bandOffset = Receiver::activeChannel - (Receiver::activeChannel % 8);
-	uint8_t orderedChanelIndex = bandOffset + state;
-	EepromSettings.startChannel = orderedChanelIndex;
-	EepromSettings.markDirty();
-	Receiver::setChannel(orderedChanelIndex);
+	Receiver::setBandChannel(state, true);
+	resetState();
+}
+
+void StateMachine::ScreensaverStateHandler::resetState(){
 	showLogo = false;
 	this->displaySwapTimer.reset();
-	this->onInitialDraw();
+	Ui::needUpdate();
 }

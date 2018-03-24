@@ -46,12 +46,23 @@ namespace Receiver {
     	HAL_ADC_Start_DMA(hadc, (uint32_t*)rssiDMARaw, 2);
     }
 
-    void setChannel(uint8_t channel)
+    void setChannel(uint8_t channel, bool store)
     {
         ReceiverSpi::setSynthRegisterB(Channels::getSynthRegisterB(channel));
 
         rssiStableTimer.reset();
         activeChannel = channel;
+        if (store){
+            EepromSettings.startChannel = channel;
+            EepromSettings.markDirty();
+        }
+    }
+
+    void setBandChannel(uint8_t inChannel, bool store)
+    {
+        uint8_t bandOffset = activeChannel - (activeChannel % 8);
+        uint8_t orderedChanelIndex = bandOffset + inChannel;
+        setChannel(orderedChanelIndex, store);
     }
 
     void setActiveReceiver(ReceiverId receiver) {

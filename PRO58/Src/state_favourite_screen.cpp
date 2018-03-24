@@ -55,9 +55,7 @@ void FavouriteScreenStateHandler::onButtonChange(
 
 void FavouriteScreenStateHandler::setChannel() {
 	EepromSettings.favouriteChannels[this->favouriteIndex] = EepromSettings.favouriteChannels[this->favouriteIndex] % CHANNELS_SIZE;
-    Receiver::setChannel(EepromSettings.favouriteChannels[this->favouriteIndex]);
-    EepromSettings.startChannel = EepromSettings.favouriteChannels[this->favouriteIndex];
-    EepromSettings.markDirty();
+    Receiver::setChannel(EepromSettings.favouriteChannels[this->favouriteIndex], true);
 }
 
 void FavouriteScreenStateHandler::onFSPinsChange(uint8_t state){
