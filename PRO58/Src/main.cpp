@@ -143,9 +143,8 @@ int main(void) {
 	HAL_GPIO_WritePin(SPI_DATA_GPIO_Port, SPI_DATA_Pin, GPIO_PIN_RESET);
 
 
-
 #ifdef USE_EXTERNAL_EEPROM
-	I2C_Reset(hi2c2, MX_I2C2_Init);
+	I2C_Reset(&hi2c2, MX_I2C2_Init);
 	EepromSettings.init(&hi2c2);
 	EepromSettings.load();
 #else
@@ -154,10 +153,11 @@ int main(void) {
 #endif
 
 #ifndef HB5808
-	I2C_Reset(hi2c1, MX_I2C1_Init);
+	//I2C_Reset breaks stuff...
+	I2C_Reset(&hi2c1, MX_I2C1_Init);
 	Ui::setup(&hi2c1);
 #else
-	I2C_Reset(hi2c2, MX_I2C2_Init);
+	I2C_Reset(&hi2c2, MX_I2C2_Init);
 	Ui::setup(&hi2c2);
 #endif
 

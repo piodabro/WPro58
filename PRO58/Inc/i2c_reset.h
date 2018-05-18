@@ -5,7 +5,7 @@
  extern "C" {
 #endif
 
-void I2C_Reset(I2C_HandleTypeDef hi2c, void(*initFunc)());
+void I2C_Reset(I2C_HandleTypeDef *hi2c, void(*initFunc)());
 
 #ifdef __cplusplus
  }

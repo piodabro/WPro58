@@ -37,7 +37,7 @@
 
 #ifdef __cplusplus
  extern "C" {
-#endif 
+#endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
@@ -66,6 +66,9 @@ void I2C1_EV_IRQHandler(void);
 void I2C1_ER_IRQHandler(void);
 void I2C2_EV_IRQHandler(void);
 void I2C2_ER_IRQHandler(void);
+
+void I2C1_EV_IRQHandler(void);
+void I2C1_ER_IRQHandler(void);
 
 #ifdef __cplusplus
 }

@@ -6,7 +6,7 @@
   ******************************************************************************
   ** This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
-  * USER CODE END. Other portions of this file, whether 
+  * USER CODE END. Other portions of this file, whether
   * inserted by the user or by software development tools
   * are owned by their respective copyright owners.
   *
@@ -102,10 +102,10 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
   /* USER CODE BEGIN I2C1_MspInit 0 */
 #ifndef HB5808
   /* USER CODE END I2C1_MspInit 0 */
-  
-    /**I2C1 GPIO Configuration    
+
+    /**I2C1 GPIO Configuration
     PB6     ------> I2C1_SCL
-    PB7     ------> I2C1_SDA 
+    PB7     ------> I2C1_SDA
     */
     GPIO_InitStruct.Pin = I2C_DISPLAY_SCL_Pin|I2C_DISPLAY_SDA_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
@@ -114,7 +114,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
 
     /* I2C1 clock enable */
     __HAL_RCC_I2C1_CLK_ENABLE();
-  
+
     /* I2C1 DMA Init */
     /* I2C1_TX Init */
     hdma_i2c1_tx.Instance = DMA1_Channel6;
@@ -155,6 +155,11 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
     HAL_NVIC_EnableIRQ(I2C1_ER_IRQn);
 
   /* USER CODE BEGIN I2C1_MspInit 1 */
+	/* I2C1 interrupt Init */
+	HAL_NVIC_SetPriority(I2C1_EV_IRQn, 5, 0);
+	HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
+	HAL_NVIC_SetPriority(I2C1_ER_IRQn, 5, 0);
+	HAL_NVIC_EnableIRQ(I2C1_ER_IRQn);
 #endif
   /* USER CODE END I2C1_MspInit 1 */
   }
@@ -163,10 +168,10 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
   /* USER CODE BEGIN I2C2_MspInit 0 */
 #ifndef HB5808
   /* USER CODE END I2C2_MspInit 0 */
-  
-    /**I2C2 GPIO Configuration    
+
+    /**I2C2 GPIO Configuration
     PB10     ------> I2C2_SCL
-    PB11     ------> I2C2_SDA 
+    PB11     ------> I2C2_SDA
     */
     GPIO_InitStruct.Pin = I2C_EEPROM_SCL_Pin|I2C_EEPROM_SDA_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
@@ -175,7 +180,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
 
     /* I2C2 clock enable */
     __HAL_RCC_I2C2_CLK_ENABLE();
-  
+
     /* I2C2 DMA Init */
     /* I2C2_TX Init */
     hdma_i2c2_tx.Instance = DMA1_Channel4;
@@ -276,10 +281,10 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
   /* USER CODE END I2C1_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_I2C1_CLK_DISABLE();
-  
-    /**I2C1 GPIO Configuration    
+
+    /**I2C1 GPIO Configuration
     PB6     ------> I2C1_SCL
-    PB7     ------> I2C1_SDA 
+    PB7     ------> I2C1_SDA
     */
     HAL_GPIO_DeInit(GPIOB, I2C_DISPLAY_SCL_Pin|I2C_DISPLAY_SDA_Pin);
 
@@ -301,10 +306,10 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
   /* USER CODE END I2C2_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_I2C2_CLK_DISABLE();
-  
-    /**I2C2 GPIO Configuration    
+
+    /**I2C2 GPIO Configuration
     PB10     ------> I2C2_SCL
-    PB11     ------> I2C2_SDA 
+    PB11     ------> I2C2_SDA
     */
     HAL_GPIO_DeInit(GPIOB, I2C_EEPROM_SCL_Pin|I2C_EEPROM_SDA_Pin);
 
@@ -331,7 +336,7 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
     HAL_NVIC_DisableIRQ(I2C2_EV_IRQn);
     HAL_NVIC_DisableIRQ(I2C2_ER_IRQn);
   }
-} 
+}
 
 /* USER CODE BEGIN 1 */
 

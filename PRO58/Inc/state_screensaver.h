@@ -12,6 +12,7 @@ namespace StateMachine {
         private:
             Timer displaySwapTimer = Timer(SCREENSAVER_DISPLAY_CYCLE * 1000);
             bool showLogo = false;
+            void resetState();
 
         public:
             void onEnter();
