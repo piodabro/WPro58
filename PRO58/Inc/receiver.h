@@ -40,7 +40,8 @@ namespace Receiver {
         extern uint8_t rssiBLast[RECEIVER_LAST_DATA_SIZE];
     #endif
 
-    void setChannel(uint8_t channel);
+    void setChannel(uint8_t channel, bool store = false);
+    void setBandChannel(uint8_t channel, bool store = false);
     void updateRssi();
     void setActiveReceiver(ReceiverId receiver = ReceiverId::A);
     #ifdef USE_DIVERSITY
