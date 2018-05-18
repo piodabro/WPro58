@@ -139,13 +139,11 @@ void SearchStateHandler::onButtonChange(
 }
 
 void SearchStateHandler::setAndSaveChannel() {
-    Receiver::setChannel(orderedChanelIndex);
-    EepromSettings.startChannel = orderedChanelIndex;
-    EepromSettings.markDirty();
+    Receiver::setChannel(orderedChanelIndex, true);
 }
 
 void SearchStateHandler::onFSPinsChange(uint8_t state){
 	uint8_t bandOffset = Receiver::activeChannel - (Receiver::activeChannel % 8);
 	orderedChanelIndex = bandOffset + state;
-	Receiver::setChannel(orderedChanelIndex);
+	this->setAndSaveChannel();
 }
