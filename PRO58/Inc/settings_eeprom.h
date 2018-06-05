@@ -75,7 +75,11 @@ const struct {
     uint8_t screenFlip = false;
 
     //true - FatShark, false - button
-    uint8_t FSPinsMode = true;
+#ifdef FS_PINS_AS_BUTTONS
+	uint8_t FSPinsMode = false;
+#else
+	uint8_t FSPinsMode = true;
+#endif
 
     uint8_t searchManual = false;
 

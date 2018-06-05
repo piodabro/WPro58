@@ -33,7 +33,12 @@ SOFTWARE.
 // === EEPROM ==================================================================
 
 // This should be incremented after every EEPROM change.
-#define EEPROM_MAGIC 0x00000006
+#define EEPROM_MAGIC_BASE 0x00000006
+#ifdef FS_PINS_AS_BUTTONS
+#define EEPROM_MAGIC EEPROM_MAGIC_BASE + 1
+#else
+#define EEPROM_MAGIC EEPROM_MAGIC_BASE
+#endif
 
 // === Receiver Modules =========================================================
 
