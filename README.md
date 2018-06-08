@@ -29,6 +29,12 @@ ___
 - **20Sy** for HB5808 module ;)
 - **conkerkh** for contributing
 
+#### Warning!
+If you use module with FatShark goggles make sure that FS pins mode setting is set to FS (not BUTTON).
+This settings changes pullup settings on FS channel pins.
+
+To use BUTTON mode simply add buttons that connect pin to ground when pressed.
+
 ___
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
