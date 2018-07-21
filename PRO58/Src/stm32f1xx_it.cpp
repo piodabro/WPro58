@@ -37,6 +37,7 @@
 
 /* USER CODE BEGIN 0 */
 #include "i2c.h"
+#include "OSD.h"
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -46,6 +47,8 @@ extern DMA_HandleTypeDef hdma_i2c1_rx;
 extern DMA_HandleTypeDef hdma_i2c2_tx;
 extern DMA_HandleTypeDef hdma_i2c2_rx;
 extern TIM_HandleTypeDef htim3;
+extern DMA_HandleTypeDef hdma_spi1_tx;
+extern DMA_HandleTypeDef hdma_spi2_tx;
 
 /******************************************************************************/
 /*            Cortex-M3 Processor Interruption and Exception Handlers         */
@@ -217,6 +220,32 @@ void DMA1_Channel4_IRQHandler(void)
   /* USER CODE END DMA1_Channel4_IRQn 1 */
 }
 
+void DMA1_Channel3_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel3_IRQn 0 */
+
+  /* USER CODE END DMA1_Channel3_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_spi1_tx);
+  /* USER CODE BEGIN DMA1_Channel3_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel3_IRQn 1 */
+}
+
+#ifdef USE_OSD
+/**
+* @brief This function handles DMA1 channel5 global interrupt.
+*/
+void DMA1_Channel5_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel5_IRQn 0 */
+
+  /* USER CODE END DMA1_Channel5_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_spi2_tx);
+  /* USER CODE BEGIN DMA1_Channel5_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel5_IRQn 1 */
+}
+#else
 /**
 * @brief This function handles DMA1 channel5 global interrupt.
 */
@@ -230,6 +259,7 @@ void DMA1_Channel5_IRQHandler(void)
 
   /* USER CODE END DMA1_Channel5_IRQn 1 */
 }
+#endif
 
 /**
 * @brief This function handles DMA1 channel6 global interrupt.
@@ -259,19 +289,38 @@ void DMA1_Channel7_IRQHandler(void)
   /* USER CODE END DMA1_Channel7_IRQn 1 */
 }
 
+#ifdef USE_OSD
 /**
 * @brief This function handles TIM3 global interrupt.
 */
-void TIM3_IRQHandler(void)
+void __attribute__((optimize("Ofast"))) TIM3_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM3_IRQn 0 */
-
-  /* USER CODE END TIM3_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim3);
-  /* USER CODE BEGIN TIM3_IRQn 1 */
-
-  /* USER CODE END TIM3_IRQn 1 */
+  TIM_HandleTypeDef *htim = &htim3;
+  /* TIM Update event */
+  if(__HAL_TIM_GET_FLAG(htim, TIM_FLAG_UPDATE) != RESET)
+  {
+    if(__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_UPDATE) !=RESET)
+    {
+      OSD::TIM_PeriodElapsedCallback(htim);
+      __HAL_TIM_CLEAR_IT(htim, TIM_IT_UPDATE);
+    }
+  } else {
+      HAL_TIM_IRQHandler(&htim3);
+  }
 }
+
+void EXTI9_5_IRQHandler(void)
+{
+    __HAL_GPIO_EXTI_CLEAR_IT(OSD_CSYNC_PIN);
+    OSD::csync_callback();
+}
+
+void EXTI15_10_IRQHandler(void)
+{
+    __HAL_GPIO_EXTI_CLEAR_IT(OSD_VSYNC_PIN);
+    OSD::vsync_callback();
+}
+#endif
 
 /* USER CODE BEGIN 1 */
 /**

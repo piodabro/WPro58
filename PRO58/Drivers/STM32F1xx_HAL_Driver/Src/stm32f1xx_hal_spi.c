@@ -1371,10 +1371,10 @@ HAL_StatusTypeDef HAL_SPI_Transmit_DMA(SPI_HandleTypeDef *hspi, uint8_t *pData, 
 #endif /* USE_SPI_CRC */
 
   /* Set the SPI TxDMA Half transfer complete callback */
-  hspi->hdmatx->XferHalfCpltCallback = SPI_DMAHalfTransmitCplt;
+//  hspi->hdmatx->XferHalfCpltCallback = SPI_DMAHalfTransmitCplt;
 
   /* Set the SPI TxDMA transfer complete callback */
-  hspi->hdmatx->XferCpltCallback = SPI_DMATransmitCplt;
+//  hspi->hdmatx->XferCpltCallback = SPI_DMATransmitCplt;
 
   /* Set the DMA error callback */
   hspi->hdmatx->XferErrorCallback = SPI_DMAError;
@@ -1393,7 +1393,7 @@ HAL_StatusTypeDef HAL_SPI_Transmit_DMA(SPI_HandleTypeDef *hspi, uint8_t *pData, 
   }
 
   /* Enable the SPI Error Interrupt Bit */
-  SET_BIT(hspi->Instance->CR2, SPI_CR2_ERRIE);
+//  SET_BIT(hspi->Instance->CR2, SPI_CR2_ERRIE);
 
   /* Enable Tx DMA Request */
   SET_BIT(hspi->Instance->CR2, SPI_CR2_TXDMAEN);

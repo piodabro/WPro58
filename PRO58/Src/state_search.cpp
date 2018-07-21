@@ -8,7 +8,7 @@
 #include "channels.h"
 #include "buttons.h"
 #include "ui.h"
-
+#include "OSD.h"
 
 using StateMachine::SearchStateHandler;
 
@@ -45,6 +45,18 @@ void SearchStateHandler::onEnter() {
     this->manual = EepromSettings.searchManual;
 	this->orderedChanelIndex = EepromSettings.startChannel;
 	Receiver::setChannel(orderedChanelIndex);
+#ifdef USE_OSD	
+	OSD::enableLCD(false);
+	OSD::setSyncMode(OSD::syncModes::external);
+#endif	
+}
+
+void SearchStateHandler::onExit(){
+#ifdef USE_OSD
+    OSD::enableLCD(true);
+    OSD::setSyncMode(OSD::syncModes::automatic);
+    OSD::clear();
+#endif    
 }
 
 void SearchStateHandler::onUpdate() {

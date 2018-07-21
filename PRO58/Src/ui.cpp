@@ -2,6 +2,7 @@
 #include "ui.h"
 #include "logo.h"
 #include "settings_eeprom.h"
+#include "OSD.h"
 
 namespace Ui {
     SSD1306 display;
@@ -25,6 +26,9 @@ namespace Ui {
         if (shouldDisplay) {
         	if(display.display())
         		shouldDisplay = false;
+#ifdef USE_OSD
+        	    OSD::copyBuffer();
+#endif
         }
     }
 

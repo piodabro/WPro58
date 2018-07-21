@@ -39,6 +39,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "tim.h"
+#include "stm32f1xx_hal.h"
 
 /* USER CODE BEGIN 0 */
 
@@ -47,6 +48,64 @@
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
 
+#ifdef USE_OSD
+/* TIM2 init function */
+void MX_TIM3_Init(void)
+{
+
+    GPIO_InitTypeDef GPIO_InitStruct;
+    TIM_ClockConfigTypeDef sClockSourceConfig;
+    TIM_OC_InitTypeDef sConfigOC;
+
+    __HAL_RCC_TIM3_CLK_ENABLE();
+
+    /*
+    PB1     ------> TIM3_CH4
+    */
+    GPIO_InitStruct.Pin = GPIO_PIN_1;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    //__HAL_AFIO_REMAP_TIM3_PARTIAL();
+
+    htim3.Instance = TIM3;
+    htim3.Init.Prescaler = 8;
+    htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim3.Init.Period = 512;
+    htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    htim3.Channel = HAL_TIM_ACTIVE_CHANNEL_4;
+    if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+    {
+        _Error_Handler(__FILE__, __LINE__);
+    }
+
+    if (HAL_TIM_Base_Start_IT(&htim3) != HAL_OK)
+    {
+        _Error_Handler(__FILE__, __LINE__);
+    }
+
+    sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+    if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
+    {
+        _Error_Handler(__FILE__, __LINE__);
+    }
+
+    sConfigOC.OCMode = TIM_OCMODE_PWM1;
+    sConfigOC.Pulse = 40;
+    sConfigOC.OCPolarity = TIM_OCPOLARITY_LOW;
+    sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+    if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
+    {
+        _Error_Handler(__FILE__, __LINE__);
+    }
+
+    // Start the timer comparing
+    HAL_TIM_OC_Start(&htim3, TIM_CHANNEL_4);
+
+}
+#else
 /* TIM3 init function */
 void MX_TIM3_Init(void)
 {
@@ -78,6 +137,8 @@ void MX_TIM3_Init(void)
   }
 
 }
+#endif
+
 /* TIM4 init function */
 void MX_TIM4_Init(void)
 {
@@ -139,8 +200,8 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
     __HAL_RCC_TIM3_CLK_ENABLE();
 
     /* TIM3 interrupt Init */
-    HAL_NVIC_SetPriority(TIM3_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(TIM3_IRQn);
+    HAL_NVIC_SetPriority(TIM3_IRQn, 1, 0);
+//    HAL_NVIC_EnableIRQ(TIM3_IRQn);
   /* USER CODE BEGIN TIM3_MspInit 1 */
 
   /* USER CODE END TIM3_MspInit 1 */

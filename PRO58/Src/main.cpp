@@ -45,8 +45,6 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-
-/* USER CODE BEGIN Includes */
 #include "settings_eeprom.h"
 
 #include "channels.h"
@@ -66,6 +64,11 @@
 
 #ifdef USE_BUZZER
 #include "beeper.h"
+#endif
+
+#ifdef USE_OSD
+#include "OSD.h"
+#include "spi.h"
 #endif
 /* USER CODE END Includes */
 
@@ -116,7 +119,9 @@ int main(void) {
 	MX_DMA_Init();
 	MX_ADC1_Init();
 	MX_I2C2_Init();
+#ifndef OSD58
 	MX_USART1_UART_Init();
+#endif
 #ifndef HB5808
 	MX_I2C1_Init();
 #endif
@@ -126,6 +131,10 @@ int main(void) {
 	MX_TIM3_Init();
 
 	/* USER CODE BEGIN 2 */
+#ifdef USE_OSD
+	spi_init();
+    OSD::init();
+#endif
 	if (DWT_Delay_Init()) {
 		_Error_Handler(__FILE__, __LINE__); /* Call Error Handler */
 	}
@@ -146,6 +155,7 @@ int main(void) {
 	EepromSettings.init();
 	EepromSettings.load();
 #endif
+
 
 #ifndef HB5808
 	//I2C_Reset breaks stuff...
@@ -202,7 +212,9 @@ int main(void) {
 		StateMachine::update();
 		Ui::update();
 		EepromSettings.update();
-
+#ifdef USE_OSD
+		OSD::update();
+#endif
 		if (
 				(
 					StateMachine::currentState == StateMachine::State::FAVOURITES
@@ -272,7 +284,7 @@ void SystemClock_Config(void) {
 	HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
 	/* SysTick_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(SysTick_IRQn, 2, 0);
 }
 
 /* USER CODE BEGIN 4 */

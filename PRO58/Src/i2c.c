@@ -107,11 +107,24 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
     PB6     ------> I2C1_SCL
     PB7     ------> I2C1_SDA
     */
-    GPIO_InitStruct.Pin = I2C_DISPLAY_SCL_Pin|I2C_DISPLAY_SDA_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+#ifdef OSD58
+    GPIO_InitStruct.Pin = I2C_DISPLAY_SCL_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    //GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+    GPIO_InitStruct.Pin = I2C_DISPLAY_SDA_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+    //GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+#else
+	GPIO_InitStruct.Pin = I2C_DISPLAY_SCL_Pin|I2C_DISPLAY_SDA_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+#endif
     /* I2C1 clock enable */
     __HAL_RCC_I2C1_CLK_ENABLE();
 
@@ -150,9 +163,9 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
 
   /* USER CODE BEGIN I2C1_MspInit 1 */
 	/* I2C1 interrupt Init */
-	HAL_NVIC_SetPriority(I2C1_EV_IRQn, 5, 0);
+	HAL_NVIC_SetPriority(I2C1_EV_IRQn, 7, 0);
 	HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
-	HAL_NVIC_SetPriority(I2C1_ER_IRQn, 5, 0);
+	HAL_NVIC_SetPriority(I2C1_ER_IRQn, 7, 0);
 	HAL_NVIC_EnableIRQ(I2C1_ER_IRQn);
 #endif
   /* USER CODE END I2C1_MspInit 1 */
@@ -167,14 +180,28 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
     PB10     ------> I2C2_SCL
     PB11     ------> I2C2_SDA
     */
-    GPIO_InitStruct.Pin = I2C_EEPROM_SCL_Pin|I2C_EEPROM_SDA_Pin;
+    #ifdef OSD58
+    GPIO_InitStruct.Pin = I2C_EEPROM_SDA_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+    GPIO_InitStruct.Pin = I2C_EEPROM_SCL_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+#else
+	GPIO_InitStruct.Pin = I2C_EEPROM_SCL_Pin|I2C_EEPROM_SDA_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+#endif
     /* I2C2 clock enable */
     __HAL_RCC_I2C2_CLK_ENABLE();
 
+#ifndef OSD58
     /* I2C2 DMA Init */
     /* I2C2_TX Init */
     hdma_i2c2_tx.Instance = DMA1_Channel4;
@@ -207,6 +234,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
     }
 
     __HAL_LINKDMA(i2cHandle,hdmarx,hdma_i2c2_rx);
+#endif
 
   /* USER CODE BEGIN I2C2_MspInit 1 */
 #else
