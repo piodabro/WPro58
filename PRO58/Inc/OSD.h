@@ -24,6 +24,7 @@ namespace OSD {
     void init(void);
     void clear(void);
     void print(uint8_t x, uint8_t y, const char *str);
+    void print(uint8_t x, uint8_t y, uint8_t c);
     void copyBuffer(void);
     void printBar(uint8_t x, uint8_t y, uint8_t value);
     void enableLCD(uint8_t enabled);

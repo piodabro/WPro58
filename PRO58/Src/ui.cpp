@@ -26,9 +26,6 @@ namespace Ui {
         if (shouldDisplay) {
         	if(display.display())
         		shouldDisplay = false;
-#ifdef USE_OSD
-        	    OSD::copyBuffer();
-#endif
         }
     }
 

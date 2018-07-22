@@ -18,7 +18,7 @@
 #include "OSD.h"
 #include "OSD_font.h"
 
-#define FIRST_LINE                  26
+#define FIRST_LINE                  27
 #define OSD_ROWS                    5
 #define OSD_COLUMNS                 18
 #define LINEBUFFER_SIZE             72
@@ -440,6 +440,10 @@ namespace OSD {
     }
 
     void setSyncMode(syncModes mode) {
+
+        if(!EepromSettings.OSDEnabled) {
+            mode = syncModes::off;
+        }
 
         switch(mode) {
         case syncModes::automatic:

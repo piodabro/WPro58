@@ -28,6 +28,9 @@ by PioDabro for WPro58 firmware.
 
 #include "SSD1306_STM32.h"
 
+#include "settings_eeprom.h"
+#include "OSD.h"
+
 #pragma GCC push_options
 #pragma GCC optimize ("O0")
 
@@ -423,9 +426,33 @@ bool SSD1306::display(void) {
   #endif
 
     while (HAL_I2C_GetState(i2c_handler) != HAL_I2C_STATE_READY) asm("NOP");
+#ifdef USE_OSD
+
+    static uint8_t noLCD = false;
+    if(noLCD) {
+        OSD::copyBuffer();
+        return true;
+    }
+    uint8_t timeout = 5;
+    while (HAL_I2C_IsDeviceReady(i2c_handler, _i2caddr, 5, 100) != HAL_OK) {
+        timeout--;
+        if(!timeout) {
+            noLCD = true;
+            if(!EepromSettings.OSDEnabled) {
+                EepromSettings.OSDEnabled = true;
+            }
+            OSD::copyBuffer();
+            return true;
+        }
+    }
+#else
     while (HAL_I2C_IsDeviceReady(i2c_handler, _i2caddr, 5, 100) != HAL_OK) asm("NOP");
+#endif
     //Buffer can't be modified while data is sent using DMA otherwise there will be tearing on the screen...
     HAL_I2C_Mem_Write_DMA(i2c_handler, _i2caddr, 0x40, I2C_MEMADD_SIZE_8BIT, buffer, sizeof(buffer));
+#ifdef USE_OSD
+    OSD::copyBuffer();
+#endif
     //This could be removed but remember that buffer can't be modified
     while (HAL_I2C_GetState(i2c_handler) != HAL_I2C_STATE_READY) asm("NOP");
 

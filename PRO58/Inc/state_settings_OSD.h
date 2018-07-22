@@ -20,8 +20,6 @@ namespace StateMachine {
         private:
 
 			Ui::SettingsMenuHelper menu;
-			//void drawMenu();
-			//void drawTriangles();
     };
 }
 
