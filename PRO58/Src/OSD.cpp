@@ -619,24 +619,50 @@ namespace OSD {
             printNumber(6,2, debug2, 10);
 #endif
 
-            if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO || EepromSettings.diversityMode == Receiver::DiversityMode::FORCE_A){
-                printBar(0,0,Receiver::rssiA);
-                if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO)
-                    print(0,0, 0xA9 + (uint8_t)Receiver::activeReceiver);
+            if(!EepromSettings.OSDEnabled) {
+                if(syncMode != syncModes::off) {
+                    setSyncMode(syncModes::off);
+                }
+                return;
             } else {
-                print(0,0,"    ");
+                if(syncMode == syncModes::off) {
+                    setSyncMode(syncModes::automatic);
+                }
             }
 
-            if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO || EepromSettings.diversityMode == Receiver::DiversityMode::FORCE_B){
-                printBar(OSD_COLUMNS-4,0,Receiver::rssiB);
-                if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO)
-                    print(OSD_COLUMNS-1,0, 0xA8 - (uint8_t)Receiver::activeReceiver);
+            if(EepromSettings.OSDShowRssi) {
+                if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO || EepromSettings.diversityMode == Receiver::DiversityMode::FORCE_A){
+                    printBar(0,0,Receiver::rssiA);
+                    if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO)
+                        print(0,0, 0xA9 + (uint8_t)Receiver::activeReceiver);
+                } else {
+                    print(0,0,"    ");
+                }
+
+                if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO || EepromSettings.diversityMode == Receiver::DiversityMode::FORCE_B){
+                    printBar(OSD_COLUMNS-4,0,Receiver::rssiB);
+                    if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO)
+                        print(OSD_COLUMNS-1,0, 0xA8 - (uint8_t)Receiver::activeReceiver);
+                } else {
+                    print(OSD_COLUMNS-4,0,"    ");
+                }
+
             } else {
+                print(0,0,"    ");
                 print(OSD_COLUMNS-4,0,"    ");
             }
 
-            print(4,0,0xB0 + Receiver::activeChannel);
-            printNumber(7,0,Channels::getFrequency(Receiver::activeChannel),10);
+            if(EepromSettings.OSDShowChannel) {
+                print(4,0,0xB0 + Receiver::activeChannel);
+            } else {
+                print(4,0,' ');
+            }
+
+            if(EepromSettings.OSDShowFrequency) {
+                printNumber(7,0,Channels::getFrequency(Receiver::activeChannel),10);
+            } else {
+                print(7,0,"    ");
+            }
 
         }
     }

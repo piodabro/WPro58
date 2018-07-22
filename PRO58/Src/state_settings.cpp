@@ -11,6 +11,7 @@
 static void diveristyModeMenuHandler(Ui::SettingsMenuItem* item);
 static void rssiCalibrationMenuHandler(Ui::SettingsMenuItem* item);
 static void callsignMenuHandler(Ui::SettingsMenuItem* item);
+static void OSDMenuHandler(Ui::SettingsMenuItem* item);
 static void exitMenuHandler(Ui::SettingsMenuItem* item);
 static void favouritesSettingsMenuHandler(Ui::SettingsMenuItem* item);
 #ifdef USE_BUZZER
@@ -31,6 +32,10 @@ void StateMachine::SettingsStateHandler::onEnter() {
 
 #ifdef USE_CALLSIGN
 	this->menu.addItem("Callsign", callsignMenuHandler);
+#endif
+
+#ifdef USE_OSD
+    this->menu.addItem("OSD", OSDMenuHandler);
 #endif
 
 	const char* divValue = (EepromSettings.diversityMode == Receiver::DiversityMode::AUTO ? "AUTO" : (EepromSettings.diversityMode == Receiver::DiversityMode::FORCE_A ? "A" : "B"));
@@ -133,6 +138,10 @@ static void rssiCalibrationMenuHandler(Ui::SettingsMenuItem* item){
 
 static void callsignMenuHandler(Ui::SettingsMenuItem* item){
 	StateMachine::switchState(StateMachine::State::SETTINGS_CALLSIGN);
+}
+
+static void OSDMenuHandler(Ui::SettingsMenuItem* item){
+    StateMachine::switchState(StateMachine::State::SETTINGS_OSD);
 }
 
 static void exitMenuHandler(Ui::SettingsMenuItem* item){
