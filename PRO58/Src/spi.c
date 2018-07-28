@@ -34,6 +34,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include <spi.h>
+#include "main.h"
 
 //#include "hal_gpio.h"
 
@@ -147,9 +148,15 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     PB15     ------> SPI2_MOSI 
     */
 
+#ifdef OSD_SPI_B
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13|GPIO_PIN_15, GPIO_PIN_SET);
 
     GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_15;
+#else
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, GPIO_PIN_SET);
+
+    GPIO_InitStruct.Pin = GPIO_PIN_15;
+#endif
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -217,39 +224,38 @@ static void MX_DMA_Init(void)
 
   /* DMA interrupt init */
   /* DMA1_Channel3_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel3_IRQn, 1, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Channel3_IRQn);
+//  HAL_NVIC_SetPriority(OSD_DMA_SPI_B_IRQ, 1, 0);
+//  HAL_NVIC_EnableIRQ(OSD_DMA_SPI_B_IRQ);
   /* DMA1_Channel5_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 1, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
+//  HAL_NVIC_SetPriority(OSD_DMA_SPI_A_IRQ, 1, 0);
+//  HAL_NVIC_EnableIRQ(OSD_DMA_SPI_A_IRQ);
 
 }
 
 /* USER CODE BEGIN 1 */
 void spi_init(void) {
-  MX_DMA_Init();
+  //MX_DMA_Init();
+#ifdef OSD_SPI_B
   MX_SPI1_Init();
+#endif
   MX_SPI2_Init();
 
 }
 
-uint8_t spi1_send_DMA(uint8_t *pData, uint16_t Size)
-{
-  uint8_t ret;
 
-  ret = HAL_SPI_Transmit_DMA(&hspi1, pData, Size);
+uint8_t spi_send_DMA(SPI_TypeDef* Instance, uint8_t *pData, uint16_t Size)
+{
+  uint8_t ret = 0;
+
+  if(Instance==SPI1) {
+      ret = HAL_SPI_Transmit_DMA(&hspi1, pData, Size);
+  } else if(Instance==SPI2) {
+      ret = HAL_SPI_Transmit_DMA(&hspi2, pData, Size);
+  }
 
   return ret;
 }
 
-uint8_t spi2_send_DMA(uint8_t *pData, uint16_t Size)
-{
-  uint8_t ret;
-
-  ret = HAL_SPI_Transmit_DMA(&hspi2, pData, Size);
-
-  return ret;
-}
 
 /* USER CODE END 1 */
 

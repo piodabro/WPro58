@@ -45,11 +45,63 @@
 
 /* USER CODE END 0 */
 
+TIM_HandleTypeDef htimOSD;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
 
 #ifdef USE_OSD
-/* TIM2 init function */
+/* TIM1 init function */
+void MX_TIM_OSD_Init(void)
+{
+
+    GPIO_InitTypeDef GPIO_InitStruct;
+    TIM_ClockConfigTypeDef sClockSourceConfig;
+    TIM_OC_InitTypeDef sConfigOC;
+
+    __HAL_RCC_TIM1_CLK_ENABLE();
+
+    GPIO_InitStruct.Pin = OSD_SYNC_OUT_PIN;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(OSD_SYNC_OUT_PORT, &GPIO_InitStruct);
+
+
+    htimOSD.Instance = OSD_TIM;
+    htimOSD.Init.Prescaler = 8;
+    htimOSD.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htimOSD.Init.Period = 512;
+    htimOSD.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    htimOSD.Channel = 1<<(OSD_TIM_CHANNEL-1);
+    if (HAL_TIM_Base_Init(&htimOSD) != HAL_OK)
+    {
+        _Error_Handler(__FILE__, __LINE__);
+    }
+
+    if (HAL_TIM_Base_Start_IT(&htimOSD) != HAL_OK)
+    {
+        _Error_Handler(__FILE__, __LINE__);
+    }
+
+    sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+    if (HAL_TIM_ConfigClockSource(&htimOSD, &sClockSourceConfig) != HAL_OK)
+    {
+        _Error_Handler(__FILE__, __LINE__);
+    }
+
+    sConfigOC.OCMode = TIM_OCMODE_PWM1;
+    sConfigOC.Pulse = 40;
+    sConfigOC.OCPolarity = TIM_OCPOLARITY_LOW;
+    sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+    if (HAL_TIM_PWM_ConfigChannel(&htimOSD, &sConfigOC, ((OSD_TIM_CHANNEL-1)<<2)) != HAL_OK)
+    {
+        _Error_Handler(__FILE__, __LINE__);
+    }
+
+    // Start the timer comparing
+    HAL_TIM_OC_Start(&htimOSD, ((OSD_TIM_CHANNEL-1)<<2));
+
+}
+
 void MX_TIM3_Init(void)
 {
 

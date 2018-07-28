@@ -46,6 +46,7 @@ extern DMA_HandleTypeDef hdma_i2c1_tx;
 extern DMA_HandleTypeDef hdma_i2c1_rx;
 extern DMA_HandleTypeDef hdma_i2c2_tx;
 extern DMA_HandleTypeDef hdma_i2c2_rx;
+extern TIM_HandleTypeDef htimOSD;
 extern TIM_HandleTypeDef htim3;
 extern DMA_HandleTypeDef hdma_spi1_tx;
 extern DMA_HandleTypeDef hdma_spi2_tx;
@@ -293,9 +294,25 @@ void DMA1_Channel7_IRQHandler(void)
 /**
 * @brief This function handles TIM3 global interrupt.
 */
+void __attribute__((optimize("Ofast"))) TIM1_UP_IRQHandler(void)
+{
+  TIM_HandleTypeDef *htim = &htimOSD;
+  /* TIM Update event */
+  if(__HAL_TIM_GET_FLAG(htim, TIM_FLAG_UPDATE) != RESET)
+  {
+    if(__HAL_TIM_GET_IT_SOURCE(htim, TIM_IT_UPDATE) !=RESET)
+    {
+      OSD::TIM_PeriodElapsedCallback(htim);
+      __HAL_TIM_CLEAR_IT(htim, TIM_IT_UPDATE);
+    }
+  } else {
+      HAL_TIM_IRQHandler(&htimOSD);
+  }
+}
+
 void __attribute__((optimize("Ofast"))) TIM3_IRQHandler(void)
 {
-  TIM_HandleTypeDef *htim = &htim3;
+  TIM_HandleTypeDef *htim = &htimOSD;
   /* TIM Update event */
   if(__HAL_TIM_GET_FLAG(htim, TIM_FLAG_UPDATE) != RESET)
   {
@@ -309,6 +326,7 @@ void __attribute__((optimize("Ofast"))) TIM3_IRQHandler(void)
   }
 }
 
+#ifdef OSD_CSYNC_PIN
 void EXTI9_5_IRQHandler(void)
 {
     __HAL_GPIO_EXTI_CLEAR_IT(OSD_CSYNC_PIN);
@@ -320,6 +338,7 @@ void EXTI15_10_IRQHandler(void)
     __HAL_GPIO_EXTI_CLEAR_IT(OSD_VSYNC_PIN);
     OSD::vsync_callback();
 }
+#endif
 #endif
 
 /* USER CODE BEGIN 1 */

@@ -189,6 +189,19 @@ void GPIO_FS_Reinit(uint32_t pullup)
   HAL_GPIO_Init(FS_PIN_EB1_GPIO_Port, &GPIO_InitStruct_Buttons);
 }
 
+void GPIO_Reinit(GPIO_TypeDef* port, uint32_t pin, uint32_t mode)
+{
+  HAL_GPIO_DeInit(port,pin);
+
+  GPIO_InitTypeDef GPIO_InitStruct;
+
+  GPIO_InitStruct.Pin = pin;
+  GPIO_InitStruct.Mode = mode;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(port, &GPIO_InitStruct);
+
+}
+
 #else
 void MX_GPIO_Init(void)
 {

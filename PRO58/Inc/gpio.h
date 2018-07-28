@@ -60,6 +60,7 @@ void MX_GPIO_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 void GPIO_FS_Reinit(uint32_t pullup);
+void GPIO_Reinit(GPIO_TypeDef* port, uint32_t pin, uint32_t mode);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

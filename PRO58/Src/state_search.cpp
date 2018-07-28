@@ -44,11 +44,11 @@ void SearchStateHandler::onEnter() {
 
     this->manual = EepromSettings.searchManual;
 	this->orderedChanelIndex = EepromSettings.startChannel;
-	Receiver::setChannel(orderedChanelIndex);
 #ifdef USE_OSD	
 	OSD::enableLCD(false);
 	OSD::setSyncMode(OSD::syncModes::external);
-#endif	
+#endif
+	Receiver::setChannel(orderedChanelIndex);
 }
 
 void SearchStateHandler::onExit(){

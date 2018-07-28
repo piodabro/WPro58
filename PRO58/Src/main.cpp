@@ -120,7 +120,7 @@ int main(void) {
 	MX_ADC1_Init();
 	MX_I2C2_Init();
 #ifndef OSD58
-	MX_USART1_UART_Init();
+	//MX_USART1_UART_Init();
 #endif
 #ifndef HB5808
 	MX_I2C1_Init();
@@ -128,13 +128,9 @@ int main(void) {
 #ifdef USE_BUZZER
 	MX_TIM4_Init();
 #endif
-	MX_TIM3_Init();
 
 	/* USER CODE BEGIN 2 */
-#ifdef USE_OSD
-	spi_init();
-    OSD::init();
-#endif
+
 	if (DWT_Delay_Init()) {
 		_Error_Handler(__FILE__, __LINE__); /* Call Error Handler */
 	}
@@ -146,6 +142,14 @@ int main(void) {
 			GPIO_PIN_SET);
 	HAL_GPIO_WritePin(SPI_CLOCK_GPIO_Port, SPI_CLOCK_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(SPI_DATA_GPIO_Port, SPI_DATA_Pin, GPIO_PIN_RESET);
+
+#ifdef USE_OSD
+    MX_TIM_OSD_Init();
+    spi_init();
+    OSD::init();
+#else
+    MX_TIM3_Init();
+#endif
 
 #ifdef USE_EXTERNAL_EEPROM
 	I2C_Reset(&hi2c2, MX_I2C2_Init);

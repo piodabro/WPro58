@@ -103,6 +103,21 @@
 #define OSD_CSYNC_PIN                       GPIO_PIN_9
 #define OSD_CSYNC_IRQ                       EXTI9_5_IRQn
 
+#define OSD_SPI_A                           SPI2
+#define OSD_DMA_SPI_A                       DMA1_Channel5
+#define OSD_DMA_SPI_A_IRQ                   DMA1_Channel5_IRQn
+
+#define OSD_SPI_B                           SPI1
+#define OSD_DMA_SPI_B                       DMA1_Channel3
+#define OSD_DMA_SPI_B_IRQ                   DMA1_Channel3_IRQn
+
+#define OSD_SYNC_OUT_PORT                   GPIOB
+#define OSD_SYNC_OUT_PIN                    GPIO_PIN_1
+#define OSD_TIM                             TIM3
+#define OSD_TIM_CCR                         CCR4
+#define OSD_TIM_CHANNEL                     4
+#define OSD_TIM_IRQ                         TIM3_IRQn
+
 
 #else
 #ifndef HB5808
@@ -136,8 +151,6 @@
 #define FS_PIN_EB0_GPIO_Port GPIOB
 #define BUTTON_MODE_Pin GPIO_PIN_14
 #define BUTTON_MODE_GPIO_Port GPIOB
-#define FS_PIN_EB2_Pin GPIO_PIN_15
-#define FS_PIN_EB2_GPIO_Port GPIOB
 #define BUTTON_UP_Pin GPIO_PIN_8
 #define BUTTON_UP_GPIO_Port GPIOA
 #define FS_PIN_EB1_Pin GPIO_PIN_11
@@ -151,6 +164,28 @@
 #define LED_A_Pin GPIO_PIN_9
 #define LED_A_GPIO_Port GPIOB
 
+#ifdef USE_OSD
+
+//PA9     ------> TIM1_CH2
+#define OSD_SYNC_OUT_PORT                   GPIOA
+#define OSD_SYNC_OUT_PIN                    GPIO_PIN_9
+#define OSD_TIM                             TIM1
+#define OSD_TIM_CCR                         CCR2
+#define OSD_TIM_CHANNEL                     2
+#define OSD_TIM_IRQ                         TIM1_UP_IRQn
+
+#define OSD_SPI_A                           SPI2
+#define OSD_SPI_A_PORT                      GPIOB
+#define OSD_SPI_A_PIN                       GPIO_PIN_15
+#define OSD_DMA_SPI_A                       DMA1_Channel5
+#define OSD_DMA_SPI_A_IRQ                   DMA1_Channel5_IRQn
+
+#define FS_PIN_EB2_Pin          GPIO_PIN_1
+#define FS_PIN_EB2_GPIO_Port    GPIOC
+#else
+#define FS_PIN_EB2_Pin          GPIO_PIN_15
+#define FS_PIN_EB2_GPIO_Port    GPIOB
+#endif
 /* ########################## Assert Selection ############################## */
 /**
   * @brief Uncomment the line below to expanse the "assert_param" macro in the 

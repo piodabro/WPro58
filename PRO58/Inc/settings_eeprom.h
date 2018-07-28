@@ -8,7 +8,7 @@
 #include "settings.h"
 #include "settings_internal.h"
 #include "receiver.h"
-
+#include "OSD.h"
 
 
 struct EepromSettings {
@@ -51,6 +51,7 @@ struct EepromSettings {
     uint8_t OSDShowRssi;
     uint8_t OSDShowChannel;
     uint8_t OSDShowFrequency;
+    OSD::videoModes OSDDefaultMode;
 #endif
 
     void update();
@@ -109,6 +110,7 @@ const struct {
     uint8_t OSDShowRssi = true;
     uint8_t OSDShowChannel = true;
     uint8_t OSDShowFrequency = true;
+    OSD::videoModes OSDVideoMode = OSD::videoModes::PAL;
 #endif
 
 } EepromDefaults;

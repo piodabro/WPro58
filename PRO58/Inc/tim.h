@@ -60,6 +60,7 @@ extern TIM_HandleTypeDef htim4;
 
 extern void _Error_Handler(const char *, int);
 
+void MX_TIM_OSD_Init(void);
 void MX_TIM3_Init(void);
 void MX_TIM4_Init(void);
                     

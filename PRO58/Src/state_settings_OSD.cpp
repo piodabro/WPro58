@@ -8,10 +8,13 @@
 #include "receiver.h"
 #include "gpio.h"
 
+#ifdef USE_OSD
+
 static void OSD1MenuHandler(Ui::SettingsMenuItem* item);
 static void OSD2MenuHandler(Ui::SettingsMenuItem* item);
 static void OSD3MenuHandler(Ui::SettingsMenuItem* item);
 static void OSD4MenuHandler(Ui::SettingsMenuItem* item);
+static void OSD5MenuHandler(Ui::SettingsMenuItem* item);
 static void exitMenuHandler(Ui::SettingsMenuItem* item);
 
 void StateMachine::SettingsOSDStateHandler::onEnter() {
@@ -28,6 +31,9 @@ void StateMachine::SettingsOSDStateHandler::onEnter() {
 
     const char* OSD4Value = (EepromSettings.OSDShowFrequency ? "ON" : "OFF");
     this->menu.addItem("Show frequency", OSD4MenuHandler, OSD4Value);
+
+    const char* OSD5Value = (EepromSettings.OSDDefaultMode == OSD::videoModes::PAL ? "PAL" : "NTSC");
+    this->menu.addItem("Default Mode", OSD5MenuHandler, OSD5Value);
 
 	this->menu.addItem("Exit", exitMenuHandler);
 }
@@ -122,6 +128,18 @@ static void OSD4MenuHandler(Ui::SettingsMenuItem* item){
     item->value = buzzerValue;
 }
 
+static void OSD5MenuHandler(Ui::SettingsMenuItem* item){
+    if(EepromSettings.OSDDefaultMode == OSD::videoModes::PAL)
+        EepromSettings.OSDDefaultMode = OSD::videoModes::NTSC;
+    else
+        EepromSettings.OSDDefaultMode = OSD::videoModes::PAL;
+
+    EepromSettings.markDirty();
+    const char* buzzerValue = (EepromSettings.OSDDefaultMode == OSD::videoModes::PAL ? "PAL" : "NTSC");
+    item->value = buzzerValue;
+}
+
 static void exitMenuHandler(Ui::SettingsMenuItem* item){
     StateMachine::switchState(StateMachine::State::SETTINGS);
 }
+#endif

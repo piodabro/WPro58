@@ -51,8 +51,7 @@ void MX_SPI2_Init(void);
 
 void spi_init(void);
 
-uint8_t spi1_send_DMA(uint8_t *pData, uint16_t Size);
-uint8_t spi2_send_DMA(uint8_t *pData, uint16_t Size);
+uint8_t spi_send_DMA(SPI_TypeDef* Instance, uint8_t *pData, uint16_t Size);
 
 #ifdef __cplusplus
 }

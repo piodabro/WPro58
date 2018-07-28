@@ -13,8 +13,9 @@
 
 #include "settings_eeprom.h"
 #include "receiver.h"
+#include "receiver_spi.h"
 #include "channels.h"
-
+#include "gpio.h"
 #include "OSD.h"
 #include "OSD_font.h"
 
@@ -34,6 +35,16 @@
 //#define DEBUG_OUT
 
 extern uint8_t buffer[];
+
+#ifdef OSD_VSYNC_IRQ
+#define ENABLE_VSYNC_IRQ()      HAL_NVIC_EnableIRQ(OSD_VSYNC_IRQ)
+#define DISABLE_VSYNC_IRQ()     HAL_NVIC_DisableIRQ(OSD_VSYNC_IRQ)
+#else
+#define ENABLE_VSYNC_IRQ()
+#define DISABLE_VSYNC_IRQ()
+#endif
+
+#ifdef USE_OSD
 
 namespace OSD {
 
@@ -57,8 +68,6 @@ namespace OSD {
 
     uint8_t linebufferA[2][LINEBUFFER_SIZE] = {0};
     uint8_t linebufferB[2][LINEBUFFER_SIZE] = {0};
-
-    static uint32_t tempCCR = 0;
 
     static syncModes syncMode;
 
@@ -142,21 +151,23 @@ namespace OSD {
 
         if((line >= firstLine ) && (line <= lastLine)) {
 
-            DMA_Channel_TypeDef* DMAy_Channel3 = DMA1_Channel3;
-            DMA_Channel_TypeDef* DMAy_Channel5 = DMA1_Channel5;
+            DMA_Channel_TypeDef* dmaSpiA = OSD_DMA_SPI_A;
 
-            DMAy_Channel3->CCR = 0;
-            DMAy_Channel3->CNDTR = 34;
-            DMAy_Channel3->CMAR = (uint32_t)linebufferB[cBuffer]+1;
+            dmaSpiA->CCR = 0;
+            dmaSpiA->CNDTR = 33;
+            dmaSpiA->CMAR = (uint32_t)linebufferA[cBuffer];
+            uint32_t ccr = dmaSpiA->CCR | DMA_CCR_EN;
 
-            DMAy_Channel5->CCR = 0;
-            DMAy_Channel5->CNDTR = 33;
-            DMAy_Channel5->CMAR = (uint32_t)linebufferA[cBuffer];
+#ifdef OSD_SPI_B
+            DMA_Channel_TypeDef* dmaSpiB = OSD_DMA_SPI_B;
 
-            uint32_t ccr = DMAy_Channel3->CCR | DMA_CCR_EN;
+            dmaSpiB->CCR = 0;
+            dmaSpiB->CNDTR = 33;
+            dmaSpiB->CMAR = (uint32_t)linebufferB[cBuffer];
 
-            DMAy_Channel3->CCR = ccr;
-            DMAy_Channel5->CCR = ccr;
+            dmaSpiB->CCR = ccr;
+#endif
+            dmaSpiA->CCR = ccr;
 
             cBuffer = 1 - cBuffer;
 
@@ -180,11 +191,11 @@ namespace OSD {
                         linebufferA[cBuffer][buf]   = ch1.byte[3];
                         linebufferA[cBuffer][buf+1] = ch1.byte[2] | ch2.byte[3];
                         linebufferA[cBuffer][buf+2] = ch2.byte[2];
-
+#ifdef OSD_SPI_B
                         linebufferB[cBuffer][buf]   = ch1.byte[1];
                         linebufferB[cBuffer][buf+1] = ch1.byte[0] | ch2.byte[1];
                         linebufferB[cBuffer][buf+2] = ch2.byte[0];
-
+#endif
                         buf +=3;
                     }
                 } else {
@@ -193,10 +204,16 @@ namespace OSD {
                         ch1.dbword = fontdata[screenBuffer[screenBufferCounter++] * (FONT_HEIGHT) + fontRow];
                         ch2.dbword = (fontdata[screenBuffer[screenBufferCounter++] * (FONT_HEIGHT) + fontRow])>>4;
 
+
+#ifdef OSD_SPI_B
                         linebufferB[cBuffer][buf]   = ch1.byte[1];
                         linebufferB[cBuffer][buf+1] = ch1.byte[0] | ch2.byte[1];
                         linebufferB[cBuffer][buf+2] = ch2.byte[0];
-
+#else
+                        linebufferA[cBuffer][buf]   = ch1.byte[1];
+                        linebufferA[cBuffer][buf+1] = ch1.byte[0] | ch2.byte[1];
+                        linebufferA[cBuffer][buf+2] = ch2.byte[0];
+#endif
                         buf +=3;
                     }
                 }
@@ -204,7 +221,11 @@ namespace OSD {
 
             } else {
                 uint8_t buf = LINEBUFFER_SIZE;
+#ifdef OSD_SPI_B
                 uint8_t alpha = 0xff;
+#else
+                uint8_t alpha = 0x00;
+#endif;
                 if(videoConnect == 2) {
                     alpha=0x00;
                 }
@@ -219,21 +240,23 @@ namespace OSD {
         }
 
         if((line >= firstLineLCD ) && (line <= lastLineLCD+1)) {
-            DMA_Channel_TypeDef* DMAy_Channel3 = DMA1_Channel3;
-            DMA_Channel_TypeDef* DMAy_Channel5 = DMA1_Channel5;
+            DMA_Channel_TypeDef* dmaSpiA = OSD_DMA_SPI_A;
 
-            DMAy_Channel3->CCR = 0;
-            DMAy_Channel3->CNDTR = 33;
-            DMAy_Channel3->CMAR = (uint32_t)linebufferB[cBuffer]+1;
+            dmaSpiA->CCR = 0;
+            dmaSpiA->CNDTR = 33;
+            dmaSpiA->CMAR = (uint32_t)linebufferA[cBuffer];
+            uint32_t ccr = dmaSpiA->CCR | DMA_CCR_EN;
 
-            DMAy_Channel5->CCR = 0;
-            DMAy_Channel5->CNDTR = 33;
-            DMAy_Channel5->CMAR = (uint32_t)linebufferA[cBuffer];
+#ifdef OSD_SPI_B
+            DMA_Channel_TypeDef* dmaSpiB = OSD_DMA_SPI_B;
 
-            uint32_t ccr = DMAy_Channel3->CCR | DMA_CCR_EN;
+            dmaSpiB->CCR = 0;
+            dmaSpiB->CNDTR = 33;
+            dmaSpiB->CMAR = (uint32_t)linebufferB[cBuffer];
 
-            DMAy_Channel3->CCR = ccr;
-            DMAy_Channel5->CCR = ccr;
+            dmaSpiB->CCR = ccr;
+#endif
+            dmaSpiA->CCR = ccr;
 
             cBuffer = 1 - cBuffer;
 
@@ -251,7 +274,13 @@ namespace OSD {
                 } else {
                     buf += 2;
                     for(unsigned col=0; col<16; col++) {
-                        linebufferB[cBuffer][buf++] = OSDbuffer[lineCounter * 16  + col];
+                        uint8_t value;
+                        value = OSDbuffer[lineCounter * 16  + col];
+#ifdef OSD_SPI_B
+                        linebufferB[cBuffer][buf++] = value;
+#else
+                        linebufferA[cBuffer][buf++] = value;
+#endif
                     }
 
                 }
@@ -259,7 +288,11 @@ namespace OSD {
 
             } else {
                 uint8_t buf = LINEBUFFER_SIZE;
+#ifdef OSD_SPI_B
                 uint8_t alpha = 0xff;
+#else
+                uint8_t alpha = 0x00;
+#endif
                 if(videoConnect == 2) {
                     alpha=0x00;
                 }
@@ -289,8 +322,6 @@ namespace OSD {
 
 
     void __attribute__((optimize("Ofast"))) TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-        DMA_Channel_TypeDef* DMAy_Channel5 = DMA1_Channel5;
-        uint8_t buf = LINEBUFFER_SIZE;
 
 #ifdef DEBUG_OUT
         screenBuffer[24] = '0'+videoConnect;
@@ -304,12 +335,14 @@ namespace OSD {
             break;
 
         case 1:
+#ifdef OSD_CSYNC_IRQ
             HAL_NVIC_EnableIRQ(OSD_CSYNC_IRQ);
-            TIM3->CCR4 = 0;
+#endif
+            OSD_TIM->OSD_TIM_CCR = 0;
             if(videoMode == videoModes::PAL) {
-                TIM3->ARR = 512;
+                OSD_TIM->ARR = 512;
             } else {
-                TIM3->ARR = 508;
+                OSD_TIM->ARR = 508;
             }
             internalLine = line;
             videoConnect++;
@@ -343,27 +376,16 @@ namespace OSD {
             return;
 
         case 3:
+#ifdef OSD_CSYNC_IRQ
             HAL_NVIC_DisableIRQ(OSD_CSYNC_IRQ);
-
-            while(buf--) {
-                linebufferA[0][buf] = 0x00;
-            }
-            DMAy_Channel5->CCR = tempCCR;
-            DMAy_Channel5->CNDTR = 1;
-            DMAy_Channel5->CMAR = (uint32_t)linebufferA[0];
-            DMAy_Channel5->CCR |= DMA_CCR_EN;
-
-            videoConnect++;
-            return;
-
-        case 4:
-
+#endif
             videoConnect = 0;
             palSync = SYNC_COUNTER;
             ntscSync = SYNC_COUNTER;
 #ifdef DEBUG_OUT
             debug2++;
 #endif
+            return;
         }
 
         if(syncMode >= syncModes::external) return;
@@ -381,23 +403,23 @@ namespace OSD {
 
             switch(internalLine) {
             case 316:
-                TIM3->ARR = 256;
-                TIM3->CCR4 = 16;
+                OSD_TIM->ARR = 256;
+                OSD_TIM->OSD_TIM_CCR = 16;
                 break;
             case 320:
-                TIM3->CCR4 = 218;
+                OSD_TIM->OSD_TIM_CCR = 218;
                 break;
             case 1:
                 line = 1;
                 break;
             case 5:
-               TIM3->CCR4 = 16;
+                OSD_TIM->OSD_TIM_CCR = 16;
                 break;
             case 10:
-               TIM3->CCR4 = 32;
+                OSD_TIM->OSD_TIM_CCR = 32;
                 break;
             case 11:
-                TIM3->ARR = 512;
+                OSD_TIM->ARR = 512;
                 break;
             }
         } else {
@@ -414,25 +436,25 @@ namespace OSD {
 
             switch(internalLine) {
             case 265:
-               TIM3->CCR4 = 16;
+                OSD_TIM->OSD_TIM_CCR = 16;
                 break;
             case 266:
-                TIM3->ARR = 254;
+                OSD_TIM->ARR = 254;
                 break;
             case 271:
-                TIM3->CCR4 = 218;
+                OSD_TIM->OSD_TIM_CCR = 218;
                 break;
             case 1:
                 line = 1;
                 break;
             case 5:
-               TIM3->CCR4 = 16;
+                OSD_TIM->OSD_TIM_CCR = 16;
                 break;
             case 11:
-               TIM3->CCR4 = 32;
+                OSD_TIM->OSD_TIM_CCR = 32;
                 break;
             case 12:
-                TIM3->ARR = 508;
+                OSD_TIM->ARR = 508;
                 break;
             }
         }
@@ -445,24 +467,50 @@ namespace OSD {
             mode = syncModes::off;
         }
 
+        if(mode == syncMode) {
+            return;
+        }
+
         switch(mode) {
         case syncModes::automatic:
+#ifndef OSD_SPI_B
+            ReceiverSpi::setPowerDownRegister(0b01010000110000010011);  //Deactivate video amp power
+            GPIO_Reinit(OSD_SYNC_OUT_PORT, OSD_SYNC_OUT_PIN, GPIO_MODE_AF_PP);
+            GPIO_Reinit(OSD_SPI_A_PORT, OSD_SPI_A_PIN, GPIO_MODE_AF_PP);
+#endif
+            ENABLE_VSYNC_IRQ();
             videoConnect = 2;
-            HAL_NVIC_EnableIRQ(OSD_VSYNC_IRQ);
             syncMode = syncModes::automatic;
             break;
         case syncModes::external:
+#ifndef OSD_SPI_B
+            ReceiverSpi::setPowerDownRegister(0b00010000110000010011);  //Activate video amp power
+            GPIO_Reinit(OSD_SYNC_OUT_PORT, OSD_SYNC_OUT_PIN, GPIO_MODE_INPUT);
+            GPIO_Reinit(OSD_SPI_A_PORT, OSD_SPI_A_PIN, GPIO_MODE_INPUT);
+#endif
+            ENABLE_VSYNC_IRQ();
+            OSD_TIM->OSD_TIM_CCR = 0;
             videoConnect = 2;
-            HAL_NVIC_EnableIRQ(OSD_VSYNC_IRQ);
             syncMode = syncModes::external;
             break;
         case syncModes::internal:
-            HAL_NVIC_DisableIRQ(OSD_VSYNC_IRQ);
+#ifndef OSD_SPI_B
+            ReceiverSpi::setPowerDownRegister(0b01010000110000010011);  //Deactivate video amp power
+            GPIO_Reinit(OSD_SYNC_OUT_PORT, OSD_SYNC_OUT_PIN, GPIO_MODE_AF_PP);
+            GPIO_Reinit(OSD_SPI_A_PORT, OSD_SPI_A_PIN, GPIO_MODE_AF_PP);
+#endif
+            DISABLE_VSYNC_IRQ();
             videoConnect = 2;
             syncMode = syncModes::internal;
             break;
         case syncModes::off:
-            HAL_NVIC_DisableIRQ(OSD_VSYNC_IRQ);
+#ifndef OSD_SPI_B
+            ReceiverSpi::setPowerDownRegister(0b00010000110000010011);  //Activate video amp power
+            GPIO_Reinit(OSD_SYNC_OUT_PORT, OSD_SYNC_OUT_PIN, GPIO_MODE_INPUT);
+            GPIO_Reinit(OSD_SPI_A_PORT, OSD_SPI_A_PIN, GPIO_MODE_INPUT);
+#endif
+            DISABLE_VSYNC_IRQ();
+            OSD_TIM->OSD_TIM_CCR = 0;
             videoConnect = 2;
             syncMode = syncModes::off;
             break;
@@ -472,21 +520,25 @@ namespace OSD {
 
     void init(void)
     {
-        GPIO_InitTypeDef GPIO_InitStruct;
-
         firstLine = FIRST_LINE;
+        videoMode = EepromSettings.OSDDefaultMode;
 
         enableLCD(false);
 
         clear();
 
         HAL_Delay(100);
-        spi2_send_DMA(linebufferB[0],1);
+        spi_send_DMA(OSD_SPI_A,linebufferB[0],1);
         HAL_Delay(100);
-        spi1_send_DMA(linebufferA[0],1);
+#ifdef OSD_SPI_B
+        spi_send_DMA(OSD_SPI_B,linebufferA[0],1);
         HAL_Delay(100);
-        spi2_send_DMA(linebufferB[0],1);
+        spi_send_DMA(OSD_SPI_A,linebufferB[0],1);
         HAL_Delay(100);
+#endif
+
+#ifdef OSD_VSYNC_PIN
+        GPIO_InitTypeDef GPIO_InitStruct;
 
         //Configure vsync pin
         GPIO_InitStruct.Pin = OSD_VSYNC_PIN;
@@ -495,16 +547,17 @@ namespace OSD {
         HAL_GPIO_Init(OSD_VSYNC_PORT, &GPIO_InitStruct);
         HAL_NVIC_SetPriority(OSD_VSYNC_IRQ, 2, 1);
 
+
         //Configure csync pin
         GPIO_InitStruct.Pin = OSD_CSYNC_PIN;
         GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
         GPIO_InitStruct.Pull = GPIO_PULLUP;
         HAL_GPIO_Init(OSD_CSYNC_PORT, &GPIO_InitStruct);
         HAL_NVIC_SetPriority(OSD_CSYNC_IRQ, 0, 0);
+#endif
 
         setSyncMode(syncModes::external);
-
-        HAL_NVIC_EnableIRQ(TIM3_IRQn);
+        HAL_NVIC_EnableIRQ(OSD_TIM_IRQ);
 
     }
 
@@ -672,5 +725,5 @@ namespace OSD {
     }
 
 }
-
+#endif
 

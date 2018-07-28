@@ -118,7 +118,9 @@ namespace StateMachine {
             STATE_FACTORY(State::SETTINGS_RSSI, SettingsRssiStateHandler);
             STATE_FACTORY(State::SETTINGS_CALLSIGN, SettingsCallsignStateHandler);
             STATE_FACTORY(State::SETTINGS_FAVOURITES, SettingsFavouritesStateHandler);
+#ifdef USE_OSD
             STATE_FACTORY(State::SETTINGS_OSD, SettingsOSDStateHandler);
+#endif
 
             default:
                 return nullptr;
