@@ -119,8 +119,8 @@ int main(void) {
 	MX_DMA_Init();
 	MX_ADC1_Init();
 	MX_I2C2_Init();
-#ifndef OSD58
-	//MX_USART1_UART_Init();
+#ifndef USE_OSD
+	MX_USART1_UART_Init();
 #endif
 #ifndef HB5808
 	MX_I2C1_Init();

@@ -322,7 +322,7 @@ void __attribute__((optimize("Ofast"))) TIM3_IRQHandler(void)
       __HAL_TIM_CLEAR_IT(htim, TIM_IT_UPDATE);
     }
   } else {
-      HAL_TIM_IRQHandler(&htim3);
+      HAL_TIM_IRQHandler(&htimOSD);
   }
 }
 
