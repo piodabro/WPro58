@@ -7,10 +7,20 @@ If you like this work and you're buying Eachine PRO58 please use this link:
 [Eachine PRO58](https://www.banggood.com/Eachine-PRO58-RX-Diversity-40CH-5_8G-OLED-SCAN-VRX-FPV-Receiver-for-FatShark-Goggles-p-1160357.html?p=CL07182964413201511Q)
 (It's a reflink)
 
-### Pinouts and programming.
-To program your PRO58 or HB5808 module you have to use ST-link programmer.
-Connect 5V power and GND via Fatshark connector and GND, SWDIO and SWDCLK to ST-Link via SWD connector.
-Remember that module draws 360 mA of current, power it with efficient power supply!
+### Pinouts and flashing.
+
+To flash your PRO58 or HB5808 module you have to use ST-link programmer.
+The best way to flash your module is:
+1. Connect 5V power and GND via Fatshark connector - Use 5V BEC with at least 1A of current,
+2. Connect GND, SWDIO and SWDCLK to ST-Link via SWD connector (on top left corner of module - see images).
+3. Use ST-LINK Utility from ST web page - http://www.st.com/en/development-tools/stsw-link004.html - look on the bottom of page for download.
+4. If its brand new module you have to remove _Read Out Protection_. In ST-LINK Utility Click on _Target -> Option Bytes..._ .
+Set _Read Out Protection_ to _Disabled_ and next click _Apply_ (**_WARNING_**: This will erase original firmware - there is no way back). Do not touch other things in this menu.
+5. Load .bin file by clicking Open file button, and next _Target -> Program and verify..._
+6. Once it finish witout error you have WPro58 installed. Disconnect all and then reconnect power ;)
+
+Remember that module draws ~0.4A of current, power it with efficient power supply!
+
 To edit/build code you need to download [SW4STM32](http://www.openstm32.org/HomePage) IDE (Eclipse based)
 
 #### Eachine PRO58 pinouts
@@ -28,6 +38,12 @@ ___
 - **mihero** for contributing
 - **20Sy** for HB5808 module ;)
 - **conkerkh** for contributing
+
+#### Warning!
+If you use module with FatShark goggles make sure that FS pins mode setting is set to FS (not BUTTON).
+This settings changes pullup settings on FS channel pins.
+
+To use BUTTON mode simply add buttons that connect pin to ground when pressed.
 
 ___
 

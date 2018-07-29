@@ -48,7 +48,6 @@
 /* Exported functions ------------------------------------------------------- */
 
 void NMI_Handler(void);
-void HardFault_Handler_1 (unsigned int * hardfault_args);
 void HardFault_Handler(void);
 void MemManage_Handler(void);
 void BusFault_Handler(void);
@@ -68,6 +67,8 @@ void TIM3_IRQHandler(void);
 
 void I2C1_EV_IRQHandler(void);
 void I2C1_ER_IRQHandler(void);
+void I2C2_EV_IRQHandler(void);
+void I2C2_ER_IRQHandler(void);
 
 void EXTI9_5_IRQHandler(void);
 void EXTI15_10_IRQHandler(void);

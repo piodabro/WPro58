@@ -66,7 +66,13 @@ void EepromSettings::initDefaults() {
 	beepEnabled = true;
 	screensaverEnabled = true;
     screenFlip = false;
+
+    //true - FatShark, false - button
+#ifdef FS_PINS_AS_BUTTONS
+    FSPinsMode = false;
+#else
     FSPinsMode = true;
+#endif
 	searchManual = false;
 	rssiAMin = RSSI_MIN_VAL;
 	rssiAMax = RSSI_MAX_VAL;
