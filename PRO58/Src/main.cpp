@@ -128,7 +128,7 @@ int main(void) {
 #ifdef USE_BUZZER
 	MX_TIM4_Init();
 #endif
-
+	MX_TIM3_Init();
 	/* USER CODE BEGIN 2 */
 
 	if (DWT_Delay_Init()) {
@@ -144,11 +144,9 @@ int main(void) {
 	HAL_GPIO_WritePin(SPI_DATA_GPIO_Port, SPI_DATA_Pin, GPIO_PIN_RESET);
 
 #ifdef USE_OSD
-    MX_TIM_OSD_Init();
+    MX_TIM1_Init();
     spi_init();
     OSD::init();
-#else
-    MX_TIM3_Init();
 #endif
 
 #ifdef USE_EXTERNAL_EEPROM

@@ -365,11 +365,11 @@ namespace OSD {
 #ifdef OSD_CSYNC_IRQ
             HAL_NVIC_EnableIRQ(OSD_CSYNC_IRQ);
 #endif
-            OSD_TIM->OSD_TIM_CCR = 0;
+            TIM1->OSD_TIM_CCR = 0;
             if(videoMode == videoModes::PAL) {
-                OSD_TIM->ARR = 512;
+                TIM1->ARR = 512;
             } else {
-                OSD_TIM->ARR = 508;
+                TIM1->ARR = 508;
             }
             internalLine = line;
             videoConnect++;
@@ -438,23 +438,23 @@ namespace OSD {
 
             switch(internalLine) {
             case 316:
-                OSD_TIM->ARR = 256;
-                OSD_TIM->OSD_TIM_CCR = 16;
+                TIM1->ARR = 256;
+                TIM1->OSD_TIM_CCR = 16;
                 break;
             case 320:
-                OSD_TIM->OSD_TIM_CCR = 218;
+                TIM1->OSD_TIM_CCR = 218;
                 break;
             case 1:
                 line = 1;
                 break;
             case 5:
-                OSD_TIM->OSD_TIM_CCR = 16;
+                TIM1->OSD_TIM_CCR = 16;
                 break;
             case 10:
-                OSD_TIM->OSD_TIM_CCR = 32;
+                TIM1->OSD_TIM_CCR = 32;
                 break;
             case 11:
-                OSD_TIM->ARR = 512;
+                TIM1->ARR = 512;
                 break;
             }
         } else {
@@ -471,25 +471,25 @@ namespace OSD {
 
             switch(internalLine) {
             case 265:
-                OSD_TIM->OSD_TIM_CCR = 16;
+                TIM1->OSD_TIM_CCR = 16;
                 break;
             case 266:
-                OSD_TIM->ARR = 254;
+                TIM1->ARR = 254;
                 break;
             case 271:
-                OSD_TIM->OSD_TIM_CCR = 218;
+                TIM1->OSD_TIM_CCR = 218;
                 break;
             case 1:
                 line = 1;
                 break;
             case 5:
-                OSD_TIM->OSD_TIM_CCR = 16;
+                TIM1->OSD_TIM_CCR = 16;
                 break;
             case 11:
-                OSD_TIM->OSD_TIM_CCR = 32;
+                TIM1->OSD_TIM_CCR = 32;
                 break;
             case 12:
-                OSD_TIM->ARR = 508;
+                TIM1->ARR = 508;
                 break;
             }
         }
@@ -524,7 +524,7 @@ namespace OSD {
             GPIO_Reinit(OSD_SPI_A_PORT, OSD_SPI_A_PIN, GPIO_MODE_INPUT);
 #endif
             ENABLE_VSYNC_IRQ();
-            OSD_TIM->OSD_TIM_CCR = 0;
+            TIM1->OSD_TIM_CCR = 0;
             videoConnect = 2;
             syncMode = syncModes::external;
             break;
@@ -545,7 +545,7 @@ namespace OSD {
             GPIO_Reinit(OSD_SPI_A_PORT, OSD_SPI_A_PIN, GPIO_MODE_INPUT);
 #endif
             DISABLE_VSYNC_IRQ();
-            OSD_TIM->OSD_TIM_CCR = 0;
+            TIM1->OSD_TIM_CCR = 0;
             videoConnect = 2;
             syncMode = syncModes::off;
             break;

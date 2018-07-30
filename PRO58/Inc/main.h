@@ -113,11 +113,9 @@
 
 #define OSD_SYNC_OUT_PORT                   GPIOB
 #define OSD_SYNC_OUT_PIN                    GPIO_PIN_1
-#define OSD_TIM                             TIM3
-#define OSD_TIM_CCR                         CCR4
-#define OSD_TIM_CHANNEL                     4
-#define OSD_TIM_IRQ                         TIM3_IRQn
-
+#define OSD_TIM_CCR                         CCR3
+#define OSD_TIM_CHANNEL                     3
+#define OSD_TIM_IRQ                         TIM1_UP_IRQn
 
 #else
 #ifndef HB5808
@@ -169,7 +167,6 @@
 //PA9     ------> TIM1_CH2
 #define OSD_SYNC_OUT_PORT                   GPIOA
 #define OSD_SYNC_OUT_PIN                    GPIO_PIN_9
-#define OSD_TIM                             TIM1
 #define OSD_TIM_CCR                         CCR2
 #define OSD_TIM_CHANNEL                     2
 #define OSD_TIM_IRQ                         TIM1_UP_IRQn
