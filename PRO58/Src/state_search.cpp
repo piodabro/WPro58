@@ -53,8 +53,6 @@ void SearchStateHandler::onEnter() {
 
 void SearchStateHandler::onExit(){
 #ifdef USE_OSD
-    OSD::enableLCD(true);
-    OSD::setSyncMode(OSD::syncModes::automatic);
     OSD::clear();
 #endif    
 }

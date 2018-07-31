@@ -26,9 +26,6 @@ void StateMachine::BandScanStateHandler::onEnter() {
 
 void StateMachine::BandScanStateHandler::onExit() {
     Receiver::setChannel(lastChannelIndex);
-#ifdef USE_OSD    
-    OSD::setSyncMode(OSD::syncModes::external);
-#endif    
 }
 
 

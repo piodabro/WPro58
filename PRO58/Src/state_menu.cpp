@@ -3,6 +3,7 @@
 #include "ui.h"
 #include "ui_menu.h"
 #include "buttons.h"
+#include "OSD.h"
 
 //TODO: Move menu icons to separate header/cpp file.
 static const unsigned char searchIcon[] = {
@@ -61,6 +62,10 @@ void StateMachine::MenuStateHandler::onEnter() {
     this->menu.addItem("Favourites", starIcon, favouritesMenuHandler);
     this->menu.addItem("Band Scan", bandScanIcon, bandScannerMenuHandler);
     this->menu.addItem("Settings", settingsIcon, settingsMenuHandler);
+#ifdef USE_OSD
+    OSD::enableLCD(true);
+    OSD::setSyncMode(OSD::syncModes::automatic);
+#endif
 }
 
 

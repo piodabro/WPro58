@@ -36,6 +36,7 @@ void StateMachine::SettingsStateHandler::onEnter() {
 
 #ifdef USE_OSD
     this->menu.addItem("OSD", OSDMenuHandler);
+    OSD::setSyncMode(OSD::syncModes::automatic);
 #endif
 
 	const char* divValue = (EepromSettings.diversityMode == Receiver::DiversityMode::AUTO ? "AUTO" : (EepromSettings.diversityMode == Receiver::DiversityMode::FORCE_A ? "A" : "B"));
