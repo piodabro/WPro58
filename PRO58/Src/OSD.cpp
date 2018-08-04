@@ -117,6 +117,7 @@ namespace OSD {
         uint32_t actTick = HAL_GetTick();
         uint32_t difTick = actTick - oldTick;
 
+
         if(!videoConnect) {
             if (difTick > 15 && difTick < 18) {
                 if(ntscSync) {
@@ -213,13 +214,18 @@ namespace OSD {
                             ch2.dbword = 0x0000;
                         }
 
+#ifdef OSD_SPI_B
                         linebufferA[cBuffer][buf]   = ch1.byte[3];
                         linebufferA[cBuffer][buf+1] = ch1.byte[2] | ch2.byte[3];
                         linebufferA[cBuffer][buf+2] = ch2.byte[2];
-#ifdef OSD_SPI_B
+
                         linebufferB[cBuffer][buf]   = ch1.byte[1];
                         linebufferB[cBuffer][buf+1] = ch1.byte[0] | ch2.byte[1];
                         linebufferB[cBuffer][buf+2] = ch2.byte[0];
+#else
+                        linebufferA[cBuffer][buf]   = ch1.byte[1];
+                        linebufferA[cBuffer][buf+1] = ch1.byte[0] | ch2.byte[1];
+                        linebufferA[cBuffer][buf+2] = ch2.byte[0];
 #endif
                         buf +=3;
                     }
@@ -508,20 +514,27 @@ namespace OSD {
 
         switch(mode) {
         case syncModes::automatic:
-#ifndef OSD_SPI_B
+#ifdef OSD_SPI_B
+            syncMode = syncModes::automatic;
+            ENABLE_VSYNC_IRQ();
+#else
+            syncMode = syncModes::internal;
+            DISABLE_VSYNC_IRQ();
             ReceiverSpi::setPowerDownRegister(0b01010000110000010011);  //Deactivate video amp power
             GPIO_Reinit(OSD_SYNC_OUT_PORT, OSD_SYNC_OUT_PIN, GPIO_MODE_AF_PP);
             GPIO_Reinit(OSD_SPI_A_PORT, OSD_SPI_A_PIN, GPIO_MODE_AF_PP);
 #endif
-            ENABLE_VSYNC_IRQ();
             videoConnect = 2;
-            syncMode = syncModes::automatic;
             break;
         case syncModes::external:
 #ifndef OSD_SPI_B
             ReceiverSpi::setPowerDownRegister(0b00010000110000010011);  //Activate video amp power
             GPIO_Reinit(OSD_SYNC_OUT_PORT, OSD_SYNC_OUT_PIN, GPIO_MODE_INPUT);
+#ifdef OSD_CSYNC_PIN
+            GPIO_Reinit(OSD_SPI_A_PORT, OSD_SPI_A_PIN, GPIO_MODE_AF_PP);
+#else
             GPIO_Reinit(OSD_SPI_A_PORT, OSD_SPI_A_PIN, GPIO_MODE_INPUT);
+#endif
 #endif
             ENABLE_VSYNC_IRQ();
             TIM1->OSD_TIM_CCR = 0;

@@ -177,6 +177,16 @@
 #define OSD_DMA_SPI_A                       DMA1_Channel5
 #define OSD_DMA_SPI_A_IRQ                   DMA1_Channel5_IRQn
 
+#ifdef USE_OSD_OVERLAY
+#define OSD_VSYNC_PORT                      GPIOA
+#define OSD_VSYNC_PIN                       GPIO_PIN_10
+#define OSD_VSYNC_IRQ                       EXTI15_10_IRQn
+
+#define OSD_CSYNC_PORT                      GPIOB
+#define OSD_CSYNC_PIN                       GPIO_PIN_4
+#define OSD_CSYNC_IRQ                       EXTI4_IRQn
+#endif
+
 #define FS_PIN_EB2_Pin          GPIO_PIN_1
 #define FS_PIN_EB2_GPIO_Port    GPIOC
 #else

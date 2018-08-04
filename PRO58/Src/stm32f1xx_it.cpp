@@ -311,6 +311,12 @@ void __attribute__((optimize("Ofast"))) TIM1_UP_IRQHandler(void)
 }
 
 #ifdef OSD_CSYNC_PIN
+void EXTI4_IRQHandler(void)
+{
+    __HAL_GPIO_EXTI_CLEAR_IT(OSD_CSYNC_PIN);
+    OSD::csync_callback();
+}
+
 void EXTI9_5_IRQHandler(void)
 {
     __HAL_GPIO_EXTI_CLEAR_IT(OSD_CSYNC_PIN);
