@@ -7,11 +7,16 @@
 #include "channels.h"
 #include "buttons.h"
 #include "ui.h"
+#include "OSD.h"
 
 using StateMachine::FavouriteScreenStateHandler;
 
 void FavouriteScreenStateHandler::onEnter() {
-	for(int i=0;i<8;i++){
+#ifdef USE_OSD
+    OSD::enableLCD(false);
+    OSD::setSyncMode(OSD::syncModes::external);
+#endif
+    for(int i=0;i<8;i++){
 		if(EepromSettings.startChannel == EepromSettings.favouriteChannels[i]){
 			this->favouriteIndex = i;
 			return;
@@ -27,7 +32,11 @@ void FavouriteScreenStateHandler::onUpdate() {
 }
 
 void FavouriteScreenStateHandler::onExit(){
-
+#ifdef USE_OSD
+    OSD::enableLCD(true);
+    OSD::setSyncMode(OSD::syncModes::automatic);
+    OSD::clear();
+#endif
 }
 
 void FavouriteScreenStateHandler::onButtonChange(

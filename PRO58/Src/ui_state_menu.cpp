@@ -1,7 +1,8 @@
 #include "ui.h"
 #include "ui_state_menu.h"
 //#include "pstr_helper.h"
-
+#include "OSD.h"
+#include "settings_eeprom.h"
 
 using Ui::display;
 using Ui::StateMenuHelper;
@@ -33,10 +34,19 @@ bool StateMenuHelper::handleButtons(
 ) {
     if (button == Button::MODE && pressType == Buttons::PressType::LONG) {
         this->visible = !this->visible;
-        if (!this->visible)
+        if (!this->visible) {
+#ifdef USE_OSD
+            OSD::setSyncMode(OSD::syncModes::external);
+            OSD::print(5,0,' ');
+#endif
             Ui::needFullRedraw();
+        }
 
         if (this->visible) {
+#ifdef USE_OSD
+            OSD::setSyncMode(OSD::syncModes::automatic);
+            OSD::print(5,0,EepromSettings.searchManual ? 0xAB : 0xAC);
+#endif
             this->slideX = MENU_W;
         }
 
@@ -61,6 +71,10 @@ bool StateMenuHelper::handleButtons(
             this->menuItems[this->selectedItem].handler(this->state);
             break;
     }
+
+#ifdef USE_OSD
+    OSD::print(5,0,EepromSettings.searchManual ? 0xAB : 0xAC);
+#endif
 
     return true;
 }

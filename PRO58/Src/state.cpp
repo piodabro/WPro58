@@ -10,6 +10,7 @@
 #include "state_settings_rssi.h"
 #include "state_settings_callsign.h"
 #include "state_settings_favourites.h"
+#include "state_settings_OSD.h"
 #include "state_favourite_screen.h"
 
 #include "ui.h"
@@ -38,8 +39,9 @@ void *operator new(size_t size, void *ptr){
 	MAX(sizeof(SettingsRssiStateHandler), \
 	MAX(sizeof(SettingsCallsignStateHandler), \
 	MAX(sizeof(SettingsFavouritesStateHandler), \
+	MAX(sizeof(SettingsOSDStateHandler), \
 	sizeof(FavouriteScreenStateHandler) \
-	))))))))
+	)))))))))
 ;
 
 namespace StateMachine {
@@ -116,7 +118,9 @@ namespace StateMachine {
             STATE_FACTORY(State::SETTINGS_RSSI, SettingsRssiStateHandler);
             STATE_FACTORY(State::SETTINGS_CALLSIGN, SettingsCallsignStateHandler);
             STATE_FACTORY(State::SETTINGS_FAVOURITES, SettingsFavouritesStateHandler);
-
+#ifdef USE_OSD
+            STATE_FACTORY(State::SETTINGS_OSD, SettingsOSDStateHandler);
+#endif
 
             default:
                 return nullptr;

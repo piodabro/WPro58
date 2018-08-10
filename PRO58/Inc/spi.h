@@ -1,16 +1,11 @@
 /**
   ******************************************************************************
-  * File Name          : gpio.h
-  * Description        : This file contains all the functions prototypes for 
-  *                      the gpio  
+  * File Name          : SPI.h
+  * Description        : This file provides code for the configuration
+  *                      of the SPI instances.
   ******************************************************************************
-  ** This notice applies to any and all portions of this file
-  * that are not between comment pairs USER CODE BEGIN and
-  * USER CODE END. Other portions of this file, whether 
-  * inserted by the user or by software development tools
-  * are owned by their respective copyright owners.
   *
-  * COPYRIGHT(c) 2017 STMicroelectronics
+  * COPYRIGHT(c) 2016 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -36,37 +31,32 @@
   *
   ******************************************************************************
   */
-
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __gpio_H
-#define __gpio_H
+#ifndef __hal_spi_H
+#define __hal_spi_H
 #ifdef __cplusplus
  extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
-#include "main.h"
 
-/* USER CODE BEGIN Includes */
+extern SPI_HandleTypeDef hspi1;
+extern SPI_HandleTypeDef hspi2;
 
-/* USER CODE END Includes */
+//extern void Error_Handler(void);
 
-/* USER CODE BEGIN Private defines */
+void MX_SPI1_Init(void);
+void MX_SPI2_Init(void);
 
-/* USER CODE END Private defines */
+void spi_init(void);
 
-void MX_GPIO_Init(void);
-
-/* USER CODE BEGIN Prototypes */
-void GPIO_FS_Reinit(uint32_t pullup);
-void GPIO_Reinit(GPIO_TypeDef* port, uint32_t pin, uint32_t mode);
-/* USER CODE END Prototypes */
+uint8_t spi_send_DMA(SPI_TypeDef* Instance, uint8_t *pData, uint16_t Size);
 
 #ifdef __cplusplus
 }
 #endif
-#endif /*__ pinoutConfig_H */
+#endif /*__ spi_H */
 
 /**
   * @}

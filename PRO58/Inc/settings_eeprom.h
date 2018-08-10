@@ -8,7 +8,7 @@
 #include "settings.h"
 #include "settings_internal.h"
 #include "receiver.h"
-
+#include "OSD.h"
 
 
 struct EepromSettings {
@@ -46,6 +46,14 @@ struct EepromSettings {
 
     uint8_t favouriteChannels[8];
 
+#ifdef USE_OSD
+    uint8_t OSDEnabled;
+    uint8_t OSDShowRssi;
+    uint8_t OSDShowChannel;
+    uint8_t OSDShowFrequency;
+    OSD::videoModes OSDDefaultMode;
+#endif
+
     void update();
 
     void load();
@@ -78,7 +86,7 @@ const struct {
 #ifdef FS_PINS_AS_BUTTONS
 	uint8_t FSPinsMode = false;
 #else
-	uint8_t FSPinsMode = true;
+    uint8_t FSPinsMode = true;
 #endif
 
     uint8_t searchManual = false;
@@ -100,6 +108,15 @@ const struct {
     const uint8_t callsign[CALLSIGN_LEN] = {0};
 
     const uint8_t favouriteChannels[8] = { 32, 33, 34, 35, 36, 37, 38, 39 }; //RaceBand ones ;)
+
+#ifdef USE_OSD
+    uint8_t OSDEnabled = true;
+    uint8_t OSDShowRssi = true;
+    uint8_t OSDShowChannel = true;
+    uint8_t OSDShowFrequency = true;
+    OSD::videoModes OSDVideoMode = OSD::videoModes::PAL;
+#endif
+
 } EepromDefaults;
 
 

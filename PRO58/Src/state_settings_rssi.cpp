@@ -9,6 +9,7 @@
 #include "settings_internal.h"
 #include "settings_eeprom.h"
 #include "buttons.h"
+#include "OSD.h"
 
 #include "ui.h"
 //#include "pstr_helper.h"
@@ -18,6 +19,9 @@
 
 void StateMachine::SettingsRssiStateHandler::onEnter() {
     internalState = InternalState::WAIT_FOR_LOW;
+#ifdef USE_OSD
+    OSD::setSyncMode(OSD::syncModes::internal);
+#endif
 }
 
 void StateMachine::SettingsRssiStateHandler::onUpdate() {

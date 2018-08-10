@@ -7,6 +7,7 @@
 #include "state.h"
 #include "ui.h"
 #include "settings_eeprom.h"
+#include "OSD.h"
 
 #ifdef PUBLIC_RELEASE
 #include "logo.h"
@@ -16,6 +17,9 @@
 
 void StateMachine::ScreensaverStateHandler::onEnter() {
     showLogo = false;
+#ifdef USE_OSD
+    OSD::setSyncMode(OSD::syncModes::external);
+#endif
 }
 
 void StateMachine::ScreensaverStateHandler::onUpdate() {

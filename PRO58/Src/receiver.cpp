@@ -76,6 +76,12 @@ namespace Receiver {
     	ledBState = !ledBState;
 #endif
 
+#ifdef OSD58 //OSD58 has inverted logic in video switch and leds.
+        swState = !swState;
+        ledAState = !ledAState;
+        ledBState = !ledBState;
+#endif
+
 		HAL_GPIO_WritePin(LED_A_GPIO_Port,LED_A_Pin, ledAState ? GPIO_PIN_SET : GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(LED_B_GPIO_Port,LED_B_Pin, ledBState ? GPIO_PIN_SET : GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(RECEIVER_SW_GPIO_Port, RECEIVER_SW_Pin, swState ? GPIO_PIN_SET : GPIO_PIN_RESET);

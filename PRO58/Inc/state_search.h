@@ -36,6 +36,7 @@ namespace StateMachine {
 
             void onEnter();
             void onUpdate();
+            void onExit();
 
             void onButtonChange(Button button, Buttons::PressType pressType);
             void onFSPinsChange(uint8_t state);

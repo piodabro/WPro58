@@ -2,6 +2,7 @@
 #include "ui.h"
 #include "logo.h"
 #include "settings_eeprom.h"
+#include "OSD.h"
 
 namespace Ui {
     SSD1306 display;

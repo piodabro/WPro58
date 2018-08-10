@@ -11,12 +11,17 @@
 #include "ui.h"
 #include "ui_menu.h"
 
+#include "OSD.h"
+
 static Timer bandScanTimer = Timer(1000);
 
 void StateMachine::BandScanStateHandler::onEnter() {
     orderedChanelIndex = 0;
     lastChannelIndex = Receiver::activeChannel;
     bandScanTimer.reset();
+#ifdef USE_OSD
+    OSD::setSyncMode(OSD::syncModes::internal);
+#endif
 }
 
 void StateMachine::BandScanStateHandler::onExit() {

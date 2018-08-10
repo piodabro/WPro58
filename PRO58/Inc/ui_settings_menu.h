@@ -38,6 +38,7 @@ namespace Ui {
             uint8_t getItemCount();
             uint8_t getMenuOffset();
             void setMenuOffset(uint8_t offset);
+            void drawMenu();
 
         private:
             Ui::SettingsMenuItem menuItems[SETTINGS_MENU_ITEMS_MAX];
@@ -45,8 +46,10 @@ namespace Ui {
             uint8_t activeItems = 0;
             uint8_t selectedItem = 0;
             uint8_t menuOffset = 0;
+            void drawTriangles();
     };
 }
+
 
 
 #endif
