@@ -35,6 +35,7 @@ FatShark pins are not connected to MCU.
 ___
 
 ### Big thanks to
+- **Telekatz** for OSD overlay implementation !!!
 - **mihero** for contributing
 - **20Sy** for HB5808 module ;)
 - **conkerkh** for contributing
