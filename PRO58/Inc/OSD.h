@@ -51,7 +51,7 @@ namespace OSD {
     void print(uint8_t x, uint8_t y, const char *str);
     void print(uint8_t x, uint8_t y, uint8_t c);
     void copyBuffer(void);
-    void printBar(uint8_t x, uint8_t y, uint8_t value);
+    void printBar(uint8_t x, uint8_t y);
     void enableLCD(uint8_t enabled);
     void testScreen(void);
     size_t printNumber(uint8_t x, uint8_t y, unsigned long long n, uint8_t base);

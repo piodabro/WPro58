@@ -45,7 +45,7 @@ bool StateMenuHelper::handleButtons(
         if (this->visible) {
 #ifdef USE_OSD
             OSD::setSyncMode(OSD::syncModes::automatic);
-            OSD::print(5,0,EepromSettings.searchManual ? 0xAB : 0xAC);
+            OSD::print(5,0,EepromSettings.searchManual ? 0x0E : 0x0F);
 #endif
             this->slideX = MENU_W;
         }
@@ -73,7 +73,7 @@ bool StateMenuHelper::handleButtons(
     }
 
 #ifdef USE_OSD
-    OSD::print(5,0,EepromSettings.searchManual ? 0xAB : 0xAC);
+    OSD::print(5,0,EepromSettings.searchManual ? 0x0E : 0x0F);
 #endif
 
     return true;

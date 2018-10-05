@@ -57,6 +57,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #define LOSTSYNC_COUNTER            30
 #define SYNC_COUNTER                2
 
+#define RAM_FONT_START              0xf0
+#define RAM_FONT_SIZE               2
+
 //#define DEBUG_OUT
 
 extern uint8_t buffer[];
@@ -90,6 +93,7 @@ namespace OSD {
     static volatile uint8_t lostSync = LOSTSYNC_COUNTER;
 
     static uint8_t OSDbuffer[OSD_LCDWIDTH * OSD_LCDHEIGHT / 8];
+    static uint32_t ramFontdata[RAM_FONT_SIZE * FONT_HEIGHT] = {0};
 
     uint8_t linebufferA[2][LINEBUFFER_SIZE] = {0};
     uint8_t linebufferB[2][LINEBUFFER_SIZE] = {0};
@@ -110,7 +114,6 @@ namespace OSD {
         };
 
     } uint32u16u8_t;
-
 
     void vsync_callback(void) {
         static uint32_t oldTick = 0;
@@ -204,12 +207,26 @@ namespace OSD {
                 uint16_t row = (line - FIRST_LINE) / FONT_HEIGHT;
                 uint16_t buf = 3;
                 uint16_t screenBufferCounter = row * OSD_COLUMNS;
+                uint8_t char1 = 0;
+                uint8_t char2 = 0;
 
                 if(videoConnect == 2) {
                     for(unsigned col=0; col<OSD_COLUMNS; col +=2) {
-                        ch1.dbword = fontdata[screenBuffer[screenBufferCounter++] * (FONT_HEIGHT) + fontRow];
+                        char1 = screenBuffer[screenBufferCounter++];
+                        char2 = screenBuffer[screenBufferCounter++];
+
+                        if(char1 < RAM_FONT_START) {
+                            ch1.dbword = fontdata[char1 * (FONT_HEIGHT) + fontRow];
+                        } else {
+                            ch1.dbword = ramFontdata[(char1 - RAM_FONT_START) * (FONT_HEIGHT) + fontRow];
+                        }
+
                         if(col < OSD_COLUMNS-1) {
-                            ch2.dbword = (fontdata[screenBuffer[screenBufferCounter++] * (FONT_HEIGHT) + fontRow])>>4;
+                            if(char2 < RAM_FONT_START) {
+                                ch2.dbword = (fontdata[char2 * (FONT_HEIGHT) + fontRow])>>4;
+                            } else {
+                                ch2.dbword = (ramFontdata[(char2 - RAM_FONT_START) * (FONT_HEIGHT) + fontRow])>>4;
+                            }
                         } else {
                             ch2.dbword = 0x0000;
                         }
@@ -232,9 +249,20 @@ namespace OSD {
                 } else {
                     buf += 2;
                     for(unsigned col=0; col<OSD_COLUMNS; col +=2) {
-                        ch1.dbword = fontdata[screenBuffer[screenBufferCounter++] * (FONT_HEIGHT) + fontRow];
-                        ch2.dbword = (fontdata[screenBuffer[screenBufferCounter++] * (FONT_HEIGHT) + fontRow])>>4;
+                        char1 = screenBuffer[screenBufferCounter++];
+                        char2 = screenBuffer[screenBufferCounter++];
 
+                        if(char1 < RAM_FONT_START) {
+                            ch1.dbword = fontdata[char1 * (FONT_HEIGHT) + fontRow];
+                        } else {
+                            ch1.dbword = ramFontdata[(char1 - RAM_FONT_START) * (FONT_HEIGHT) + fontRow];
+                        }
+
+                        if(char2 < RAM_FONT_START) {
+                            ch2.dbword = (fontdata[char2 * (FONT_HEIGHT) + fontRow])>>4;
+                        } else {
+                            ch2.dbword = (ramFontdata[(char2 - RAM_FONT_START) * (FONT_HEIGHT) + fontRow])>>4;
+                        }
 
 #ifdef OSD_SPI_B
                         linebufferB[cBuffer][buf]   = ch1.byte[1];
@@ -641,23 +669,59 @@ namespace OSD {
         screenBuffer[pos++] = c;
     }
 
-    void printBar(uint8_t x, uint8_t y, uint8_t value) {
+    void printBar(uint8_t x, uint8_t y) {
         uint16_t pos = x + y * OSD_COLUMNS;
-        uint16_t tempValue = value * 3 + 12;
+        uint16_t tempValue;
+        uint32_t fontData[4];
+        uint32_t fontRow[4];
+        uint8_t RSSI[2] = {Receiver::rssiA, Receiver::rssiB};
+        uint8_t show[2] = {EepromSettings.diversityMode != Receiver::DiversityMode::FORCE_B,
+                            EepromSettings.diversityMode != Receiver::DiversityMode::FORCE_A};
 
-        screenBuffer[pos++] = 0xed;
-        for(x=0; x<2;x++) {
-            if(tempValue < 25) {
-                screenBuffer[pos++] = 0xA0;
-            } else if(tempValue >=150) {
-                screenBuffer[pos++] = 0xee;
-                tempValue -= 150;
-            } else {
-                screenBuffer[pos++] = 0xA0 + (tempValue/25);
-                tempValue = 0;
+        for(uint8_t i = 0; i<2;i++) {
+
+            tempValue = RSSI[i] / 5;
+            fontData[0] = 0xE0000000;
+            fontData[1] = 0x40000000;
+            fontData[2] = 0x40000000;
+
+            while(tempValue--) {
+                fontData[0] = (fontData[0]>>1) | 0x80000000;
+                fontData[1] = (fontData[1]>>1) | 0x40000000;
+                fontData[2] = (fontData[2]>>1);
             }
+            fontData[2] |= 0x40000000;
+
+            if(!show[i]) {
+                fontData[0] = 0x00000000;
+            }
+            if(i==(uint8_t)Receiver::activeReceiver) {
+                fontData[2]=fontData[1];
+            }
+
+            fontRow[0] = (fontData[0] & 0xFFFC0000);
+            fontRow[1] = (fontData[0] & 0xFFFC0000) | (fontData[1]>>16 & 0x0000FFFC);
+            fontRow[2] = (fontData[0] & 0xFFFC0000) | (fontData[2]>>16 & 0x0000FFFC);
+            ramFontdata[0 * (FONT_HEIGHT) + 2 + i * 7] = fontRow[0];
+            ramFontdata[0 * (FONT_HEIGHT) + 3 + i * 7] = fontRow[1];
+            ramFontdata[0 * (FONT_HEIGHT) + 4 + i * 7] = fontRow[2];
+            ramFontdata[0 * (FONT_HEIGHT) + 5 + i * 7] = fontRow[2];
+            ramFontdata[0 * (FONT_HEIGHT) + 6 + i * 7] = fontRow[1];
+            ramFontdata[0 * (FONT_HEIGHT) + 7 + i * 7] = fontRow[0];
+
+            fontRow[0] = (fontData[0]<<12 & 0xFFFC0000);
+            fontRow[1] = (fontData[0]<<12 & 0xFFFC0000) | (fontData[1]>>4 & 0x0000FFFC);
+            fontRow[2] = (fontData[0]<<12 & 0xFFFC0000) | (fontData[2]>>4 & 0x0000FFFC);
+            ramFontdata[1 * (FONT_HEIGHT) + 2 + i * 7] = fontRow[0];
+            ramFontdata[1 * (FONT_HEIGHT) + 3 + i * 7] = fontRow[1];
+            ramFontdata[1 * (FONT_HEIGHT) + 4 + i * 7] = fontRow[2];
+            ramFontdata[1 * (FONT_HEIGHT) + 5 + i * 7] = fontRow[2];
+            ramFontdata[1 * (FONT_HEIGHT) + 6 + i * 7] = fontRow[1];
+            ramFontdata[1 * (FONT_HEIGHT) + 7 + i * 7] = fontRow[0];
+
         }
-        screenBuffer[pos++] = 0xf3;
+        screenBuffer[pos++] = RAM_FONT_START;
+        screenBuffer[pos++] = RAM_FONT_START+1;
     }
 
     void copyBuffer(void) {
@@ -736,31 +800,15 @@ namespace OSD {
             }
 
             if(EepromSettings.OSDShowRssi) {
-                if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO || EepromSettings.diversityMode == Receiver::DiversityMode::FORCE_A){
-                    printBar(0,0,Receiver::rssiA);
-                    if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO)
-                        print(0,0, 0xA9 + (uint8_t)Receiver::activeReceiver);
-                } else {
-                    print(0,0,"    ");
-                }
-
-                if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO || EepromSettings.diversityMode == Receiver::DiversityMode::FORCE_B){
-                    printBar(OSD_COLUMNS-4,0,Receiver::rssiB);
-                    if(EepromSettings.diversityMode == Receiver::DiversityMode::AUTO)
-                        print(OSD_COLUMNS-1,0, 0xA8 - (uint8_t)Receiver::activeReceiver);
-                } else {
-                    print(OSD_COLUMNS-4,0,"    ");
-                }
-
+                printBar(0,0);
             } else {
-                print(0,0,"    ");
-                print(OSD_COLUMNS-4,0,"    ");
+                print(0,0,"  ");
             }
 
             if(EepromSettings.OSDShowChannel) {
-                print(4,0,0xB0 + Receiver::activeChannel);
+                print(2,0,0x80 + Receiver::activeChannel);
             } else {
-                print(4,0,' ');
+                print(2,0,' ');
             }
 
             if(EepromSettings.OSDShowFrequency) {
