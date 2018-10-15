@@ -8,6 +8,8 @@
 #ifndef HW_PRO58_H_
 #define HW_PRO58_H_
 
+#ifdef PRO58
+
 #define RECEIVER_SW_Pin						GPIO_PIN_15
 #define RECEIVER_SW_GPIO_Port 				GPIOC
 #define RSSI_A_ADC_Pin 						GPIO_PIN_0
@@ -32,6 +34,8 @@
 #define BUTTON_DOWN_GPIO_Port 				GPIOB
 #define FS_PIN_EB0_Pin 						GPIO_PIN_13
 #define FS_PIN_EB0_GPIO_Port 				GPIOB
+#define FS_PIN_EB2_Pin 						GPIO_PIN_15
+#define FS_PIN_EB2_GPIO_Port 				GPIOB
 #define BUTTON_MODE_Pin 					GPIO_PIN_14
 #define BUTTON_MODE_GPIO_Port 				GPIOB
 #define BUTTON_UP_Pin 						GPIO_PIN_8
@@ -62,22 +66,20 @@
 	#define OSD_DMA_SPI_A_IRQ                   DMA1_Channel5_IRQn
 
 	#ifdef USE_OSD_OVERLAY
-	#define OSD_VSYNC_PORT                      GPIOA
-	#define OSD_VSYNC_PIN                       GPIO_PIN_10
-	#define OSD_VSYNC_IRQ                       EXTI15_10_IRQn
+		#define OSD_VSYNC_PORT                      GPIOA
+		#define OSD_VSYNC_PIN                       GPIO_PIN_10
+		#define OSD_VSYNC_IRQ                       EXTI15_10_IRQn
 
-	#define OSD_CSYNC_PORT                      GPIOB
-	#define OSD_CSYNC_PIN                       GPIO_PIN_4
-	#define OSD_CSYNC_IRQ                       EXTI4_IRQn
+		#define OSD_CSYNC_PORT                      GPIOB
+		#define OSD_CSYNC_PIN                       GPIO_PIN_4
+		#define OSD_CSYNC_IRQ                       EXTI4_IRQn
 	#endif
 
-	#define FS_PIN_EB2_Pin          			GPIO_PIN_1
-	#define FS_PIN_EB2_GPIO_Port    			GPIOC
-#else
 	#undef FS_PIN_EB2_Pin
 	#undef FS_PIN_EB2_GPIO_Port
 	#undef USE_FS_PINS
 #endif
 
+#endif
 
 #endif /* HW_PRO58_H_ */

@@ -45,7 +45,7 @@ namespace Buttons {
     	if(!EepromSettings.screenFlip){
 			updateButton(Button::UP, states[static_cast<uint8_t>(Button::UP)], BUTTON_UP_GPIO_Port, BUTTON_UP_Pin);
 			updateButton(Button::DOWN, states[static_cast<uint8_t>(Button::DOWN)], BUTTON_DOWN_GPIO_Port, BUTTON_DOWN_Pin);
-#ifndef HB5808
+#ifdef USE_FS_PINS
 			if(!EepromSettings.FSPinsMode){
 				updateButton(Button::UP, states[static_cast<uint8_t>(Button::FS_UP)], FS_PIN_EB0_GPIO_Port, FS_PIN_EB0_Pin);
 				updateButton(Button::DOWN, states[static_cast<uint8_t>(Button::FS_DOWN)], FS_PIN_EB2_GPIO_Port, FS_PIN_EB2_Pin);
@@ -55,7 +55,7 @@ namespace Buttons {
     	else{
 			updateButton(Button::UP, states[static_cast<uint8_t>(Button::UP)], BUTTON_DOWN_GPIO_Port, BUTTON_DOWN_Pin);
 			updateButton(Button::DOWN, states[static_cast<uint8_t>(Button::DOWN)], BUTTON_UP_GPIO_Port, BUTTON_UP_Pin);
-#ifndef HB5808
+#ifdef USE_FS_PINS
 			if(!EepromSettings.FSPinsMode){
 				updateButton(Button::UP, states[static_cast<uint8_t>(Button::FS_UP)], FS_PIN_EB2_GPIO_Port, FS_PIN_EB2_Pin);
 				updateButton(Button::DOWN, states[static_cast<uint8_t>(Button::FS_DOWN)], FS_PIN_EB0_GPIO_Port, FS_PIN_EB0_Pin);
@@ -63,7 +63,7 @@ namespace Buttons {
 #endif
     	}
 		updateButton(Button::MODE, states[static_cast<uint8_t>(Button::MODE)], BUTTON_MODE_GPIO_Port, BUTTON_MODE_Pin);
-#ifndef HB5808
+#ifdef USE_FS_PINS
 		if(!EepromSettings.FSPinsMode){
 			updateButton(Button::MODE, states[static_cast<uint8_t>(Button::FS_MODE)], FS_PIN_EB1_GPIO_Port, FS_PIN_EB1_Pin);
 		}

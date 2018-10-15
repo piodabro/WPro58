@@ -8,6 +8,7 @@
 #ifndef HW_OSD58_H_
 #define HW_OSD58_H_
 
+#ifdef OSD58
 
 #define RECEIVER_SW_Pin                     GPIO_PIN_4
 #define RECEIVER_SW_GPIO_Port               GPIOA
@@ -82,5 +83,7 @@
 #define OSD_TIM_CHANNEL                     3
 #define OSD_TIM_IRQ                         TIM1_UP_IRQn
 
+
+#endif
 
 #endif /* HW_OSD58_H_ */

@@ -8,6 +8,8 @@
 #ifndef HW_HB5808_H_
 #define HW_HB5808_H_
 
+#ifdef HB5808
+
 #define RECEIVER_SW_Pin GPIO_PIN_15
 #define RECEIVER_SW_GPIO_Port GPIOB
 #define RSSI_A_ADC_Pin GPIO_PIN_0
@@ -46,5 +48,6 @@
 
 #undef USE_FS_PINS
 
+#endif
 
 #endif /* HW_HB5808_H_ */
