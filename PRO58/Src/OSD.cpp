@@ -44,7 +44,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "OSD.h"
 #include "OSD_font.h"
 
-#define FIRST_LINE                  27
+#define FIRST_LINE                  31
 #define OSD_ROWS                    5
 #define OSD_COLUMNS                 18
 #define LINEBUFFER_SIZE             72
@@ -172,7 +172,7 @@ namespace OSD {
 
     }
 
-    void __attribute__((optimize("Ofast"))) csync_callback(void) {
+    void __attribute__((optimize("O3"))) csync_callback(void) {
         static uint8_t cBuffer = 0;
 
         if((line >= firstLine ) && (line <= lastLine)) {
@@ -352,7 +352,7 @@ namespace OSD {
     }
 
 
-    void __attribute__((optimize("Ofast"))) TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+    void __attribute__((optimize("O3"))) TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
         DMA_Channel_TypeDef* dmaSpiA = OSD_DMA_SPI_A;
         uint8_t buf = LINEBUFFER_SIZE;
 

@@ -59,16 +59,16 @@
 #include "i2c_reset.h"
 
 #ifdef USE_FS_PINS
-#include "fatshark_pins.h"
+	#include "fatshark_pins.h"
 #endif
 
 #ifdef USE_BUZZER
-#include "beeper.h"
+	#include "beeper.h"
 #endif
 
 #ifdef USE_OSD
-#include "OSD.h"
-#include "spi.h"
+	#include "OSD.h"
+	#include "spi.h"
 #endif
 /* USER CODE END Includes */
 
