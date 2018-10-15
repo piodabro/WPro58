@@ -763,6 +763,7 @@
 									<listOptionValue builtIn="false" value="USE_EXTERNAL_EEPROM"/>
 									<listOptionValue builtIn="false" value="USE_CALLSIGN"/>
 									<listOptionValue builtIn="false" value="USE_OSD"/>
+									<listOptionValue builtIn="false" value="USE_OSD_OVERLAY"/>
 								</option>
 								<option id="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other.822087866.548977773" superClass="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-fmessage-length=0" valueType="string"/>
 								<option id="gnu.c.compiler.option.dialect.std.575124353" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
@@ -791,6 +792,7 @@
 									<listOptionValue builtIn="false" value="USE_EXTERNAL_EEPROM"/>
 									<listOptionValue builtIn="false" value="USE_CALLSIGN"/>
 									<listOptionValue builtIn="false" value="USE_OSD"/>
+									<listOptionValue builtIn="false" value="USE_OSD_OVERLAY"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.dialect.std.236067838" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.dialect.flags.634135493" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" useByScannerDiscovery="true" value="-std=c++11" valueType="string"/>
@@ -884,6 +886,7 @@
 									<listOptionValue builtIn="false" value="USE_BUZZER"/>
 									<listOptionValue builtIn="false" value="USE_EXTERNAL_EEPROM"/>
 									<listOptionValue builtIn="false" value="USE_OSD"/>
+									<listOptionValue builtIn="false" value="USE_OSD_OVERLAY"/>
 								</option>
 								<option id="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other.822087866.476507344" superClass="fr.ac6.managedbuild.gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-fmessage-length=0" valueType="string"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.1967944626" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
@@ -912,6 +915,7 @@
 									<listOptionValue builtIn="false" value="USE_BUZZER"/>
 									<listOptionValue builtIn="false" value="USE_EXTERNAL_EEPROM"/>
 									<listOptionValue builtIn="false" value="USE_OSD"/>
+									<listOptionValue builtIn="false" value="USE_OSD_OVERLAY"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.dialect.std.1218343051" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.dialect.flags.1346984202" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" useByScannerDiscovery="true" value="-std=c++11" valueType="string"/>
