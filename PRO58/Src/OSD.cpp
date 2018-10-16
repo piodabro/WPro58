@@ -44,8 +44,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "OSD.h"
 #include "OSD_font.h"
 
-#define FIRST_LINE                  31
-#define OSD_ROWS                    5
+#define FIRST_LINE                  41  //This should become a setting to adjust to used goggles/monitor
+#define OSD_ROWS                    6
 #define OSD_COLUMNS                 18
 #define LINEBUFFER_SIZE             72
 #define OSD_LCDWIDTH                128
@@ -660,6 +660,7 @@ namespace OSD {
         screenBuffer[pos++] = 0xf3;
     }
 
+    //TODO: maybe use DMA???
     void copyBuffer(void) {
         uint16_t mask;
         uint8_t x2;
